@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/sjursor/poker/issues"
   },
-  "homepage": "https://github.com/sjursor/poker#readme"
+  "homepage": "https://github.com/sjursor/poker#readme",
+  "dependencies": {
+    "card-deck": "^1.0.1",
+    "deck-o-cards": "^2.0.3",
+    "express": "^4.17.1"
+  }
 }
