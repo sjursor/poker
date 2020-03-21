@@ -18,8 +18,6 @@
   },
   "homepage": "https://github.com/sjursor/poker#readme",
   "dependencies": {
-    "card-deck": "^1.0.1",
-    "deck-o-cards": "^2.0.3",
-    "express": "^4.17.1"
+    "deck-o-cards": "^2.0.3"
   }
 }
