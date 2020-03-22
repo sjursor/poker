@@ -96,6 +96,15 @@ setNextDealerAndDealHand = function() {
     firebase.database().ref('rooms/'+currentRoom+"/turn").set("");
     firebase.database().ref('rooms/'+currentRoom+"/river").set("");
 
+    var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
+    playersRef.once('value', function(snapshot){
+    	var players = snapshot.val().split(";");
+    	$(players).each(function(k,v){
+    		firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
+    		firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
+    	});
+    });
+
     var updates = {};
     updates["rooms/"+currentRoom+"/deck"] = newDeck;
     return firebase.database().ref().update(updates);
