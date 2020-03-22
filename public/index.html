@@ -56,6 +56,10 @@
         height: 145px;
         float: left;
       }
+      #roomlist li{
+        color:blue;
+        cursor:pointer;
+      }
       #currentTable{
         background:#009933;
         width:100%; border:1px solid red; min-height:300px; clear:both; margin-top:20px;border-radius: 182px;
@@ -97,16 +101,8 @@
 
       <div id="currentTable">
         <h3>Current Table: <span id="currentTableName"></span></h3>
-        <div class="duken">
-          <div class="flop">
-            <span class="kort">Flopp 1</span>
-            <span class="kort">Flopp 2</span>
-            <span class="kort">Flopp 3</span>
-          </div>
-          <div class="turn">
-            <span class="kort">Turn</span>
-          </div>
-          <div class="river"><span class="kort">River</span></div>
+        <div class="duken" id="duken">
+          
         </div>
       </div>
 
@@ -118,6 +114,7 @@
       $(document).ready(function(){
         let app = firebase.app();
         let currentUser;
+
           //firebase.database().ref('/').on('value', snapshot => { console.log(snapshot) });
           
           var fs = firebase.firestore();
@@ -133,7 +130,19 @@
             $("#roomlist ul li").click(function(){
               var fid = $(this).data("fid");
               $("#currentTableName").html(fid);
-            });
+              resetTableCards();
+
+              var roomsRef = firebase.database().ref('rooms/'+fid);
+              roomsRef.on('value', function(snapshot) {
+                room = snapshot.val();
+                if(room['flop']){
+                  var flop = room['flop'].split(",");
+                  jQuery("#flopp1").text(flop[0]);
+                  jQuery("#flopp2").text(flop[1]);
+                  jQuery("#flopp3").text(flop[2]);
+                }
+              });
+            })
           });
 
           //List current rooms in firebase
@@ -157,7 +166,17 @@
               createNewPlayer(userName);
           });
 
-
+          resetTableCards = function(){
+            $("#duken").html('<div class="flop">\
+              <span class="kort" id="flopp1">Flopp 1</span>\
+              <span class="kort" id="flopp2">Flopp 2</span>\
+              <span class="kort" id="flopp3">Flopp 3</span>\
+            </div>\
+            <div class="turn">\
+              <span class="kort" id="turn">Turn</span>\
+            </div>\
+            <div class="river" id="river"><span class="kort">River</span></div>');
+          }
 
           //Create new rooms
           createNewRoom = function(name){
@@ -189,7 +208,7 @@
           }
 
 
-            
+          resetTableCards();
             
       });
 
