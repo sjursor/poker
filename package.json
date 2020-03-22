@@ -18,6 +18,15 @@
   },
   "homepage": "https://github.com/sjursor/poker#readme",
   "dependencies": {
-    "deck-o-cards": "^2.0.3"
+    "connect": "^3.7.0",
+    "deck-o-cards": "^2.0.3",
+    "ecstatic": "^4.1.2",
+    "fast-crc32c": "^2.0.0",
+    "firebase": "^7.12.0",
+    "firebase-admin": "^8.10.0",
+    "firebase-functions": "^3.5.0",
+    "fs": "0.0.1-security",
+    "request": "^2.88.2",
+    "serve-static": "^1.14.1"
   }
 }

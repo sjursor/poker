@@ -6,14 +6,31 @@
     <title>Welcome to Firebase Hosting</title>
 
     <!-- update the version number as needed -->
-    <script defer src="/__/firebase/7.12.0/firebase-app.js"></script>
+    <script src="/scripts/firebase/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/7.12.0/firebase-auth.js"></script>
-    <script defer src="/__/firebase/7.12.0/firebase-database.js"></script>
-    <script defer src="/__/firebase/7.12.0/firebase-messaging.js"></script>
-    <script defer src="/__/firebase/7.12.0/firebase-storage.js"></script>
-    <!-- initialize the SDK after all desired features are loaded -->
-    <script defer src="/__/firebase/init.js"></script>
+    <script defer src="/scripts/firebase/firebase-auth.js"></script>
+    <script defer src="/scripts/firebase/firebase-database.js"></script>
+    <script defer src="/scripts/firebase/firebase-firestore.js"></script>
+
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDl7d1_BOmwKUCKE22PjSBGagUsXtIy9EU",
+        authDomain: "poker-9c76f.firebaseapp.com",
+        databaseURL: "https://poker-9c76f.firebaseio.com",
+        projectId: "poker-9c76f",
+        storageBucket: "poker-9c76f.appspot.com",
+        messagingSenderId: "661582615603",
+        appId: "1:661582615603:web:bdbbe82e9fd68d265b3f46"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+    </script>
 
     <style media="screen">
       body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
@@ -28,38 +45,91 @@
         body, #message { margin-top: 0; background: white; box-shadow: none; }
         body { border-top: 16px solid #ffa100; }
       }
+      #container{max-width: 800px; margin:auto;}
+      #profile{width:50%; float:left;}
+      #rooming{width:50%; float:left;}
     </style>
   </head>
   <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+
+    <div id="container">
+      <div id="profile">
+        <h3>Your name</h3>
+        <input name="name" id="nameInput" type="text"/>
+        <button type="submit" id="profileSubmit">Submit</button>
+      </div>
+    
+      <div id="rooming">
+        <h3>Create new room</h3>
+        <input name="room" id="roomInput" type="text"/>
+        <button type="submit" id="newRoomSubmit">Create new room</button>
+
+        <div id="roomlist">
+          <h3>Or join existing</h3>
+          <ul></ul>
+        </div>
+      </div>
+
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+      
+      $(document).ready(function(){
+        let app = firebase.app();
+          //firebase.database().ref('/').on('value', snapshot => { console.log(snapshot) });
+          
+          var fs = firebase.firestore();
+          var db = firebase.database();
 
-        try {
-          let app = firebase.app();
-          let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
-          document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
-        }
+          //List current rooms in firebase
+          var roomsRef = firebase.database().ref('rooms');
+          roomsRef.on('value', function(snapshot) {
+            $("#roomlist ul li").remove();
+            $.each(snapshot.val(), function(key,roomData){
+              var li = $("#roomlist ul").append('<li>'+roomData['name']+'</li>'); 
+            });
+          });
+
+
+          $("#newRoomSubmit").click(function(){
+              var roomName = jQuery("#roomInput").val();
+              createNewRoom(roomName);
+          });
+
+          //Create new rooms
+          createNewRoom = function(name){
+            let roomData = {
+              name:name,
+              players:0,
+              currentDealer:0,
+              flop:[],
+              turn:"",
+              river:""
+            };
+            let newRoomKey = firebase.database().ref().child('rooms').push().key;
+            
+            var updates = {};
+            updates['/rooms/' + newRoomKey] = roomData;
+            return firebase.database().ref().update(updates);
+          }
+
+          //Create new player
+          createNewPlayer = function(){
+            let newPlayerKey = firebase.database().ref().child('players').push().key;
+            let newPlayerData = {
+              name:"Sjur Sørskår",
+              currentTable:newRoomKey
+            }
+            var updates = {};
+            updates['/players/' + newPlayerKey] = newPlayerData;
+
+            return firebase.database().ref().update(updates);
+          }
+            
+            
       });
+
+      
     </script>
   </body>
 </html>
