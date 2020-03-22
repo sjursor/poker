@@ -76,7 +76,9 @@
       #nextCard{
         clear: both;
         float: left;
-        margin:30px 0px 0px 220px;        
+        margin:20px 0px 0px 220px;
+        font-size: 18px;
+        padding: 8px;
       }
     </style>
   </head>
@@ -110,7 +112,7 @@
         <div class="duken" id="duken">
           
         </div>
-        <button id="nextCard">Videre</button>
+        <button id="nextCard">Deal new hand</button>
       </div>
 
 
@@ -121,6 +123,14 @@
       $(document).ready(function(){
         let app = firebase.app();
         let currentUser;
+
+        // Table states:
+        // 0: No cards dealt (only when initializing new table)
+        // 1: Cards dealt to players, no cards on table (this is also first state after previous hand finishes)
+        // 2: Flop
+        // 3: Turn
+        // 4: River
+        let tableState = 0;
 
           //firebase.database().ref('/').on('value', snapshot => { console.log(snapshot) });
           
@@ -179,7 +189,38 @@
 
           // Next card
           $("#nextCard").click(function() {
-console.log(getNewDeck());
+            switch (tableState) {
+              case 0:
+                setNextDealerAndDealHand();
+                $("#nextCard").html("Show flop");
+                tableState = 1;
+                break;
+
+              case 1:
+                showFlop();
+                $("#nextCard").html("Show turn");
+                tableState = 2;
+                break;
+
+              case 2:
+                showTurn();
+                $("#nextCard").html("Show river");
+                tableState = 3;
+                break;
+
+              case 3:
+                showRiver();
+                $("#nextCard").html("End game and deal new hand");
+                tableState = 4;
+                break;
+
+              case 4:
+                setNextDealerAndDealHand();
+                $("#nextCard").html("Show flop");
+                tableState = 1;
+                break;
+            }
+
           });
 
 
