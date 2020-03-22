@@ -126,6 +126,8 @@
           var fs = firebase.firestore();
           var db = firebase.database();
 
+
+
           //List current rooms in firebase
           var roomsRef = firebase.database().ref('rooms');
           roomsRef.on('value', function(snapshot) {
@@ -162,15 +164,23 @@
           });
 
           //Click handlers
+        // New room
           $("#newRoomSubmit").click(function(){
               var roomName = jQuery("#roomInput").val();
               createNewRoom(roomName);
           });
 
+          // New player
           $("#profileSubmit").click(function(){
               var userName = jQuery("#nameInput").val();
               createNewPlayer(userName);
           });
+
+          // Next card
+          $("#nextCard").click(function() {
+
+          });
+
 
           resetTableCards = function(){
             $("#duken").html('<div class="flop">\
