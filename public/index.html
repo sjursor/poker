@@ -57,6 +57,7 @@
         height: 145px;
         float: left;
       }
+      #activePlayers li,
       #roomlist li{
         color:blue;
         cursor:pointer;
@@ -124,6 +125,7 @@
         let app = firebase.app();
         let currentUser;
         currentRoom = "-M31Y6LoLrvT1fhuiLDe";
+        currentUser = "";
 
         // Table states:
         // 0: No cards dealt (only when initializing new table)
@@ -190,7 +192,13 @@
             $("#activePlayers ul li").remove();
             $.each(snapshot.val(), function(key,usersData){
               if(usersData['name'])
-              var li = $("#activePlayers ul").append('<li>'+usersData['name']+'</li>'); 
+              var li = $("#activePlayers ul").append('<li data-fid="'+key+'">'+usersData['name']+'</li>');
+
+              $("#activePlayers ul li").click(function(){
+                  var fid = $(this).data("fid");
+                  currentUser = fid;
+                  console.log("setting currentUserTo "+fid);
+              });
             });
           });
 
