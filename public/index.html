@@ -48,6 +48,15 @@
       #container{max-width: 800px; margin:auto;}
       #profile{width:50%; float:left;}
       #rooming{width:50%; float:left;}
+      .kort{width:80px; height:120px; background:beige; float:left; border:1px solid black; margin:10px 20px;}
+      .flop{
+        border: 1px solid white;
+        margin-right: 20px;
+        width: 400px;
+        height: 145px;
+        float: left;
+        background:#ccc;
+      }
     </style>
   </head>
   <body>
@@ -57,6 +66,11 @@
         <h3>Your name</h3>
         <input name="name" id="nameInput" type="text"/>
         <button type="submit" id="profileSubmit">Submit</button>
+
+        <div id="activePlayers">
+          <h3>Active players</h3>
+          <ul></ul>
+      </div>
       </div>
     
       <div id="rooming">
@@ -69,6 +83,18 @@
           <ul></ul>
         </div>
       </div>
+
+      <div id="currentTable" style="width:100%; border:1px solid red; min-height:300px; clear:both; margin-top:20px;" >
+        <h3>Current Table</h3>
+        <div class="flop">
+          <span class="kort">Kort 1</span>
+          <span class="kort">Kort 2</span>
+          <span class="kort">Kort 3</span>
+        </div>
+        <div class="turn"><span class="kort">Kort 4</span></div>
+        <div class="river"><span class="kort">Kort 5</span></div>
+      </div>
+
 
     </div>
 
@@ -90,10 +116,25 @@
             });
           });
 
+          //List current rooms in firebase
+          var usersRef = firebase.database().ref('players');
+          usersRef.on('value', function(snapshot) {
+            $("#activePlayers ul li").remove();
+            $.each(snapshot.val(), function(key,usersData){
+              if(usersData['name'])
+              var li = $("#activePlayers ul").append('<li>'+usersData['name']+'</li>'); 
+            });
+          });
+
 
           $("#newRoomSubmit").click(function(){
               var roomName = jQuery("#roomInput").val();
               createNewRoom(roomName);
+          });
+
+          $("#profileSubmit").click(function(){
+              var userName = jQuery("#nameInput").val();
+              createNewPlayer(userName);
           });
 
           //Create new rooms
@@ -114,11 +155,10 @@
           }
 
           //Create new player
-          createNewPlayer = function(){
+          createNewPlayer = function(name){
             let newPlayerKey = firebase.database().ref().child('players').push().key;
             let newPlayerData = {
-              name:"Sjur Sørskår",
-              currentTable:newRoomKey
+              name:name
             }
             var updates = {};
             updates['/players/' + newPlayerKey] = newPlayerData;
