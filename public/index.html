@@ -58,7 +58,7 @@
         border: 1px solid white;
         margin-right: 20px;
         width: 280px;
-        height: 145px;
+        height: 120px;
         float: left;
       }
       #activePlayers li,
@@ -130,6 +130,8 @@
         <button id="nextCard">Deal new hand</button>
       </div>
 
+      <div id="playersAtTable"><ul></ul></div>
+
       
       <div id="userCards">
         <h3>User cards</h3>
@@ -177,6 +179,21 @@
               $("#currentTableName").html(fid);
               currentRoom = fid;
               resetTableCards();
+
+              //List players
+              jQuery("#playersAtTable ul").empty();
+              var playersRef = firebase.database().ref('rooms/'+fid+"/players");
+              playersRef.once('value', function(snapshot){
+                var players = snapshot.val().split(";");
+                $(players).each(function(k,v){
+                  var playerRef = firebase.database().ref('players/'+v);
+                  playerRef.once('value').then(function(snapshot) {
+                    var val = snapshot.val();
+                    jQuery("#playersAtTable ul").append("<li data-attr='"+fid+"'><b>"+val['name']+"</b> ("+val['stack']+")</li>");  
+                  });
+                  
+                });
+              });
               
               var flop = firebase.database().ref('rooms').child(fid).child("flop");
               flop.on('value', function(snapshot) {
