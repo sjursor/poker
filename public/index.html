@@ -210,7 +210,19 @@
               $("#activePlayers ul li").click(function(){
                   var fid = $(this).data("fid");
                   currentUser = fid;
-                  console.log("setting currentUserTo "+fid);
+                  currentUserRef = usersRef.child(fid);
+                  currentUserRef.on('value', function(snapshot){
+                    var userData = snapshot.val();
+
+                    if(userData['currentRoom'] == currentRoom){
+                      var userCards = userData['activeCards'].split(";");
+                      $("#userCard1").text(userCards[0]);
+                      $("#userCard2").text(userCards[1]);
+                    }else{
+                      console.log("current Table error");
+                    }
+                  });
+                  //console.log("setting currentUserTo "+fid);
               });
             });
           });
