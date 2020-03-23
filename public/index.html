@@ -106,7 +106,7 @@
         <button type="submit" id="profileSubmit">Submit</button>
 
         <div id="activePlayers">
-          <h3>Active players</h3>
+          <h3>Players</h3>
           <ul></ul>
       </div>
       </div>
@@ -130,7 +130,7 @@
         <button id="nextCard">Deal new hand</button>
       </div>
 
-      <div id="playersAtTable"><ul></ul></div>
+      <div id="playersAtTable"><h3>Players at this table</h3><ul></ul></div>
 
       
       <div id="userCards">
@@ -184,14 +184,14 @@
               jQuery("#playersAtTable ul").empty();
               var playersRef = firebase.database().ref('rooms/'+fid+"/players");
               playersRef.once('value', function(snapshot){
-                var players = snapshot.val().split(";");
+                var players = snapshot.val();
                 $(players).each(function(k,v){
                   var playerRef = firebase.database().ref('players/'+v);
                   playerRef.once('value').then(function(snapshot) {
                     var val = snapshot.val();
-                    jQuery("#playersAtTable ul").append("<li data-attr='"+fid+"'><b>"+val['name']+"</b> ("+val['stack']+")</li>");  
+                    if(val !== null)
+                      jQuery("#playersAtTable ul").append("<li data-attr='"+fid+"'><b>"+val['name']+"</b> ("+val['stack']+")</li>");  
                   });
-                  
                 });
               });
               
@@ -374,12 +374,51 @@
           createNewPlayer = function(name){
             let newPlayerKey = firebase.database().ref().child('players').push().key;
             let newPlayerData = {
-              name:name
+              name:name,
+              stack:0
             }
             var updates = {};
             updates['/players/' + newPlayerKey] = newPlayerData;
 
             return firebase.database().ref().update(updates);
+          }
+
+          addPlayerToTable = function(player,table){
+            var ref = firebase.database().ref('rooms/'+table);
+            ref.once("value", function(snapshot){
+              var data = snapshot.val();
+              var players = data['players'];
+              if(typeof(players)!=="object"){
+                players = [];  
+              }
+              players.push(player);
+
+              var updates = {};
+              updates['/rooms/' + table + '/players'] = players;
+              console.log(updates);
+              return firebase.database().ref().update(updates);
+            });
+          }
+          removePlayerFromTable = function(player,table){
+            var ref = firebase.database().ref('rooms/'+table);
+            ref.once("value", function(snapshot){
+              var data = snapshot.val();
+              var players = data['players'];
+              console.log(players);
+              var newPlayers = [];
+              $.each(players,function(k,v){
+                console.log(k,v);
+                if(v == player){
+                  return;
+                }else{
+                  newPlayers.push(v);
+                }
+              });
+
+              var updates = {};
+              updates['/rooms/' + table + '/players'] = newPlayers;
+              return firebase.database().ref().update(updates);
+            });
           }
 
 

@@ -17,7 +17,7 @@ setNextDealerAndDealHand = function() {
 
     var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
     playersRef.once('value', function(snapshot){
-    	var players = snapshot.val().split(";");
+    	var players = snapshot.val();
     	$(players).each(function(k,v){
     		firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
     		firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
