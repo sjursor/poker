@@ -92,6 +92,9 @@
         margin: 20px auto 100px auto;
         border: 1px dotted black;
       }
+      .active {
+        border: 1px solid black;
+      }
     </style>
   </head>
   <body>
@@ -142,8 +145,8 @@
       $(document).ready(function(){
         let app = firebase.app();
         let currentUser;
-        currentRoom = "-M31Y6LoLrvT1fhuiLDe";
-        currentUser = "-M31Y6LoLrvT1fhuiLDf";
+        currentRoom = "";
+        currentPlayer = "";
 
         // Table states:
         // 0: No cards dealt (only when initializing new table)
@@ -168,6 +171,8 @@
               var li = $("#roomlist ul").append('<li data-fid="'+key+'">'+roomData['name']+'</li>'); 
             });
             $("#roomlist ul li").click(function(){
+              $("#roomlist ul li.active").removeClass("active");
+              $(this).addClass("active");
               var fid = $(this).data("fid");
               $("#currentTableName").html(fid);
               currentRoom = fid;
@@ -204,6 +209,9 @@
 
 
             })
+            if(!currentRoom){
+              jQuery("#roomlist ul li").first().click();  
+            }
           });
 
           //List current rooms in firebase
@@ -215,6 +223,8 @@
               var li = $("#activePlayers ul").append('<li data-fid="'+key+'">'+usersData['name']+'</li>');
 
               $("#activePlayers ul li").click(function(){
+                  $("#activePlayers ul li.active").removeClass("active");
+                  $(this).addClass("active");
                   var fid = $(this).data("fid");
                   currentUser = fid;
                   currentUserRef = usersRef.child(fid);
@@ -237,7 +247,14 @@
                   });
                   //console.log("setting currentUserTo "+fid);
               });
+
             });
+            
+            if(!currentPlayer){
+              jQuery("#activePlayers ul li").first().click();  
+            }
+            
+            
           });
 
           //Click handlers
