@@ -33,6 +33,8 @@
       firebase.initializeApp(firebaseConfig);
     </script>
 
+    <link rel="stylesheet" type="text/css" href="cardStyling.css">
+
     <style media="screen">
       body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
       #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
@@ -49,11 +51,11 @@
       #container{max-width: 800px; margin:auto;}
       #profile{width:50%; float:left;}
       #rooming{width:50%; float:left;}
-      .kort{width:80px; height:120px; background:beige; float:left; border:1px solid black; margin:10px 20px;}
+      .card{ float:left;   margin:10px 10px; width:72px;}
       .flop{
         border: 1px solid white;
         margin-right: 20px;
-        width: 400px;
+        width: 280px;
         height: 145px;
         float: left;
       }
@@ -63,8 +65,9 @@
         cursor:pointer;
       }
       #currentTable{
-        background:#009933;
-        width:100%; border:3px solid red; min-height:300px; clear:both; margin-top:20px;border-radius: 182px;
+        background-image: url("http://www.transparenttextures.com/patterns/black-felt.png");
+        background-color:rgb(7, 99, 36);
+        width:620px; border:6px solid black; min-height:300px; clear:both; margin-top:20px;border-radius: 182px;
       }
       #currentTable h3{
         color:white;
@@ -138,7 +141,7 @@
         let app = firebase.app();
         let currentUser;
         currentRoom = "-M31Y6LoLrvT1fhuiLDe";
-        currentUser = "";
+        currentUser = "-M31Y6LoLrvT1fhuiLDf";
 
         // Table states:
         // 0: No cards dealt (only when initializing new table)
@@ -171,13 +174,15 @@
               var flop = firebase.database().ref('rooms').child(fid).child("flop");
               flop.on('value', function(snapshot) {
                 flop = snapshot.val();
-                  if(flop == ""){
-                    jQuery(".flop span").text("");
+                  if(!flop){
+                    console.log("no flop");
+                    jQuery(".flop span").removeClass();
                   }else{
-                    var flop = flop.split(";");
-                    jQuery("#flopp1").text(flop[0]);
-                    jQuery("#flopp2").text(flop[1]);
-                    jQuery("#flopp3").text(flop[2]);  
+                    flop = flop.split(";");
+                    console.log("flop: "+flop);
+                    jQuery("#flopp1").removeClass().addClass(getCardClass(flop[0].split(",")));
+                    jQuery("#flopp2").removeClass().addClass(getCardClass(flop[1].split(",")));
+                    jQuery("#flopp3").removeClass().addClass(getCardClass(flop[2].split(",")));
                   }
                   
                 
@@ -186,13 +191,13 @@
               var turn = firebase.database().ref('rooms').child(fid).child("turn");
               turn.on('value', function(snapshot) {
                 turn = snapshot.val();
-                  jQuery("#turn").text(turn);
+                  jQuery("#turn").removeClass().addClass(getCardClass(turn));
               });
 
               var river = firebase.database().ref('rooms').child(fid).child("river");
               river.on('value', function(snapshot) {
                 river = snapshot.val();
-                  jQuery("#river").text(river);
+                  jQuery("#river").removeClass().addClass(getCardClass(river));
               });
 
 
@@ -216,8 +221,14 @@
 
                     if(userData['currentRoom'] == currentRoom){
                       var userCards = userData['activeCards'].split(";");
-                      $("#userCard1").text(userCards[0]);
-                      $("#userCard2").text(userCards[1]);
+                      var klass1 = userCards[0].split(",");
+                      var type = getType(klass1[0]);
+                      $("#userCard1").removeClass().addClass(getCardClass(klass1));
+
+                      var klass2 = userCards[1].split(",");
+                      var type = getType(klass2[0]);
+                      $("#userCard2").removeClass().addClass(getCardClass(klass2));//"card "+klass2[1].toLowerCase()+'_'+type);                      
+                      
                     }else{
                       console.log("current Table error");
                     }
@@ -275,19 +286,34 @@
             }
 
           });
+          getCardClass = function(card){
+            if(!card){return;}
+            var type = getType(card[0]);
+            return "card "+card[1].toLowerCase()+'_'+type;
+          }
 
+          getType = function(s){
+            if(!s){return;}
+            r = s
+            .replace("♣️","clubs")
+            .replace("♠️","spades")
+            .replace("❤️","hearts")
+            .replace("♦️","diamonds")
+
+            return r;
+          }
 
           resetTableCards = function(){
             $("#duken").html('<div class="flop">\
-              <span class="kort" id="flopp1">Flopp 1</span>\
-              <span class="kort" id="flopp2">Flopp 2</span>\
-              <span class="kort" id="flopp3">Flopp 3</span>\
+              <span class="card" id="flopp1"></span>\
+              <span class="card" id="flopp2"></span>\
+              <span class="card" id="flopp3"></span>\
             </div>\
             <div class="turn">\
-              <span class="kort" id="turn">Turn</span>\
+              <span class="card" id="turn"></span>\
             </div>\
             <div class="river">\
-              <span class="kort" id="river">River</span>\
+              <span class="card" id="river"></span>\
             </div>');
           }
 
