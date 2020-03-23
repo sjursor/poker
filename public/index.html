@@ -50,7 +50,7 @@
         body, #message { margin-top: 0; background: white; box-shadow: none; }
         body { border-top: 16px solid #ffa100; }
       }
-      #container{max-width: 800px; margin:auto;}
+      #container{max-width: 900px; margin:auto;}
       #profile{width:50%; float:left;}
       #rooming{width:50%; float:left;}
       .card{ float:left;   margin:10px 10px; width:72px;}
@@ -70,6 +70,7 @@
         background-image: url("http://www.transparenttextures.com/patterns/black-felt.png");
         background-color:rgb(7, 99, 36);
         width:620px; border:6px solid black; min-height:300px; clear:both; margin-top:20px;border-radius: 182px;
+        float:left;
       }
       #currentTable h3{
         color:white;
@@ -86,11 +87,16 @@
         font-size: 18px;
         padding: 8px;
       }
+      #playersAtTable{
+        float:left;
+      }
       #userCards{
-        width: 400px;
+        width: 185px;
         height: 200px;
         margin: 20px auto 100px auto;
         border: 1px dotted black;
+        clear:both;
+        text-align:center;
       }
       .active {
         border: 1px solid black;
@@ -101,23 +107,15 @@
 
     <div id="container">
       <div id="profile">
-        <h3>Create player</h3>
-        <input name="name" id="nameInput" type="text"/>
-        <button type="submit" id="profileSubmit">Submit</button>
-
         <div id="activePlayers">
           <h3>Players</h3>
           <ul></ul>
-      </div>
+        </div>
       </div>
     
       <div id="rooming">
-        <h3>Create new room</h3>
-        <input name="room" id="roomInput" type="text"/>
-        <button type="submit" id="newRoomSubmit">Create new room</button>
-
-        <div id="roomlist">
-          <h3>Join existing table</h3>
+       <div id="roomlist">
+          <h3>Existing tables</h3>
           <ul></ul>
         </div>
       </div>
@@ -137,6 +135,16 @@
         <h3>User cards</h3>
         <div class="card" id="userCard1"></div>
         <div class="card" id="userCard2"></div>
+      </div>
+
+      <div id="admin">
+        <h3>Create player</h3>
+        <input name="name" id="nameInput" type="text"/>
+        <button type="submit" id="profileSubmit">Submit</button>
+        
+        <h3>Create new room</h3>
+        <input name="room" id="roomInput" type="text"/>
+        <button type="submit" id="newRoomSubmit">Create new room</button>
       </div>
 
 
@@ -170,19 +178,19 @@
           roomsRef.on('value', function(snapshot) {
             $("#roomlist ul li").remove();
             $.each(snapshot.val(), function(key,roomData){
-              var li = $("#roomlist ul").append('<li data-fid="'+key+'">'+roomData['name']+'</li>'); 
+              var li = $("#roomlist ul").append('<li data-fid="'+key+'" data-name="'+roomData['name']+'">'+roomData['name']+'</li>'); 
             });
             $("#roomlist ul li").click(function(){
               $("#roomlist ul li.active").removeClass("active");
               $(this).addClass("active");
-              var fid = $(this).data("fid");
-              $("#currentTableName").html(fid);
-              currentRoom = fid;
+              var name = $(this).data("name");
+              $("#currentTableName").html(name);
+              currentRoom = $(this).data('fid');
               resetTableCards();
 
               //List players
               jQuery("#playersAtTable ul").empty();
-              var playersRef = firebase.database().ref('rooms/'+fid+"/players");
+              var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
               playersRef.once('value', function(snapshot){
                 var players = snapshot.val();
                 $(players).each(function(k,v){
@@ -190,12 +198,12 @@
                   playerRef.once('value').then(function(snapshot) {
                     var val = snapshot.val();
                     if(val !== null)
-                      jQuery("#playersAtTable ul").append("<li data-attr='"+fid+"'><b>"+val['name']+"</b> ("+val['stack']+")</li>");  
+                      jQuery("#playersAtTable ul").append("<li data-attr='"+currentRoom+"'><b>"+val['name']+"</b> ("+val['stack']+")</li>");  
                   });
                 });
               });
               
-              var flop = firebase.database().ref('rooms').child(fid).child("flop");
+              var flop = firebase.database().ref('rooms').child(currentRoom).child("flop");
               flop.on('value', function(snapshot) {
                 flop = snapshot.val();
                   if(!flop){
@@ -212,13 +220,13 @@
                 
               });
 
-              var turn = firebase.database().ref('rooms').child(fid).child("turn");
+              var turn = firebase.database().ref('rooms').child(currentRoom).child("turn");
               turn.on('value', function(snapshot) {
                 turn = snapshot.val();
                   jQuery("#turn").removeClass().addClass(getCardClass(turn));
               });
 
-              var river = firebase.database().ref('rooms').child(fid).child("river");
+              var river = firebase.database().ref('rooms').child(currentRoom).child("river");
               river.on('value', function(snapshot) {
                 river = snapshot.val();
                   jQuery("#river").removeClass().addClass(getCardClass(river));
@@ -259,7 +267,7 @@
                       $("#userCard2").removeClass().addClass(getCardClass(klass2));//"card "+klass2[1].toLowerCase()+'_'+type);                      
                       
                     }else{
-                      console.log("current Table error");
+                      console.log("User not on current table error");
                     }
                   });
                   //console.log("setting currentUserTo "+fid);
