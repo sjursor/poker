@@ -7,7 +7,7 @@ const 	http = require('http');
 const app = express();
 
 app.use('/scripts', express.static(__dirname + '/node_modules/'));
-app.use('/firebase.js', express.static(__dirname + 'firebase.js'));
+//app.use('/firebase.js', express.static(__dirname + 'firebase.js'));
 
 app.use(ecstatic({
   root: `${__dirname}/public`,
