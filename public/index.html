@@ -53,7 +53,17 @@
       #container{max-width: 900px; margin:auto;}
       #profile{width:50%; float:left;}
       #rooming{width:50%; float:left;}
-      .card{ float:left;   margin:10px 10px; width:72px;}
+      .card{
+        float:left;
+        margin:10px 10px;
+        width:72px;
+        animation-name: appearcard;
+        animation-duration: 1s;
+      }
+      @keyframes appearcard {
+        from {opacity: 0;}
+        to {opacity: 1;}
+      }
       .flop{
         border: 1px solid white;
         margin-right: 20px;
@@ -66,11 +76,107 @@
         color:blue;
         cursor:pointer;
       }
-      #currentTable{
+      #seats {
+        padding: 4px;
+        /*background-color: yellow;*/
+        clear: both;
+        position: relative;
+      }
+      .seatrow {
+        display: flex;
+        /*background-color: blue;*/
+        height: 100px;
+
+      }
+      #row1, #row3 {
+        justify-content: space-between;
+        padding-left: 60px;
+        padding-right: 60px;
+        height: 180px;
+      }
+      #row2 {
+        justify-content: space-between;
+        height: 160px;
+      }
+      .player {
+        margin: 4px;
+        /*background-color: gray;*/
+        height: auto;
+        width: 140px;
+        text-align: center;
+        font-weight: bold;
+        padding-top: 80px;
+      }
+
+
+      #player1 {
+        padding-top: 26px;
+      }
+
+      #player2 {
+        padding-top: 26px;
+      }
+
+      #player3 {
+        transform: rotate(45deg);
+      }
+
+      #player4 {
+        transform: rotate(90deg);
+        padding-top: 60px;
+
+      }
+
+      #player5 {
+        transform: rotate(135deg);
+      }
+
+      #player6 {
+        padding-top: 80px;
+      }
+
+      #player7 {
+        padding-top: 80px;
+      }
+
+      #player8 {
+        transform: rotate(-135deg);
+      }
+
+      #player9 {
+        transform: rotate(-90deg);
+        padding-top: 60px;
+      }
+
+      #player10 {
+        transform: rotate(-45deg);
+
+      }
+
+
+
+
+
+
+
+
+
+      .playercards {
+        height: 51px;
+        width: 76px;
+        /*background-color: red;*/
+        background-image: url("/bicyclecards.jpg");
+        background-size: cover;
+        margin: auto;
+      }
+
+      #currentTable {
         background-image: url("http://www.transparenttextures.com/patterns/black-felt.png");
         background-color:rgb(7, 99, 36);
         width:620px; border:6px solid black; min-height:300px; clear:both; margin-top:20px;border-radius: 182px;
-        float:left;
+        position: absolute;
+        top: 88px;
+        left: 134px;
       }
       #currentTable h3{
         color:white;
@@ -120,12 +226,30 @@
         </div>
       </div>
 
-      <div id="currentTable">
-        <h3>Current Table: <span id="currentTableName"></span></h3>
-        <div class="duken" id="duken">
-          
+      <div id="seats">
+        <div class="seatrow" id="row1">
+          <div class="player" id="player10">Random name<div class="playercards"></div></div>
+          <div class="player" id="player1">Random name<div class="playercards"></div></div>
+          <div class="player" id="player2">Random name<div class="playercards"></div></div>
+          <div class="player" id="player3">Random name<div class="playercards"></div></div>
         </div>
-        <button id="nextCard">Deal new hand</button>
+        <div class="seatrow" id="row2">
+          <div class="player" id="player9">Random name<div class="playercards"></div></div>
+          <div class="player" id="player4">Random name<div class="playercards"></div></div>
+        </div>
+        <div class="seatrow" id="row3">
+          <div class="player" id="player8">Random name<div class="playercards"></div></div>
+          <div class="player" id="player7"><div class="playercards"></div>Random name</div>
+          <div class="player" id="player6"><div class="playercards"></div>Random name</div>
+          <div class="player" id="player5">Random name<div class="playercards"></div></div>
+        </div>
+        <div id="currentTable">
+          <h3>Current Table: <span id="currentTableName"></span></h3>
+          <div class="duken" id="duken">
+
+          </div>
+          <button id="nextCard">Deal new hand</button>
+        </div>
       </div>
 
       <div id="playersAtTable"><h3>Players at this table</h3><ul></ul></div>
