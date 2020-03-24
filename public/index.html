@@ -108,6 +108,9 @@
         padding-top: 80px;
       }
 
+      .dealer {
+        color: blueviolet;
+      }
 
       #player1 {
         padding-top: 22px;
@@ -234,20 +237,20 @@
       </div>
       <div id="seats">
         <div class="seatrow" id="row1">
-          <div class="player" id="player10">Random name<div class="playercards"></div></div>
-          <div class="player" id="player1">Random name<div class="playercards"></div></div>
-          <div class="player" id="player2">Random name<div class="playercards"></div></div>
-          <div class="player" id="player3">Random name<div class="playercards"></div></div>
+          <div class="player" id="player10"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+          <div class="player" id="player1"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+          <div class="player" id="player2"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+          <div class="player" id="player3"><span class="name">&nbsp;</span><div class="playercards"></div></div>
         </div>
         <div class="seatrow" id="row2">
-          <div class="player nocards" id="player9">Random name<div class="playercards"></div></div>
-          <div class="player" id="player4">Random name<div class="playercards"></div></div>
+          <div class="player nocards" id="player9"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+          <div class="player" id="player4"><span class="name">&nbsp;</span><div class="playercards"></div></div>
         </div>
         <div class="seatrow" id="row3">
-          <div class="player" id="player8">Random name<div class="playercards"></div></div>
-          <div class="player" id="player7"><div class="playercards"></div>Random name</div>
-          <div class="player" id="player6"><div class="playercards"></div>Random name</div>
-          <div class="player" id="player5">Random name<div class="playercards"></div></div>
+          <div class="player" id="player8"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+          <div class="player" id="player7"><div class="playercards"></div><span class="name">&nbsp;</span></div>
+          <div class="player" id="player6"><div class="playercards"></div><span class="name">&nbsp;</span></div>
+          <div class="player" id="player5"><span class="name">&nbsp;</span><div class="playercards"></div></div>
         </div>
         <div id="currentTable">
           <h3>Current Table: <span id="currentTableName"></span></h3>
@@ -329,18 +332,45 @@
               playersRef.on('value', function(snapshot){
                 jQuery("#playersAtTable ul").empty();
                 var players = snapshot.val();
+                var counter = 1;
                 $(players).each(function(k,v){
                   var playerRef = firebase.database().ref('players/'+v);
-                  playerRef.once('value').then(function(snapshot) {
+                  playerRef.on('value', function(snapshot) {
                     var val = snapshot.val();
-                    if(val !== null)
+                    var playerkey = snapshot.key;
+                    if(val !== null) {
+                      // Add player pid as a data attribute
+                      $("#player" + counter + " .name").attr("data-pid", playerkey);
+
+                      // Write the player name
+                      $("#player" + counter + " .name").html(val["name"]);
+
+                      // Get the current dealer for the room
+                      var currentDealerRef = firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
+                      currentDealerRef.on('value', function(snapshot) {
+                        currentDealer = snapshot.val();
+
+                        // Make sure no players has the dealer class
+                        $(".dealer").removeClass("dealer");
+
+                        // Set the dealer class on the correct player
+                        $("[data-pid='" + currentDealer + "']").addClass("dealer");
+                      });
+
+                      counter++;
+
+                      // TODO: Remove old ul list when not needed anymore
                       jQuery("#playersAtTable ul").append("<li data-attr='"+v+"'>\
                                                               <b>"+val['name']+"</b>\
                                                               ("+val['stack']+")\
                                                               <span class='removePlayerFromTable' data-table="+currentRoom+" data-uid='"+v+"'>\
                                                                 Remove from table\
                                                               </span>\
-                                                            </li>");  
+                                                            </li>");
+                    }
+
+                    //console.log(val["name"]);
+
                   });
                 });
                 $( document ).on( "click", "span.removePlayerFromTable", function() {
