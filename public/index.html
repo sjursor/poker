@@ -11,6 +11,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-auth.js"></script>
 
+    <script type="application/javascript" src="/auth.js"></script>
     <script type="application/javascript" src="/bundle.js"></script>
     <!-- include only the Firebase features as you need -->
     
@@ -288,6 +289,10 @@
         currentRoom = "";
         currentPlayer = "";
 
+        
+        
+
+        
         let searchParams = new URLSearchParams(window.location.search)
         if(searchParams.has('admin')){
           $("#admin").show();
@@ -382,7 +387,7 @@
 
             })
             if(!currentRoom){
-              jQuery("#roomlist ul li").first().click();  
+              jQuery("#roomlist ul li").first().click();
             }
           });
 
