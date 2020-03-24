@@ -110,11 +110,11 @@
 
 
       #player1 {
-        padding-top: 26px;
+        padding-top: 22px;
       }
 
       #player2 {
-        padding-top: 26px;
+        padding-top: 22px;
       }
 
       #player3 {
@@ -123,8 +123,7 @@
 
       #player4 {
         transform: rotate(90deg);
-        padding-top: 60px;
-
+        padding-top: 54px;
       }
 
       #player5 {
@@ -132,11 +131,11 @@
       }
 
       #player6 {
-        padding-top: 80px;
+        padding-top: 74px;
       }
 
       #player7 {
-        padding-top: 80px;
+        padding-top: 74px;
       }
 
       #player8 {
@@ -145,7 +144,7 @@
 
       #player9 {
         transform: rotate(-90deg);
-        padding-top: 60px;
+        padding-top: 54px;
       }
 
       #player10 {
@@ -162,12 +161,17 @@
 
 
       .playercards {
-        height: 51px;
-        width: 76px;
+        height: 56px;
+        width: 78px;
         /*background-color: red;*/
         background-image: url("/bicyclecards.jpg");
         background-size: cover;
         margin: auto;
+        border: 1px solid gray;
+      }
+
+      .player.nocards .playercards {
+        background: none;
       }
 
       #currentTable {
@@ -234,7 +238,7 @@
           <div class="player" id="player3">Random name<div class="playercards"></div></div>
         </div>
         <div class="seatrow" id="row2">
-          <div class="player" id="player9">Random name<div class="playercards"></div></div>
+          <div class="player nocards" id="player9">Random name<div class="playercards"></div></div>
           <div class="player" id="player4">Random name<div class="playercards"></div></div>
         </div>
         <div class="seatrow" id="row3">
