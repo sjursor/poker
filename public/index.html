@@ -314,7 +314,7 @@
             firebase.auth().signOut().then(function() {
               console.log("signed out success");
               $("#logout").hide();
-              $("#userinfo").empty();
+              $("#userinfo").text("You must log in to play the game (reload page)");
               $("#game").hide();
             }).catch(function(error) {
               console.log("error", error);
