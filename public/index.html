@@ -191,15 +191,27 @@
               //List players
               jQuery("#playersAtTable ul").empty();
               var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
-              playersRef.once('value', function(snapshot){
+              playersRef.on('value', function(snapshot){
+                jQuery("#playersAtTable ul").empty();
                 var players = snapshot.val();
                 $(players).each(function(k,v){
                   var playerRef = firebase.database().ref('players/'+v);
                   playerRef.once('value').then(function(snapshot) {
                     var val = snapshot.val();
                     if(val !== null)
-                      jQuery("#playersAtTable ul").append("<li data-attr='"+currentRoom+"'><b>"+val['name']+"</b> ("+val['stack']+")</li>");  
+                      jQuery("#playersAtTable ul").append("<li data-attr='"+v+"'>\
+                                                              <b>"+val['name']+"</b>\
+                                                              ("+val['stack']+")\
+                                                              <span class='removePlayerFromTable' data-table="+currentRoom+" data-uid='"+v+"'>\
+                                                                Remove from table\
+                                                              </span>\
+                                                            </li>");  
                   });
+                });
+                $( document ).on( "click", "span.removePlayerFromTable", function() {
+                  var table = $(this).data("table");
+                  var uid   = $(this).data("uid");
+                  removePlayerFromTable(uid,table);
                 });
               });
               
@@ -245,10 +257,13 @@
             $("#activePlayers ul li").remove();
             $.each(snapshot.val(), function(key,usersData){
               if(usersData['name'])
-              var li = $("#activePlayers ul").append('<li data-fid="'+key+'">'+usersData['name']+'</li>');
+              var li = $("#activePlayers ul").append('<li>\
+                                                        <span class="pname" data-fid="'+key+'">'+usersData['name']+'</span>\
+                                                        <span class="addPlayerToTable" data-uid="'+key+'"> - Legg til</span>\
+                                                      </li>');
 
-              $("#activePlayers ul li").click(function(){
-                  $("#activePlayers ul li.active").removeClass("active");
+              $("#activePlayers ul li span.pname").click(function(){
+                  $("#activePlayers ul li .pname.active").removeClass("active");
                   $(this).addClass("active");
                   var fid = $(this).data("fid");
                   currentUser = fid;
@@ -273,7 +288,15 @@
                   //console.log("setting currentUserTo "+fid);
               });
 
+
             });
+
+            //Add user to current table
+            $("span.addPlayerToTable").click(function(){
+                var uid = $(this).data("uid");
+                addPlayerToTable(uid,currentRoom);
+                //TODO: Remove from #activePlayers list to prevent users appearing on multiple table
+            })
             
             if(!currentPlayer){
               jQuery("#activePlayers ul li").first().click();  
@@ -403,7 +426,6 @@
 
               var updates = {};
               updates['/rooms/' + table + '/players'] = players;
-              console.log(updates);
               return firebase.database().ref().update(updates);
             });
           }
