@@ -22,6 +22,7 @@ Start new round:
 - Vise dele-knapp kun til dealer
 - Vise hvem som er dealer
 - Vise navn rundt bordet
+- Vise hvem som fortsatt har kort
 
 Users:
 - Login på user
