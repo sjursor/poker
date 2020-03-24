@@ -216,72 +216,76 @@
         border: 1px solid black;
       }
       #admin{display:none;}
+      #game{display:none;}
     </style>
   </head>
   <body>
 
+    
     <div id="container">
-      <div id="admin">
-        <div id="profile">
-          <div id="activePlayers">
-            <h3>Players</h3>
-            <ul></ul>
+      <div id="userinfo"></div> - <div id="logout" style="display:none">Logg ut</div>
+      <div id="game">
+        <div id="admin">
+          <div id="profile">
+            <div id="activePlayers">
+              <h3>Players</h3>
+              <ul></ul>
+            </div>
           </div>
-        </div>
-      
-        <div id="rooming">
-         <div id="roomlist">
-            <h3>Existing tables</h3>
-            <ul></ul>
-          </div>
-        </div>
-      </div>
-      <div id="seats">
-        <div class="seatrow" id="row1">
-          <div class="player" id="player10"><span class="name">&nbsp;</span><div class="playercards"></div></div>
-          <div class="player" id="player1"><span class="name">&nbsp;</span><div class="playercards"></div></div>
-          <div class="player" id="player2"><span class="name">&nbsp;</span><div class="playercards"></div></div>
-          <div class="player" id="player3"><span class="name">&nbsp;</span><div class="playercards"></div></div>
-        </div>
-        <div class="seatrow" id="row2">
-          <div class="player nocards" id="player9"><span class="name">&nbsp;</span><div class="playercards"></div></div>
-          <div class="player" id="player4"><span class="name">&nbsp;</span><div class="playercards"></div></div>
-        </div>
-        <div class="seatrow" id="row3">
-          <div class="player" id="player8"><span class="name">&nbsp;</span><div class="playercards"></div></div>
-          <div class="player" id="player7"><div class="playercards"></div><span class="name">&nbsp;</span></div>
-          <div class="player" id="player6"><div class="playercards"></div><span class="name">&nbsp;</span></div>
-          <div class="player" id="player5"><span class="name">&nbsp;</span><div class="playercards"></div></div>
-        </div>
-        <div id="currentTable">
-          <h3>Current Table: <span id="currentTableName"></span></h3>
-          <div class="duken" id="duken">
-
-          </div>
-          <button id="nextCard">Deal new hand</button>
-        </div>
-      </div>
-
-      <div id="playersAtTable"><h3>Players at this table</h3><ul></ul></div>
-
-      
-      <div id="userCards">
-        <h3>User cards</h3>
-        <div class="card" id="userCard1"></div>
-        <div class="card" id="userCard2"></div>
-      </div>
-
-      <div id="admin">
-        <h3>Create player</h3>
-        <input name="name" id="nameInput" type="text"/>
-        <button type="submit" id="profileSubmit">Submit</button>
         
-        <h3>Create new room</h3>
-        <input name="room" id="roomInput" type="text"/>
-        <button type="submit" id="newRoomSubmit">Create new room</button>
+          <div id="rooming">
+           <div id="roomlist">
+              <h3>Existing tables</h3>
+              <ul></ul>
+            </div>
+          </div>
+        </div>
+        <div id="seats">
+          <div class="seatrow" id="row1">
+            <div class="player" id="player10"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+            <div class="player" id="player1"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+            <div class="player" id="player2"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+            <div class="player" id="player3"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+          </div>
+          <div class="seatrow" id="row2">
+            <div class="player nocards" id="player9"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+            <div class="player" id="player4"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+          </div>
+          <div class="seatrow" id="row3">
+            <div class="player" id="player8"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+            <div class="player" id="player7"><div class="playercards"></div><span class="name">&nbsp;</span></div>
+            <div class="player" id="player6"><div class="playercards"></div><span class="name">&nbsp;</span></div>
+            <div class="player" id="player5"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+          </div>
+          <div id="currentTable">
+            <h3>Current Table: <span id="currentTableName"></span></h3>
+            <div class="duken" id="duken">
+
+            </div>
+            <button id="nextCard">Deal new hand</button>
+          </div>
+        </div>
+
+        <div id="playersAtTable"><h3>Players at this table</h3><ul></ul></div>
+
+        
+        <div id="userCards">
+          <h3>User cards</h3>
+          <div class="card" id="userCard1"></div>
+          <div class="card" id="userCard2"></div>
+        </div>
+
+        <div id="admin">
+          <h3>Create player</h3>
+          <input name="name" id="nameInput" type="text"/>
+          <button type="submit" id="profileSubmit">Submit</button>
+          
+          <h3>Create new room</h3>
+          <input name="room" id="roomInput" type="text"/>
+          <button type="submit" id="newRoomSubmit">Create new room</button>
+        </div>
+
       </div>
-
-
     </div>
 
     <script>
@@ -294,6 +298,42 @@
 
         
         
+        var provider = new firebase.auth.FacebookAuthProvider();
+
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+          var token = result.credential.accessToken;
+          // The signed-in user info.
+          var user = result.user;
+
+          $("#userinfo").text(result.user.displayName +' - '+result.user.email);
+          $("#game").show();
+
+          $("#logout").show();
+          $("#logout").on("click", function(){
+            firebase.auth().signOut().then(function() {
+              console.log("signed out success");
+              $("#logout").hide();
+              $("#userinfo").empty();
+              $("#game").hide();
+            }).catch(function(error) {
+              console.log("error", error);
+            });
+          });
+          // ...
+        }).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // The email of the user's account used.
+          var email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          var credential = error.credential;
+          console.log(errorMessage, errorCode, email);
+          // ...
+        });
+
+
 
         
         let searchParams = new URLSearchParams(window.location.search)
