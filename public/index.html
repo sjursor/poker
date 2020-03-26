@@ -20,8 +20,6 @@
     
   </head>
   <body>
-
-    
     <div id="container">
       <div id="userinfo"></div> - <div id="logout" style="display:none">Logg ut</div>
       <div id="game">
@@ -90,22 +88,22 @@
 
     <script>
       
-      showGame = function(user){
-          $("#game").show();
-          jQuery("#userinfo").text("User: "+user.displayName);
-          $("#logout").show();
-          $("#logout").on("click", function(){
-              removePlayerFromTable(user.uid);
-            firebase.auth().signOut().then(function() {
-              console.log("signed out success");
-              $("#logout").hide();
-              $("#userinfo").text("You must log in to play the game (reload page)");
-              $("#game").hide();
-            }).catch(function(error) {
-              console.log("error", error);
-            });
+    showGame = function(user){
+        $("#game").show();
+        jQuery("#userinfo").text("User: "+user.displayName);
+        $("#logout").show();
+        $("#logout").on("click", function(){
+            removePlayerFromTable(user.uid);
+          firebase.auth().signOut().then(function() {
+            console.log("signed out success");
+            $("#logout").hide();
+            $("#userinfo").text("You must log in to play the game (reload page)");
+            $("#game").hide();
+          }).catch(function(error) {
+            console.log("error", error);
           });
-        }
+        });
+      }
 
       $(document).ready(function(){
         let app = firebase.app();
@@ -114,15 +112,9 @@
         
         loginHandler();
 
-        
-
-        
-
-        
+        //Show admin tools if ?admin=true
         let searchParams = new URLSearchParams(window.location.search)
-        if(searchParams.has('admin')){
-          $("#admin").show();
-        }
+        if(searchParams.has('admin')){$("#admin").show();}
 
         // Table states:
         // 0: No cards dealt (only when initializing new table)
@@ -131,13 +123,10 @@
         // 3: Turn
         // 4: River
         let tableState = 0;
-
-        //firebase.database().ref('/').on('value', snapshot => { console.log(snapshot) });
         
-        //var fs = firebase.firestore();
+
         var db = firebase.database();
-
-
+        
 
         //List current rooms in firebase
         var roomsRef = firebase.database().ref('rooms');
