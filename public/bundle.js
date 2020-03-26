@@ -96,6 +96,36 @@ setNextDealerAndDealHand = function() {
     firebase.database().ref('rooms/'+currentRoom+"/turn").set("");
     firebase.database().ref('rooms/'+currentRoom+"/river").set("");
 
+
+	currentDealerRef = firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
+	currentDealerRef.once('value', function(snapshot){
+		currentDealer = snapshot.val();
+		console.log(currentDealer)
+		if (currentDealer == 0) {
+
+			var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
+			playersRef.once('value', function(snapshot){
+				var players = snapshot.val();
+				currentDealer = players.pop();
+				$(players).each(function(k,v){
+					firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
+					firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
+
+
+				});
+
+				var updates = {};
+				updates["rooms/"+currentRoom+"/deck"] = newDeck;
+				updates["rooms/"+currentRoom+"/currentDealer"] = currentDealer;
+				return firebase.database().ref().update(updates);
+			});
+
+		} else {
+
+		}
+
+	});
+/*
     var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
     playersRef.once('value', function(snapshot){
     	var players = snapshot.val();
@@ -108,7 +138,7 @@ setNextDealerAndDealHand = function() {
     var updates = {};
     updates["rooms/"+currentRoom+"/deck"] = newDeck;
     return firebase.database().ref().update(updates);
-
+*/
 }
 
 

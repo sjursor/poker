@@ -140,7 +140,7 @@
             playersRef.on('value', function(snapshot){
               jQuery("#playersAtTable ul").empty();
               var players = snapshot.val();
-              console.log(players)
+              //console.log(players)
               var counter = 1;
               $(players).each(function(k,v){
                 //console.log(v);
@@ -149,6 +149,7 @@
                 playerRef.on('value', function(snapshot) {
                   var val = snapshot.val();
                   var playerkey = snapshot.key;
+
                   if(val !== null) {
                     // Add player pid as a data attribute
                     $("#player" + counter + " .name").attr("data-pid", playerkey);
@@ -157,7 +158,7 @@
                     $("#player" + counter + " .name").html(val["name"]);
 
                     // Get the current dealer for the room
-                    var currentDealerRef = firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
+                    /*var currentDealerRef = firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
                     currentDealerRef.on('value', function(snapshot) {
                       currentDealer = snapshot.val();
 
@@ -166,18 +167,18 @@
 
                       // Set the dealer class on the correct player
                       $("[data-pid='" + currentDealer + "']").addClass("dealer");
-                    });
+                    });*/
 
                     counter++;
 
                     // TODO: Remove old ul list when not needed anymore
-                    jQuery("#playersAtTable ul").append("<li data-attr='"+v+"'>\
+                    /*jQuery("#playersAtTable ul").append("<li data-attr='"+v+"'>\
                                                             <b>"+val['name']+"</b>\
                                                             ("+val['stack']+")\
                                                             <span class='removePlayerFromTable' data-table="+currentRoom+" data-uid='"+v+"'>\
                                                               Remove from table\
                                                             </span>\
-                                                          </li>");
+                                                          </li>");*/
                   }
 
                   //console.log(val["name"]);
@@ -199,7 +200,7 @@
                   jQuery(".flop span").removeClass();
                 }else{
                   flop = flop.split(";");
-                  console.log("flop: "+flop);
+                  //console.log("flop: "+flop);
                   jQuery("#flopp1").removeClass().addClass(getCardClass(flop[0].split(",")));
                   jQuery("#flopp2").removeClass().addClass(getCardClass(flop[1].split(",")));
                   jQuery("#flopp3").removeClass().addClass(getCardClass(flop[2].split(",")));
@@ -416,29 +417,22 @@
       }
 
       addPlayerToTable = function(player,table){
-        console.log(player)
-        console.log(table)
-
         var ref = firebase.database().ref('rooms/'+table+'/players');
         ref.once("value", function(snapshot){
           var players = snapshot.val();
-          console.log(players);
-          console.log(table);
+
+          // Empty table
           if(players == null){
             // TODO: check if table exists
             var ref = firebase.database().ref('rooms/'+table+'/players');
-
-            //firebase.database().ref('rooms/'+table+'/players').set({'players':[]});
             players = [];
-            //alksjdklasjd();
           }
           if(typeof(players) !== "object"){ players = []; }
 
+          // Player already on table
           if($.inArray(player,players)>-1){  // This will check if player exist in table
-            console.log("player found on table")
             return;
-          }else{
-            //console.log("player "+player+" not found on table "+table);
+          } else {  // Player not on table, adding player to table
             players.push(player);
             var updates = {};
             updates['/rooms/' + table + '/players'] = players;
