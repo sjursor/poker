@@ -3,10 +3,12 @@ loginHandler = function(){
 
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-      console.log("user is signed in");
+        console.log("user is signed in");
 
-      addPlayerToTable(user.uid, "-M3NcGg4RPa6ShpXgZXa");
-      showGame(user);
+        addPlayerToTable(user.uid, "-M3NcGg4RPa6ShpXgZXa");
+        currentPlayer = user.uid;
+        showGame(user);
+        updateUserCards();
     } else {
       firebase.auth().signInWithPopup(provider).then(function(result) {
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
@@ -19,7 +21,8 @@ loginHandler = function(){
           addPlayerToTable(pid,currentRoom);
           jQuery("#userinfo").text("User: "+user.displayName);
         });
-        showGame();
+          showGame();
+          updateUserCards();
 
         // ...
       }).catch(function(error) {
