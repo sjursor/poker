@@ -11,30 +11,9 @@
     <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-auth.js"></script>
 
-    <script type="application/javascript" src="/auth.js"></script>
     <script type="application/javascript" src="/bundle.js"></script>
-    <!-- include only the Firebase features as you need -->
-    
-
-    <script type="application/javascript"
-        src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" 
-        crossorigin="anonymous"></script>
-
-    <script type="text/javascript">
-
-      const firebaseConfig = {
-        apiKey: "AIzaSyDl7d1_BOmwKUCKE22PjSBGagUsXtIy9EU",
-        authDomain: "poker-9c76f.firebaseapp.com",
-        databaseURL: "https://poker-9c76f.firebaseio.com",
-        projectId: "poker-9c76f",
-        storageBucket: "poker-9c76f.appspot.com",
-        messagingSenderId: "661582615603",
-        appId: "1:661582615603:web:bdbbe82e9fd68d265b3f46"
-      };
-
-      firebase.initializeApp(firebaseConfig);
-    </script>
+    <script type="application/javascript" src="/auth.js"></script>
+    <script type="application/javascript" src="/jQuery_3.4.1.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="cardStyling.css">
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -111,25 +90,12 @@
 
     <script>
       
-      $(document).ready(function(){
-        let app = firebase.app();
-        let currentUser;
-        currentRoom = "";
-        currentPlayer = "";
-        
-        var provider = new firebase.auth.FacebookAuthProvider();
-
-        firebase.auth().signInWithPopup(provider).then(function(result) {
-          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-          var token = result.credential.accessToken;
-          // The signed-in user info.
-          var user = result.user;
-
-          $("#userinfo").text(result.user.displayName +' - '+result.user.email);
+      showGame = function(user){
           $("#game").show();
-
+          jQuery("#userinfo").text("User: "+user.displayName);
           $("#logout").show();
           $("#logout").on("click", function(){
+              removePlayerFromTable(user.uid);
             firebase.auth().signOut().then(function() {
               console.log("signed out success");
               $("#logout").hide();
@@ -139,20 +105,18 @@
               console.log("error", error);
             });
           });
-          // ...
-        }).catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // The email of the user's account used.
-          var email = error.email;
-          // The firebase.auth.AuthCredential type that was used.
-          var credential = error.credential;
-          console.log(errorMessage, errorCode, email);
-          // ...
-        });
+        }
 
+      $(document).ready(function(){
+        let app = firebase.app();
+        currentRoom   = "";
+        currentPlayer = "";
+        
+        loginHandler();
 
+        
+
+        
 
         
         let searchParams = new URLSearchParams(window.location.search)
@@ -168,117 +132,117 @@
         // 4: River
         let tableState = 0;
 
-          //firebase.database().ref('/').on('value', snapshot => { console.log(snapshot) });
-          
-          //var fs = firebase.firestore();
-          var db = firebase.database();
+        //firebase.database().ref('/').on('value', snapshot => { console.log(snapshot) });
+        
+        //var fs = firebase.firestore();
+        var db = firebase.database();
 
 
 
-          //List current rooms in firebase
-          var roomsRef = firebase.database().ref('rooms');
-          roomsRef.on('value', function(snapshot) {
-            $("#roomlist ul li").remove();
-            $.each(snapshot.val(), function(key,roomData){
-              var li = $("#roomlist ul").append('<li data-fid="'+key+'" data-name="'+roomData['name']+'">'+roomData['name']+'</li>'); 
-            });
-            $("#roomlist ul li").click(function(){
-              $("#roomlist ul li.active").removeClass("active");
-              $(this).addClass("active");
-              var name = $(this).data("name");
-              $("#currentTableName").html(name);
-              currentRoom = $(this).data('fid');
-              resetTableCards();
-
-              //List players
-              jQuery("#playersAtTable ul").empty();
-              var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
-              playersRef.on('value', function(snapshot){
-                jQuery("#playersAtTable ul").empty();
-                var players = snapshot.val();
-                var counter = 1;
-                $(players).each(function(k,v){
-                  var playerRef = firebase.database().ref('players/'+v);
-                  playerRef.on('value', function(snapshot) {
-                    var val = snapshot.val();
-                    var playerkey = snapshot.key;
-                    if(val !== null) {
-                      // Add player pid as a data attribute
-                      $("#player" + counter + " .name").attr("data-pid", playerkey);
-
-                      // Write the player name
-                      $("#player" + counter + " .name").html(val["name"]);
-
-                      // Get the current dealer for the room
-                      var currentDealerRef = firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
-                      currentDealerRef.on('value', function(snapshot) {
-                        currentDealer = snapshot.val();
-
-                        // Make sure no players has the dealer class
-                        $(".dealer").removeClass("dealer");
-
-                        // Set the dealer class on the correct player
-                        $("[data-pid='" + currentDealer + "']").addClass("dealer");
-                      });
-
-                      counter++;
-
-                      // TODO: Remove old ul list when not needed anymore
-                      jQuery("#playersAtTable ul").append("<li data-attr='"+v+"'>\
-                                                              <b>"+val['name']+"</b>\
-                                                              ("+val['stack']+")\
-                                                              <span class='removePlayerFromTable' data-table="+currentRoom+" data-uid='"+v+"'>\
-                                                                Remove from table\
-                                                              </span>\
-                                                            </li>");
-                    }
-
-                    //console.log(val["name"]);
-
-                  });
-                });
-                $( document ).on( "click", "span.removePlayerFromTable", function() {
-                  var table = $(this).data("table");
-                  var uid   = $(this).data("uid");
-                  removePlayerFromTable(uid,table);
-                });
-              });
-              
-              var flop = firebase.database().ref('rooms').child(currentRoom).child("flop");
-              flop.on('value', function(snapshot) {
-                flop = snapshot.val();
-                  if(!flop){
-                    console.log("no flop");
-                    jQuery(".flop span").removeClass();
-                  }else{
-                    flop = flop.split(";");
-                    console.log("flop: "+flop);
-                    jQuery("#flopp1").removeClass().addClass(getCardClass(flop[0].split(",")));
-                    jQuery("#flopp2").removeClass().addClass(getCardClass(flop[1].split(",")));
-                    jQuery("#flopp3").removeClass().addClass(getCardClass(flop[2].split(",")));
-                  }
-                  
-                
-              });
-
-              var turn = firebase.database().ref('rooms').child(currentRoom).child("turn");
-              turn.on('value', function(snapshot) {
-                turn = snapshot.val();
-                  jQuery("#turn").removeClass().addClass(getCardClass(turn));
-              });
-
-              var river = firebase.database().ref('rooms').child(currentRoom).child("river");
-              river.on('value', function(snapshot) {
-                river = snapshot.val();
-                  jQuery("#river").removeClass().addClass(getCardClass(river));
-              });
-
-
-            })
-            if(!currentRoom){
-              jQuery("#roomlist ul li").first().click();
-            }
+        //List current rooms in firebase
+        var roomsRef = firebase.database().ref('rooms');
+        roomsRef.on('value', function(snapshot) {
+          $("#roomlist ul li").remove();
+          $.each(snapshot.val(), function(key,roomData){
+            var li = $("#roomlist ul").append('<li data-fid="'+key+'" data-name="'+roomData['name']+'">'+roomData['name']+'</li>'); 
           });
+          $("#roomlist ul li").click(function(){
+            $("#roomlist ul li.active").removeClass("active");
+            $(this).addClass("active");
+            var name = $(this).data("name");
+            $("#currentTableName").html(name);
+            currentRoom = $(this).data('fid');
+            resetTableCards();
+
+            //List players
+            jQuery("#playersAtTable ul").empty();
+            var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
+            playersRef.on('value', function(snapshot){
+              jQuery("#playersAtTable ul").empty();
+              var players = snapshot.val();
+              var counter = 1;
+              $(players).each(function(k,v){
+                var playerRef = firebase.database().ref('players/'+v);
+                playerRef.on('value', function(snapshot) {
+                  var val = snapshot.val();
+                  var playerkey = snapshot.key;
+                  if(val !== null) {
+                    // Add player pid as a data attribute
+                    $("#player" + counter + " .name").attr("data-pid", playerkey);
+
+                    // Write the player name
+                    $("#player" + counter + " .name").html(val["name"]);
+
+                    // Get the current dealer for the room
+                    var currentDealerRef = firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
+                    currentDealerRef.on('value', function(snapshot) {
+                      currentDealer = snapshot.val();
+
+                      // Make sure no players has the dealer class
+                      $(".dealer").removeClass("dealer");
+
+                      // Set the dealer class on the correct player
+                      $("[data-pid='" + currentDealer + "']").addClass("dealer");
+                    });
+
+                    counter++;
+
+                    // TODO: Remove old ul list when not needed anymore
+                    jQuery("#playersAtTable ul").append("<li data-attr='"+v+"'>\
+                                                            <b>"+val['name']+"</b>\
+                                                            ("+val['stack']+")\
+                                                            <span class='removePlayerFromTable' data-table="+currentRoom+" data-uid='"+v+"'>\
+                                                              Remove from table\
+                                                            </span>\
+                                                          </li>");
+                  }
+
+                  //console.log(val["name"]);
+
+                });
+              });
+              $( document ).on( "click", "span.removePlayerFromTable", function() {
+                var table = $(this).data("table");
+                var uid   = $(this).data("uid");
+                removePlayerFromTable(uid,table);
+              });
+            });
+            
+            var flop = firebase.database().ref('rooms').child(currentRoom).child("flop");
+            flop.on('value', function(snapshot) {
+              flop = snapshot.val();
+                if(!flop){
+                  console.log("no flop");
+                  jQuery(".flop span").removeClass();
+                }else{
+                  flop = flop.split(";");
+                  console.log("flop: "+flop);
+                  jQuery("#flopp1").removeClass().addClass(getCardClass(flop[0].split(",")));
+                  jQuery("#flopp2").removeClass().addClass(getCardClass(flop[1].split(",")));
+                  jQuery("#flopp3").removeClass().addClass(getCardClass(flop[2].split(",")));
+                }
+                
+              
+            });
+
+            var turn = firebase.database().ref('rooms').child(currentRoom).child("turn");
+            turn.on('value', function(snapshot) {
+              turn = snapshot.val();
+                jQuery("#turn").removeClass().addClass(getCardClass(turn));
+            });
+
+            var river = firebase.database().ref('rooms').child(currentRoom).child("river");
+            river.on('value', function(snapshot) {
+              river = snapshot.val();
+                jQuery("#river").removeClass().addClass(getCardClass(river));
+            });
+
+
+          })
+          if(!currentRoom){
+            jQuery("#roomlist ul li").first().click();
+          }
+        });
 
           //List current rooms in firebase
           var usersRef = firebase.database().ref('players');
@@ -344,7 +308,7 @@
           // New player
           $("#profileSubmit").click(function(){
               var userName = jQuery("#nameInput").val();
-              createNewPlayer(userName);
+              newPlayer(userName);
           });
 
           // Next card
@@ -382,108 +346,143 @@
             }
 
           });
-          getCardClass = function(card){
-            if(!card){return;}
-            var type = getType(card[0]);
-            return "card "+card[1].toLowerCase()+'_'+type;
-          }
-
-          getType = function(s){
-            if(!s){return;}
-            r = s
-            .replace("♣️","clubs")
-            .replace("♠️","spades")
-            .replace("❤️","hearts")
-            .replace("♦️","diamonds")
-
-            return r;
-          }
-
-          resetTableCards = function(){
-            $("#duken").html('<div class="flop">\
-              <span class="card" id="flopp1"></span>\
-              <span class="card" id="flopp2"></span>\
-              <span class="card" id="flopp3"></span>\
-            </div>\
-            <div class="turn">\
-              <span class="card" id="turn"></span>\
-            </div>\
-            <div class="river">\
-              <span class="card" id="river"></span>\
-            </div>');
-          }
-
-          //Create new rooms
-          createNewRoom = function(name){
-            let roomData = {
-              name:name,
-              players:0,
-              currentDealer:0,
-              flop:[],
-              turn:"",
-              river:""
-            };
-            let newRoomKey = firebase.database().ref().child('rooms').push().key;
-            
-            var updates = {};
-            updates['/rooms/' + newRoomKey] = roomData;
-            return firebase.database().ref().update(updates);
-          }
-
-          //Create new player
-          createNewPlayer = function(name){
-            let newPlayerKey = firebase.database().ref().child('players').push().key;
-            let newPlayerData = {
-              name:name,
-              stack:0
-            }
-            var updates = {};
-            updates['/players/' + newPlayerKey] = newPlayerData;
-
-            return firebase.database().ref().update(updates);
-          }
-
-          addPlayerToTable = function(player,table){
-            var ref = firebase.database().ref('rooms/'+table);
-            ref.once("value", function(snapshot){
-              var data = snapshot.val();
-              var players = data['players'];
-              if(typeof(players)!=="object"){
-                players = [];  
-              }
-              players.push(player);
-
-              var updates = {};
-              updates['/rooms/' + table + '/players'] = players;
-              return firebase.database().ref().update(updates);
-            });
-          }
-          removePlayerFromTable = function(player,table){
-            var ref = firebase.database().ref('rooms/'+table);
-            ref.once("value", function(snapshot){
-              var data = snapshot.val();
-              var players = data['players'];
-              console.log(players);
-              var newPlayers = [];
-              $.each(players,function(k,v){
-                console.log(k,v);
-                if(v == player){
-                  return;
-                }else{
-                  newPlayers.push(v);
-                }
-              });
-
-              var updates = {};
-              updates['/rooms/' + table + '/players'] = newPlayers;
-              return firebase.database().ref().update(updates);
-            });
-          }
+          
 
 
           resetTableCards();
             
       });
+
+      getCardClass = function(card){
+        if(!card){return;}
+        var type = getType(card[0]);
+        return "card "+card[1].toLowerCase()+'_'+type;
+      }
+
+      getType = function(s){
+        if(!s){return;}
+        r = s
+        .replace("♣️","clubs")
+        .replace("♠️","spades")
+        .replace("❤️","hearts")
+        .replace("♦️","diamonds")
+
+        return r;
+      }
+
+      resetTableCards = function(){
+        $("#duken").html('<div class="flop">\
+          <span class="card" id="flopp1"></span>\
+          <span class="card" id="flopp2"></span>\
+          <span class="card" id="flopp3"></span>\
+        </div>\
+        <div class="turn">\
+          <span class="card" id="turn"></span>\
+        </div>\
+        <div class="river">\
+          <span class="card" id="river"></span>\
+        </div>');
+      }
+
+      //Create new rooms
+      createNewRoom = function(name){
+        let roomData = {
+          name:name,
+          players:0,
+          currentDealer:0,
+          flop:[],
+          turn:"",
+          river:""
+        };
+        let newRoomKey = firebase.database().ref().child('rooms').push().key;
+        
+        var updates = {};
+        updates['/rooms/' + newRoomKey] = roomData;
+        firebase.database().ref().update(updates);
+        currentRoom = newRoomKey;
+        return newRoomKey;
+      }
+
+      //Create new player
+      newPlayer = function(uid, email, displayName, photoURL, callback){
+        let newPlayerKey = firebase.database().ref('players/'+uid);
+        newPlayerKey.once("value", function(snapshot){
+          if(snapshot.val() == null){
+            createNewPlayer(uid, email, displayName, photoURL,callback);
+          }else{
+            currentPlayer = uid;
+            callback(uid);
+          }
+        });
+      }
+
+      createNewPlayer = function(uid, email, displayName, photoURL,callback){
+        firebase.database().ref().child('players/'+uid).set({
+          name:displayName,
+          email:email,
+          photo:photoURL,
+          stack:0
+        },function(error) {
+          if (error) {
+            console.log("The write failed...");
+          } else {
+            // Data saved successfully!
+            currentPlayer = uid;
+            callback(uid);
+          }
+        });
+      }
+
+      addPlayerToTable = function(player,table){
+        var ref = firebase.database().ref('rooms/'+table+'/players');
+        ref.once("value", function(snapshot){
+          var players = snapshot.val();
+          console.log(players);
+          console.log(table);
+          if(players == null){
+            //check if table exists
+            var ref = firebase.database().ref('rooms/'+table+'/players');
+
+            firebase.database().ref('rooms/'+table).set({'players':[]});
+            players = [];
+          }
+          if(typeof(players) !== "object"){ players = []; }
+
+          if($.inArray(player,players)>-1){
+            //console.log("player found on table")
+            return;
+          }else{
+            //console.log("player "+player+" not found on table "+table);
+            players.push(player);
+            var updates = {};
+            updates['/rooms/' + table + '/players'] = players;
+            return firebase.database().ref().update(updates);
+          }              
+        });
+      }
+          
+      removePlayerFromTable = function(player,table){
+        var ref = firebase.database().ref('rooms/'+table);
+        ref.once("value", function(snapshot){
+          var data = snapshot.val();
+          var players = data['players'];
+
+          console.log(players);
+          var newPlayers = [];
+          $.each(players,function(k,v){
+            console.log(k,v);
+            if(v == player){
+              return;
+            }else{
+              newPlayers.push(v);
+            }
+          });
+
+          var updates = {};
+          updates['/rooms/' + table + '/players'] = newPlayers;
+          return firebase.database().ref().update(updates);
+        });
+      }
 
       
     </script>
