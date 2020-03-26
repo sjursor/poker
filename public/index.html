@@ -269,33 +269,43 @@
           $("#nextCard").click(function() {
             switch (tableState) {
               case 0:
-                setNextDealerAndDealHand();
-                $("#nextCard").html("Show flop");
-                tableState = 1;
+                if (confirm("Deal new hand?")) {
+                  setNextDealerAndDealHand();
+                  $("#nextCard").html("Show flop");
+                  tableState = 1;
+                }
                 break;
 
               case 1:
-                showFlop();
-                $("#nextCard").html("Show turn");
-                tableState = 2;
+                if (confirm("Show flop?")) {
+                  showFlop();
+                  $("#nextCard").html("Show turn");
+                  tableState = 2;
+                }
                 break;
 
               case 2:
-                showTurn();
-                $("#nextCard").html("Show river");
-                tableState = 3;
+                if (confirm("Show turn?")) {
+                  showTurn();
+                  $("#nextCard").html("Show river");
+                  tableState = 3;
+                }
                 break;
 
               case 3:
-                showRiver();
-                $("#nextCard").html("End game and deal new hand");
-                tableState = 4;
+                if (confirm("Show river?")) {
+                  showRiver();
+                  $("#nextCard").html("End game and deal new hand");
+                  tableState = 4;
+                }
                 break;
 
               case 4:
-                setNextDealerAndDealHand();
-                $("#nextCard").html("Show flop");
-                tableState = 1;
+                if (confirm("End game and deal new hand?")) {
+                  setNextDealerAndDealHand();
+                  $("#nextCard").html("Show flop");
+                  tableState = 1;
+                }
                 break;
             }
 
