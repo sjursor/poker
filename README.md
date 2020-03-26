@@ -20,23 +20,16 @@ V- Vise kort til aktiv bruker
 
 24.03 Todo:
 John:
-- Vise dele-knapp kun til dealer
-- Vise hvem som er dealer
-- Vise navn rundt bordet
+- Vise hvem som er dealer (litt bugs)
+- Vise navn rundt bordet (litt bugs)
 - Vise hvem som fortsatt har kort
 
 Sjur:
 - Introdusere en fold-knapp
 	- Confirm dialog
 	- update ingame = false;
-- Styling (sexify)
-- Showdown
-Users:
-- Login på user (facebook/google/username/password)
-	- Kun vise kort for innlogget bruker
-
-
-
+- Bedre kort-grafikk og visning av større kort rundt bordet
+- Showdown (knapp for å vise mine kort)
 
 
 
@@ -44,6 +37,7 @@ Backlog
 
 Bord:
 - Velg bord ved login/første besøk
+- Flere bord
 
 Users:
 - Velg nick ved login/første besøk
@@ -56,4 +50,5 @@ Chip-handling:
 - Set vinnere ved omstart
 - Sidepot
 
+- Styling (sexify)
 
