@@ -73,15 +73,6 @@
           <div class="card" id="userCard2"></div>
         </div>
 
-        <div id="admin">
-          <h3>Create player</h3>
-          <input name="name" id="nameInput" type="text"/>
-          <button type="submit" id="profileSubmit">Submit</button>
-          
-          <h3>Create new room</h3>
-          <input name="room" id="roomInput" type="text"/>
-          <button type="submit" id="newRoomSubmit">Create new room</button>
-        </div>
 
       </div>
     </div>
@@ -149,9 +140,12 @@
             playersRef.on('value', function(snapshot){
               jQuery("#playersAtTable ul").empty();
               var players = snapshot.val();
+              console.log(players)
               var counter = 1;
               $(players).each(function(k,v){
+                //console.log(v);
                 var playerRef = firebase.database().ref('players/'+v);
+                //console.log(playerRef)
                 playerRef.on('value', function(snapshot) {
                   var val = snapshot.val();
                   var playerkey = snapshot.key;
@@ -201,7 +195,7 @@
             flop.on('value', function(snapshot) {
               flop = snapshot.val();
                 if(!flop){
-                  console.log("no flop");
+                  //console.log("no flop");
                   jQuery(".flop span").removeClass();
                 }else{
                   flop = flop.split(";");
@@ -294,11 +288,6 @@
               createNewRoom(roomName);
           });
 
-          // New player
-          $("#profileSubmit").click(function(){
-              var userName = jQuery("#nameInput").val();
-              newPlayer(userName);
-          });
 
           // Next card
           $("#nextCard").click(function() {
@@ -394,6 +383,8 @@
 
       //Create new player
       newPlayer = function(uid, email, displayName, photoURL, callback){
+        console.log("newPlayer")
+        console.log(uid);
         let newPlayerKey = firebase.database().ref('players/'+uid);
         newPlayerKey.once("value", function(snapshot){
           if(snapshot.val() == null){
@@ -406,6 +397,8 @@
       }
 
       createNewPlayer = function(uid, email, displayName, photoURL,callback){
+        console.log("createNewPlayer")
+        console.log(uid);
         firebase.database().ref().child('players/'+uid).set({
           name:displayName,
           email:email,
@@ -423,22 +416,26 @@
       }
 
       addPlayerToTable = function(player,table){
+        console.log(player)
+        console.log(table)
+
         var ref = firebase.database().ref('rooms/'+table+'/players');
         ref.once("value", function(snapshot){
           var players = snapshot.val();
           console.log(players);
           console.log(table);
           if(players == null){
-            //check if table exists
+            // TODO: check if table exists
             var ref = firebase.database().ref('rooms/'+table+'/players');
 
-            firebase.database().ref('rooms/'+table).set({'players':[]});
+            //firebase.database().ref('rooms/'+table+'/players').set({'players':[]});
             players = [];
+            //alksjdklasjd();
           }
           if(typeof(players) !== "object"){ players = []; }
 
-          if($.inArray(player,players)>-1){
-            //console.log("player found on table")
+          if($.inArray(player,players)>-1){  // This will check if player exist in table
+            console.log("player found on table")
             return;
           }else{
             //console.log("player "+player+" not found on table "+table);
@@ -446,7 +443,7 @@
             var updates = {};
             updates['/rooms/' + table + '/players'] = players;
             return firebase.database().ref().update(updates);
-          }              
+          }
         });
       }
           

@@ -4,6 +4,8 @@ loginHandler = function(){
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
       console.log("user is signed in");
+
+      addPlayerToTable(user.uid, "-M3NcGg4RPa6ShpXgZXa");
       showGame(user);
     } else {
       firebase.auth().signInWithPopup(provider).then(function(result) {
