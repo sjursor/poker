@@ -140,12 +140,16 @@
 
             if (val["flop"] == "") {
               tableState = 1;
+              $("#nextCard").html("Show flop");
             } else if (val["turn"] == "") {
               tableState = 2;
+              $("#nextCard").html("Show turn");
             } else if (val["river"] == "") {
               tableState = 3;
+              $("#nextCard").html("Show river");
             } else {
               tableState = 4;
+              $("#nextCard").html("End game and deal new hand");
             }
 
           });
