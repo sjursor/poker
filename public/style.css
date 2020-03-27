@@ -11,6 +11,32 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         body { border-top: 16px solid #ffa100; }
       }
       #container{max-width: 900px; margin:auto;}
+
+      #userinfowrapper {
+          width: 100%;
+          background-color: #000;
+          color: #fff;
+          padding: 2px;
+          font-size: 14px;
+          text-align: right;
+      }
+      #logout {
+        margin-left: 22px;
+      }
+      #logout {
+          color: #fff;
+          text-decoration: none;
+      }
+      #logout:hover {
+          text-decoration: underline;
+          cursor: pointer;
+      }
+      #userinfo {
+          margin: auto;
+          max-width: 980px;
+
+      }
+
       #profile{width:50%; float:left;}
       #rooming{width:50%; float:left;}
       .card{
