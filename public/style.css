@@ -90,7 +90,7 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         width: 140px;
         text-align: center;
         font-weight: bold;
-        padding-top: 80px;
+        padding-top: 60px;
       }
 
       .dealer {
@@ -98,11 +98,11 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       }
 
       #player1 {
-        padding-top: 22px;
+        padding-top: 2px;
       }
 
       #player2 {
-        padding-top: 22px;
+        padding-top: 2px;
       }
 
       #player3 {
@@ -111,7 +111,7 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
 
       #player4 {
         transform: rotate(90deg);
-        padding-top: 54px;
+        padding-top: 34px;
       }
 
       #player5 {
@@ -132,7 +132,7 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
 
       #player9 {
         transform: rotate(-90deg);
-        padding-top: 54px;
+        padding-top: 34px;
       }
 
       #player10 {
@@ -141,8 +141,8 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       }
 
       .playercards {
-        height: 56px;
-        width: 78px;
+        height: 76px;
+        width: 105px;
         /*background-color: red;*/
         background-image: url("/bicyclecards.jpg");
         background-size: cover;
@@ -157,7 +157,7 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       #currentTable {
         background-image: url("https://www.transparenttextures.com/patterns/black-felt.png");
         background-color:rgb(7, 99, 36);
-        width:620px; border:6px solid black; min-height:300px; clear:both; margin-top:20px;border-radius: 182px;
+        width:720px; border:6px solid black; min-height:300px; clear:both; margin-top:20px;border-radius: 182px;
         position: absolute;
         top: 88px;
         left: 134px;
