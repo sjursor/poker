@@ -159,9 +159,10 @@
             var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
             playersRef.on('value', function(snapshot){
               var players = snapshot.val();
+              
+              //remove empty player-index
               players = players.filter(function (el) {return el != null; });
-              //console.log(players)
-              var counter = 1;
+              
               $.each(players,function(k,v){
                 //console.log(v);
                 var playerRef = firebase.database().ref('players/'+v);
@@ -170,38 +171,16 @@
                   var val = snapshot.val();
                   var playerkey = snapshot.key;
 
+                  var playerPos = $.inArray(playerkey,players)+1;
+
                   if(val !== null) {
                     // Add player pid as a data attribute
-                    $("#player" + counter + " .name").attr("data-pid", playerkey);
+                    $("#player" + playerPos + " .name").attr("data-pid", playerkey);
 
                     // Write the player name
-                    $("#player" + counter + " .name").html(val["name"]);
+                    $("#player" + playerPos + " .name").html(val["name"]);
 
-                    // Get the current dealer for the room
-                    /*var currentDealerRef = firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
-                    currentDealerRef.on('value', function(snapshot) {
-                      currentDealer = snapshot.val();
-
-                      // Make sure no players has the dealer class
-                      $(".dealer").removeClass("dealer");
-
-                      // Set the dealer class on the correct player
-                      $("[data-pid='" + currentDealer + "']").addClass("dealer");
-                    });*/
-
-                    counter++;
-
-                    // TODO: Remove old ul list when not needed anymore
-                    /*jQuery("#playersAtTable ul").append("<li data-attr='"+v+"'>\
-                                                            <b>"+val['name']+"</b>\
-                                                            ("+val['stack']+")\
-                                                            <span class='removePlayerFromTable' data-table="+currentRoom+" data-uid='"+v+"'>\
-                                                              Remove from table\
-                                                            </span>\
-                                                          </li>");*/
                   }
-
-                  //console.log(val["name"]);
 
                 });
               });
