@@ -164,6 +164,7 @@
             playersRef.on('value', function(snapshot){
               jQuery("#playersAtTable ul").empty();
               var players = snapshot.val();
+              players = players.filter(function (el) {return el != null; });
               //console.log(players)
               var counter = 1;
               $(players).each(function(k,v){
