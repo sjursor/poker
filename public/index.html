@@ -409,12 +409,16 @@
 
           // Player already on table
           if($.inArray(player,players)>-1){  // This will check if player exist in table
+            firebase.database().ref('players/'+player+'/currentRoom').set(table);
             return;
           } else {  // Player not on table, adding player to table
             players.push(player);
             var updates = {};
             updates['/rooms/' + table + '/players'] = players;
             return firebase.database().ref().update(updates);
+
+            //setting correct room on player obj
+            firebase.database().ref('players/'+player+'/currentRoom').set(table);
           }
         });
       }
@@ -448,7 +452,7 @@
           playerRef.on('value', function(snapshot){
             var userData = snapshot.val();
 
-            //if (userData['currentRoom'] == currentRoom) {
+            if (userData['currentRoom'] == currentRoom) {
               var userCards = userData['activeCards'].split(";");
               var klass1 = userCards[0].split(",");
               var type = getType(klass1[0]);
@@ -458,9 +462,10 @@
               var type = getType(klass2[0]);
               $("#userCard2").removeClass().addClass(getCardClass(klass2));//"card "+klass2[1].toLowerCase()+'_'+type);
 
-            //} else {
-              //console.log("User not on current table error");
-            //}
+            } else {
+              $("#userCard1").text("Error: currentTable is not players currentTable");
+              console.log("User not on current table error");
+            }
           });
 
       }
