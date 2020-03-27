@@ -20,8 +20,12 @@
     
   </head>
   <body>
+  <div id="userinfowrapper">
+    <div id="userinfo"><span id="userinfoname"></span><a id="logout" style="display:none">Logg ut</a></div>
+  </div>
+
     <div id="container">
-      <div id="userinfo"></div> - <div id="logout" style="display:none">Logg ut</div>
+
       <div id="game">
         <div id="admin">
           <div id="profile">
@@ -81,14 +85,14 @@
       
     showGame = function(user){
         $("#game").show();
-        jQuery("#userinfo").text("User: "+user.displayName);
+        jQuery("#userinfoname").text("User: "+user.displayName);
         $("#logout").show();
         $("#logout").on("click", function(){
             removePlayerFromTable(user.uid);
           firebase.auth().signOut().then(function() {
             console.log("signed out success");
             $("#logout").hide();
-            $("#userinfo").text("You must log in to play the game (reload page)");
+            $("#userinfoname").text("You must log in to play the game (reload page)");
             $("#game").hide();
           }).catch(function(error) {
             console.log("error", error);
