@@ -179,13 +179,23 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       #playersAtTable{
         float:left;
       }
-      #userCards{
+
+      #userfunctions {
+          margin: auto;
+          display: flex;
+          justify-content: center;
+      }
+      .userfunction {
         width: 185px;
         height: 200px;
-        margin: 20px auto 100px auto;
         border: 1px dotted black;
-        clear:both;
         text-align:center;
+
+      }
+      .userfunction button {
+          font-size: 18px;
+          padding: 8px;
+          margin-top: 20px;
       }
       .active {
         border: 1px solid black;

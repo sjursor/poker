@@ -67,13 +67,19 @@
             <button id="nextCard">Deal new hand</button>
           </div>
         </div>
-        
-        <div id="userCards">
-          <h3>User cards</h3>
-          <div class="card" id="userCard1"></div>
-          <div class="card" id="userCard2"></div>
-        </div>
 
+        <div id="userfunctions">
+          <div id="userCards" class="userfunction">
+            <h3>User cards</h3>
+            <div class="card" id="userCard1"></div>
+            <div class="card" id="userCard2"></div>
+          </div>
+          <div id="userButtons" class="userfunction">
+            <button id="fold">Fold hand</button><br>
+            <button id="showcards">Show cards</button>
+
+          </div>
+        </div>
 
       </div>
     </div>
@@ -312,10 +318,30 @@
             }
 
           });
-          
 
 
-          resetTableCards();
+        // Fold-button
+        $("#fold").click(function() {
+
+          if (confirm("Fold hand?")) {
+
+          }
+
+        });
+
+
+        // Show card-button
+        $("#showcards").click(function() {
+
+          if (confirm("Show cards?")) {
+
+          }
+
+        });
+
+
+
+        resetTableCards();
             
       });
 
