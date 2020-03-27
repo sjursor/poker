@@ -156,19 +156,17 @@
           });
 
             //List players
-            jQuery("#playersAtTable ul").empty();
             var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
             playersRef.on('value', function(snapshot){
-              jQuery("#playersAtTable ul").empty();
               var players = snapshot.val();
               players = players.filter(function (el) {return el != null; });
               //console.log(players)
               var counter = 1;
-              $(players).each(function(k,v){
+              $.each(players,function(k,v){
                 //console.log(v);
                 var playerRef = firebase.database().ref('players/'+v);
                 //console.log(playerRef)
-                playerRef.on('value', function(snapshot) {
+                playerRef.once('value', function(snapshot) {
                   var val = snapshot.val();
                   var playerkey = snapshot.key;
 
@@ -251,16 +249,6 @@
           var usersRef = firebase.database().ref('players');
           usersRef.on('value', function(snapshot) {
             $("#activePlayers ul li").remove();
-            $.each(snapshot.val(), function(key,usersData){
-              if(usersData['name'])
-              var li = $("#activePlayers ul").append('<li>\
-                                                        <span class="pname" data-fid="'+key+'">'+usersData['name']+'</span>\
-                                                        <span class="addPlayerToTable" data-uid="'+key+'"> - Legg til</span>\
-                                                      </li>');
-
-
-
-            });
 
             //Add user to current table
             $("span.addPlayerToTable").click(function(){
@@ -474,7 +462,7 @@
           playerRef.on('value', function(snapshot){
             var userData = snapshot.val();
 
-            if (userData['currentRoom'] == currentRoom) {
+            //if (userData['currentRoom'] == currentRoom) {
               var userCards = userData['activeCards'].split(";");
               var klass1 = userCards[0].split(",");
               var type = getType(klass1[0]);
@@ -484,9 +472,9 @@
               var type = getType(klass2[0]);
               $("#userCard2").removeClass().addClass(getCardClass(klass2));//"card "+klass2[1].toLowerCase()+'_'+type);
 
-            } else {
-              console.log("User not on current table error");
-            }
+            //} else {
+              //console.log("User not on current table error");
+            //}
           });
 
       }
