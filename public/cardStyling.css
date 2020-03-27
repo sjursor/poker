@@ -1,312 +1,207 @@
 .ace_clubs {
- width: 71px;
- height: 97px;
- background: url("https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png") -2px -1px;
+ background: url(/playingcards/ace_of_clubs.png);
 }
 
 .two_clubs {
- width: 71px;
- height: 97px;
- 
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -75px -1px;
+ background: url(/playingcards/2_of_clubs.png);
 }
 
 .three_clubs {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -148px -1px;
+ background: url(/playingcards/3_of_clubs.png);
 }
 
 .four_clubs {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -220px -1px;
+ background: url(/playingcards/4_of_clubs.png);
 }
 
 .five_clubs {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -294px -1px;
+ background: url(/playingcards/5_of_clubs.png);
 }
 
 .six_clubs {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -366px -1px;
+ background: url(/playingcards/6_of_clubs.png);
 }
 
 .seven_clubs {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -440px -1px;
+ background: url(/playingcards/7_of_clubs.png);
 }
 
 .eight_clubs {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -512px -1px;
+ background: url(/playingcards/8_of_clubs.png);
 }
 
 .nine_clubs {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -586px -1px;
+ background: url(/playingcards/9_of_clubs.png);
 }
 
 .ten_clubs {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -658px -1px;
+ background: url(/playingcards/10_of_clubs.png);
 }
 
 .jack_clubs {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -732px -1px;
+ background: url(/playingcards/jack_of_clubs.png);
 }
 
 .queen_clubs {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -804px -1px;
+ background: url(/playingcards/queen_of_clubs.png);
 }
 
 .king_clubs {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -878px -1px;
+ background: url(/playingcards/king_of_clubs.png);
 }
 
 .ace_hearts {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -2px -99px;
+ background: url(/playingcards/ace_of_hearts.png);
 }
 
 .two_hearts {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -75px -99px;
+ background: url(/playingcards/2_of_hearts.png);
 }
 
 .three_hearts {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -148px -99px;
+ background: url(/playingcards/3_of_hearts.png);
 }
 
 .four_hearts {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -220px -99px;
+ background: url(/playingcards/4_of_hearts.png);
 }
 
 .five_hearts {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -294px -99px;
+ background: url(/playingcards/5_of_hearts.png);
 }
 
 .six_hearts {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -366px -99px;
+ background: url(/playingcards/6_of_hearts.png);
 }
 
 .seven_hearts {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -440px -99px;
+ background: url(/playingcards/7_of_hearts.png);
 }
 
 .eight_hearts {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -512px -99px;
+ background: url(/playingcards/8_of_hearts.png);
 }
 
 .nine_hearts {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -586px -99px;
+ background: url(/playingcards/9_of_hearts.png);
 }
 
 .ten_hearts {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -658px -99px;
+ background: url(/playingcards/10_of_hearts.png);
 }
 
 .jack_hearts {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -732px -99px;
+ background: url(/playingcards/jack_of_hearts.png);
 }
 
 .queen_hearts {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -804px -99px;
+ background: url(/playingcards/queen_of_hearts.png);
 }
 
 .king_hearts {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -878px -99px;
+ background: url(/playingcards/king_of_hearts.png);
 }
 
 .ace_spades {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -2px -197px;
+ background: url(/playingcards/ace_of_spades.png);
 }
 
 .two_spades {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -75px -197px;
+ background: url(/playingcards/2_of_spades.png);
 }
 
 .three_spades {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -148px -197px;
+ background: url(/playingcards/3_of_spades.png);
 }
 
 .four_spades {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -220px -197px;
+ background: url(/playingcards/4_of_spades.png);
 }
 
 .five_spades {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -294px -197px;
+ background: url(/playingcards/5_of_spades.png);
 }
 
 .six_spades {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -366px -197px;
+ background: url(/playingcards/6_of_spades.png);
 }
 
 .seven_spades {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -440px -197px;
+ background: url(/playingcards/7_of_spades.png);
 }
 
 .eight_spades {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -512px -197px;
+ background: url(/playingcards/8_of_spades.png);
 }
 
 .nine_spades {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -586px -197px;
+ background: url(/playingcards/9_of_spades.png);
 }
 
 .ten_spades {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -658px -197px;
+ background: url(/playingcards/10_of_spades.png);
 }
 
 .jack_spades {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -732px -197px;
+ background: url(/playingcards/jack_of_spades.png);
 }
 
 .queen_spades {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -804px -197px;
+ background: url(/playingcards/queen_of_spades.png);
 }
 
 .king_spades {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -878px -197px;
+ background: url(/playingcards/king_of_spades.png);
 }
 
 .ace_diamonds {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -2px -295px;
+ background: url(/playingcards/ace_of_diamonds.png);
 }
 
 .two_diamonds {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -75px -295px;
+ background: url(/playingcards/2_of_diamonds.png);
 }
 
 .three_diamonds {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -148px -295px;
+ background: url(/playingcards/3_of_diamonds.png);
 }
 
 .four_diamonds {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -220px -295px;
+ background: url(/playingcards/4_of_diamonds.png);
 }
 
 .five_diamonds {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -294px -295px;
+ background: url(/playingcards/5_of_diamonds.png);
 }
 
 .six_diamonds {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -366px -295px;
+ background: url(/playingcards/6_of_diamonds.png);
 }
 
 .seven_diamonds {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -440px -295px;
+ background: url(/playingcards/7_of_diamonds.png);
 }
 
 .eight_diamonds {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -512px -295px;
+ background: url(/playingcards/8_of_diamonds.png);
 }
 
 .nine_diamonds {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -586px -295px;
+ background: url(/playingcards/9_of_diamonds.png);
 }
 
 .ten_diamonds {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -658px -295px;
+ background: url(/playingcards/10_of_diamonds.png);
 }
 
 .jack_diamonds {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -732px -295px;
+ background: url(/playingcards/jack_of_diamonds.png);
 }
 
 .queen_diamonds {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -804px -295px;
+ background: url(/playingcards/queen_of_diamonds.png);
 }
 
 .king_diamonds {
- width: 71px;
- height: 97px;
- background: url(https://coreassistant.com/wp-content/uploads/2020/03/windows-playing-cards.png) -878px -295px;
+ background: url(/playingcards/king_of_diamonds.png);
 }
