@@ -132,6 +132,7 @@
             //var name = $(this).data("name");
             //$("#currentTableName").html(name);
             currentRoom = "-M3NcGg4RPa6ShpXgZXa";
+            currentDealer = "";
             resetTableCards();
 
 
@@ -154,7 +155,8 @@
             }
 
             // Show button only when currentplayer is dealer
-            if (val["currentDealer"] != currentPlayer) {
+            currentDealer = val["currentDealer"];
+            if (currentDealer != currentPlayer) {
               $("#nextCard").hide();
             } else {
               $("#nextCard").show();
@@ -171,7 +173,7 @@
               players = players.filter(function (el) {return el != null; });
               
               $.each(players,function(k,v){
-                //console.log(v);
+
                 var playerRef = firebase.database().ref('players/'+v);
                 //console.log(playerRef)
                 playerRef.once('value', function(snapshot) {
@@ -183,6 +185,13 @@
                   if(val !== null) {
                     // Add player pid as a data attribute
                     $("#player" + playerPos + " .name").attr("data-pid", playerkey);
+
+                    // Add dealer class
+                    if (playerkey == currentDealer) {
+                      $("[data-pid='" + v + "']").addClass("dealer");
+                    } else {
+                      $("[data-pid='" + v + "']").removeClass("dealer");
+                    }
 
                     // Write the player name
                     $("#player" + playerPos + " .name").html(val["name"]);
