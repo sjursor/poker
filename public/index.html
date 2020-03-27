@@ -191,6 +191,13 @@
                   if(val !== null) {
                     // Add player pid as a data attribute
                     $("#player" + playerPos + " .name").attr("data-pid", playerkey);
+                    if(val.photo){
+                      $("#player" + playerPos + " .playercards").css("background-image", "none");
+                      $("#player" + playerPos + " .playercards").html('<img src="'+val.photo+'" style="width:75px;"/>');  
+                    }else{
+
+                    }
+                    
 
                     // Add dealer class
                     if (playerkey == currentDealer) {
@@ -324,9 +331,11 @@
         $("#fold").click(function() {
 
           if (confirm("Fold hand?")) {
-
+            firebase.database().ref('rooms/'+currentRoom+"/folded").push({
+              currentPlayer
+            });
+            $("#fold").attr("disabled","disabled");
           }
-
         });
 
 
@@ -334,7 +343,15 @@
         $("#showcards").click(function() {
 
           if (confirm("Show cards?")) {
+            
+            var card1 = $("#userCard1").attr("class").replace("card ", "");
+            var card2 = $("#userCard2").attr("class").replace("card ", "");
+            cards = card1+";"+card2;
 
+            firebase.database().ref('rooms/'+currentRoom+"/shownCards/"+currentPlayer).set({
+               cards
+            });
+            $("#showCards").attr("disabled","disabled");
           }
 
         });
