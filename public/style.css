@@ -172,6 +172,7 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         margin-top: 35px;
       }
       #nextCard{
+        display: none;
         clear: both;
         float: left;
         margin:20px 0px 0px 220px;

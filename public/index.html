@@ -153,6 +153,13 @@
               $("#nextCard").html("End game and deal new hand");
             }
 
+            // Show button only when currentplayer is dealer
+            if (val["currentDealer"] != currentPlayer) {
+              $("#nextCard").hide();
+            } else {
+              $("#nextCard").show();
+            }
+
           });
 
             //List players
