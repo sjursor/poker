@@ -233,15 +233,13 @@
                 if(!flop){
                   //console.log("no flop");
                   jQuery(".flop span").removeClass();
-                }else{
+                } else {
                   flop = flop.split(";");
-                  //console.log("flop: "+flop);
                   jQuery("#flopp1").removeClass().addClass(getCardClass(flop[0].split(",")));
                   jQuery("#flopp2").removeClass().addClass(getCardClass(flop[1].split(",")));
                   jQuery("#flopp3").removeClass().addClass(getCardClass(flop[2].split(",")));
                 }
-                
-              
+
             });
 
             var turn = firebase.database().ref('rooms').child(currentRoom).child("turn");
@@ -260,8 +258,11 @@
             foldedRef.on('value', function(snapshot) {
               folded = snapshot.val();
               $.each(folded, function(k,v){
-                if(v){
-                  jQuery("[data-pid='"+v['currentPlayer']+"']").parent().find(".infotext").text("Folded");  
+                if (v) {
+                  jQuery("[data-pid='"+v['currentPlayer']+"']").parent().find(".infotext").text("Folded");
+                  if (v['currentPlayer'] == currentPlayer) {
+                    $("#fold").attr("disabled","disabled");
+                  }
                 }
               })
                 
