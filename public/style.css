@@ -90,11 +90,19 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         width: 140px;
         text-align: center;
         font-weight: bold;
+          font-size: 14px;
         padding-top: 60px;
       }
 
       .dealer {
         color: blueviolet;
+      }
+      .dealer:after {
+          content: " (D)";
+      }
+
+      .player .name {
+          padding-bottom: 2px;
       }
 
       #player1 {
@@ -146,8 +154,17 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         /*background-color: red;*/
         background-image: url("/bicyclecards.jpg");
         background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center;
+
         margin: auto;
         border: 1px solid gray;
+      }
+
+      .playercards .infotext {
+          background: #fff;
+          width: 100%;
+          color: brown;
       }
 
       .player.nocards .playercards {

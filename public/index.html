@@ -44,20 +44,20 @@
         </div>
         <div id="seats">
           <div class="seatrow" id="row1">
-            <div class="player" id="player10"><span class="name">&nbsp;</span><div class="playercards"></div></div>
-            <div class="player" id="player1"><span class="name">&nbsp;</span><div class="playercards"></div></div>
-            <div class="player" id="player2"><span class="name">&nbsp;</span><div class="playercards"></div></div>
-            <div class="player" id="player3"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+            <div class="player" id="player10"><div class="name">&nbsp;</div><div class="playercards"></div></div>
+            <div class="player" id="player1"><div class="name">&nbsp;</div><div class="playercards"></div></div>
+            <div class="player" id="player2"><div class="name">&nbsp;</div><div class="playercards"></div></div>
+            <div class="player" id="player3"><div class="name">&nbsp;</div><div class="playercards"></div></div>
           </div>
           <div class="seatrow" id="row2">
-            <div class="player nocards" id="player9"><span class="name">&nbsp;</span><div class="playercards"></div></div>
-            <div class="player" id="player4"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+            <div class="player nocards" id="player9"><div class="name">&nbsp;</div><div class="playercards"></div></div>
+            <div class="player" id="player4"><div class="name">&nbsp;</div><div class="playercards"></div></div>
           </div>
           <div class="seatrow" id="row3">
-            <div class="player" id="player8"><span class="name">&nbsp;</span><div class="playercards"></div></div>
-            <div class="player" id="player7"><div class="playercards"></div><span class="name">&nbsp;</span></div>
-            <div class="player" id="player6"><div class="playercards"></div><span class="name">&nbsp;</span></div>
-            <div class="player" id="player5"><span class="name">&nbsp;</span><div class="playercards"></div></div>
+            <div class="player" id="player8"><div class="name">&nbsp;</div><div class="playercards"></div></div>
+            <div class="player" id="player7"><div class="playercards"></div><div class="name">&nbsp;</div></div>
+            <div class="player" id="player6"><div class="playercards"></div><div class="name">&nbsp;</div></div>
+            <div class="player" id="player5"><div class="name">&nbsp;</div><div class="playercards"></div></div>
           </div>
           <div id="currentTable">
             <h3>Current Table: <span id="currentTableName"></span></h3>
@@ -134,7 +134,6 @@
             var li = $("#roomlist ul").append('<li data-fid="'+key+'" data-name="'+roomData['name']+'">'+roomData['name']+'</li>'); 
           });
 
-
             //var name = $(this).data("name");
             //$("#currentTableName").html(name);
             currentRoom = "-M3NcGg4RPa6ShpXgZXa";
@@ -145,6 +144,7 @@
             activeRoom = roomsRef.child(currentRoom);
           activeRoom.on('value', function(snapshot) {
             var val = snapshot.val();
+            $("#currentTableName").html(val["name"]);
 
             if (val["flop"] == "") {
               tableState = 1;
@@ -198,8 +198,9 @@
                     // Add player pid as a data attribute
                     $("#player" + playerPos + " .name").attr("data-pid", playerkey);
                     if(val.photo){
-                      $("#player" + playerPos + " .playercards").css("background-image", "none");
-                      $("#player" + playerPos + " .playercards").html('<img src="'+val.photo+'" style="width:75px;"/>');  
+                      $("#player" + playerPos + " .playercards").css("background-image", "url("+val.photo+")");
+                      $("#player" + playerPos + " .playercards").css("background-size", "contain");
+                      $("#player" + playerPos + " .playercards").html("<div class='infotext'>FOLD</div>");
                     }else{
 
                     }
