@@ -4,21 +4,25 @@ loginHandler = function(){
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         console.log("user is signed in");
-
-        addPlayerToTable(user.uid, "-M3NcGg4RPa6ShpXgZXa");
+        newPlayer(user.uid, user.email, user.displayName, user.photoURL, function(pid){
+          addPlayerToTable(user.uid, "-M3NcGg4RPa6ShpXgZXa");
+          currentPlayer = user.uid;
         
-        currentPlayer = user.uid;
-        showGame(user);
-        updateUserCards();
+          showGame(user);
+          updateUserCards();
+        });
     } else {
-      firebase.auth().signInWithRedirect(provider).then(function(result) {
+      firebase.auth().signInWithPopup(provider).then(function(result) {
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         var token = result.credential.accessToken;
         // The signed-in user info.
         var user = result.user;
+
+        console.log("authing");
+
         newPlayer(user.uid, user.email, user.displayName, user.photoURL, function(pid){
           currentPlayer = pid;
-          console.log("Current room "+currentRoom);
+          
           addPlayerToTable(pid,currentRoom);
           jQuery("#userinfo").text("User: "+user.displayName);
         });

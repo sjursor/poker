@@ -91,7 +91,7 @@
         jQuery("#userinfoname").text("User: "+user.displayName);
         $("#logout").show();
         $("#logout").on("click", function(){
-            removePlayerFromTable(user.uid);
+            //removePlayerFromTable(user.uid);
           firebase.auth().signOut().then(function() {
             console.log("signed out success");
             $("#logout").hide();
@@ -173,10 +173,16 @@
             //List players
             var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
             playersRef.on('value', function(snapshot){
-              var players = snapshot.val();
+              var ex_players = snapshot.val();
               
               //remove empty player-index
-              players = players.filter(function (el) {return el != null; });
+              var players = [];
+                
+              
+              $.each(ex_players,function(k,player){
+                players.push(player);
+              });
+                        
               
               $.each(players,function(k,v){
 
@@ -253,27 +259,9 @@
 
         });
 
-          //List current rooms in firebase
-          var usersRef = firebase.database().ref('players');
-          usersRef.on('value', function(snapshot) {
-            $("#activePlayers ul li").remove();
-
-            //Add user to current table
-            $("span.addPlayerToTable").click(function(){
-                var uid = $(this).data("uid");
-                addPlayerToTable(uid,currentRoom);
-                //TODO: Remove from #activePlayers list to prevent users appearing on multiple table
-            })
-            
-            if(!currentPlayer){
-              jQuery("#activePlayers ul li").first().click();  
-            }
-            
-            
-          });
 
           //Click handlers
-        // New room
+          // New room
           $("#newRoomSubmit").click(function(){
               var roomName = jQuery("#roomInput").val();
               createNewRoom(roomName);
@@ -414,17 +402,17 @@
 
       //Create new player
       newPlayer = function(uid, email, displayName, photoURL, callback){
-        console.log("newPlayer")
-        console.log(uid);
         let newPlayerKey = firebase.database().ref('players/'+uid);
-        newPlayerKey.once("value", function(snapshot){
-          if(snapshot.val() == null){
-            createNewPlayer(uid, email, displayName, photoURL,callback);
-          }else{
-            currentPlayer = uid;
-            callback(uid);
-          }
-        });
+        createNewPlayer(uid, email, displayName, photoURL,callback);
+        callback(uid);
+        // newPlayerKey.once("value", function(snapshot){
+        //   if(snapshot.val() == null){
+        //     createNewPlayer(uid, email, displayName, photoURL,callback);
+        //   }else{
+        //     currentPlayer = uid;
+        //     callback(uid);
+        //   }
+        // });
       }
 
       createNewPlayer = function(uid, email, displayName, photoURL,callback){
@@ -441,7 +429,7 @@
           } else {
             // Data saved successfully!
             currentPlayer = uid;
-            callback(uid);
+            //callback(uid);
           }
         });
       }
@@ -449,29 +437,22 @@
       addPlayerToTable = function(player,table){
         var ref = firebase.database().ref('rooms/'+table+'/players');
         ref.once("value", function(snapshot){
-          var players = snapshot.val();
+          var ex_players = snapshot.val();
+          var players = [];
+          $.each(ex_players,function(k,p){
+            players.push(p);
+          });
 
-          // Empty table
-          if(players == null){
-            // TODO: check if table exists
-            var ref = firebase.database().ref('rooms/'+table+'/players');
-            players = [];
+          //Add player to playerslist if not already on table
+          if($.inArray(player,players)==-1){
+           players.push(player); 
           }
-          if(typeof(players) !== "object"){ players = []; }
+          //setting players on table
+          firebase.database().ref('rooms/'+table+'/players').set(players);
 
-          // Player already on table
-          if($.inArray(player,players)>-1){  // This will check if player exist in table
-            firebase.database().ref('players/'+player+'/currentRoom').set(table);
-            return;
-          } else {  // Player not on table, adding player to table
-            players.push(player);
-            var updates = {};
-            updates['/rooms/' + table + '/players'] = players;
-            return firebase.database().ref().update(updates);
-
-            //setting correct room on player obj
-            firebase.database().ref('players/'+player+'/currentRoom').set(table);
-          }
+          //setting currentRoom on player obj
+          firebase.database().ref('players/'+player+'/currentRoom').set(table);
+          
         });
       }
           
@@ -505,14 +486,17 @@
             var userData = snapshot.val();
 
             if (userData['currentRoom'] == currentRoom) {
-              var userCards = userData['activeCards'].split(";");
-              var klass1 = userCards[0].split(",");
-              var type = getType(klass1[0]);
-              $("#userCard1").removeClass().addClass(getCardClass(klass1));
+              if(userData['activeCards']){
+                var userCards = userData['activeCards'].split(";");
+                var klass1 = userCards[0].split(",");
+                var type = getType(klass1[0]);
+                $("#userCard1").removeClass().addClass(getCardClass(klass1));
 
-              var klass2 = userCards[1].split(",");
-              var type = getType(klass2[0]);
-              $("#userCard2").removeClass().addClass(getCardClass(klass2));//"card "+klass2[1].toLowerCase()+'_'+type);
+                var klass2 = userCards[1].split(",");
+                var type = getType(klass2[0]);
+                $("#userCard2").removeClass().addClass(getCardClass(klass2));//"card "+klass2[1].toLowerCase()+'_'+type);  
+              }
+              
 
             } else {
               $("#userCard1").text("Error: currentTable is not players currentTable");
