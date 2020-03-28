@@ -417,13 +417,12 @@
       }
 
       createNewPlayer = function(uid, email, displayName, photoURL,callback){
-        console.log("createNewPlayer")
-        console.log(uid);
         firebase.database().ref().child('players/'+uid).set({
           name:displayName,
           email:email,
           photo:photoURL,
-          stack:0
+          stack:0,
+          currentRoom:currentRoom
         },function(error) {
           if (error) {
             console.log("The write failed...");
@@ -441,19 +440,17 @@
           var ex_players = snapshot.val();
           var players = [];
           $.each(ex_players,function(k,p){
-            players.push(p);
+            if(p){players.push(p);}
           });
 
           //Add player to playerslist if not already on table
-          if($.inArray(player,players)==-1){
-           players.push(player); 
-          }
-          //setting players on table
-          firebase.database().ref('rooms/'+table+'/players').set(players);
+          if($.inArray(player,players)==-1){players.push(player); }
 
           //setting currentRoom on player obj
           firebase.database().ref('players/'+player+'/currentRoom').set(table);
-          
+          //setting players on table
+          firebase.database().ref('rooms/'+table+'/players').set(players);
+
         });
       }
           
@@ -486,7 +483,7 @@
           playerRef.on('value', function(snapshot){
             var userData = snapshot.val();
 
-            if (userData['currentRoom'] == currentRoom) {
+            // if (userData['currentRoom'] == table) {
               if(userData['activeCards']){
                 var userCards = userData['activeCards'].split(";");
                 var klass1 = userCards[0].split(",");
@@ -499,10 +496,11 @@
               }
               
 
-            } else {
-              $("#userCard1").text("Error: currentTable is not players currentTable");
-              console.log("User not on current table error");
-            }
+            // } else {
+            //   $("#userCard1").text("Error: currentTable is not players currentTable");
+            //   console.log("User not on current table error");
+            //   console.log(userData['currentRoom'], table);
+            // }
           });
 
       }
