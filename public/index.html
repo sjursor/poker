@@ -200,7 +200,7 @@
                     if(val.photo){
                       $("#player" + playerPos + " .playercards").css("background-image", "url("+val.photo+")");
                       $("#player" + playerPos + " .playercards").css("background-size", "contain");
-                      $("#player" + playerPos + " .playercards").html("<div class='infotext'>FOLD</div>");
+                      $("#player" + playerPos + " .playercards").html("<div class='infotext'></div>");
                     }else{
 
                     }
@@ -254,6 +254,17 @@
             river.on('value', function(snapshot) {
               river = snapshot.val();
                 jQuery("#river").removeClass().addClass(getCardClass(river));
+            });
+
+            var foldedRef = firebase.database().ref('rooms').child(currentRoom).child("folded");
+            foldedRef.on('value', function(snapshot) {
+              folded = snapshot.val();
+              $.each(folded, function(k,v){
+                if(v){
+                  jQuery("[data-pid='"+v['currentPlayer']+"']").parent().find(".infotext").text("Folded");  
+                }
+              })
+                
             });
 
 
