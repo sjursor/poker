@@ -355,7 +355,6 @@
 
             var foldedRef = firebase.database().ref('rooms').child(currentRoom).child("folded");
             foldedRef.on('value', function(snapshot) {
-              console.log("updated folded");
               folded = snapshot.val();
 
               if(!folded || folded.length == 0){
