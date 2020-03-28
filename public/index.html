@@ -186,7 +186,7 @@
         tableState = 0;
         
 
-        var db = firebase.database();
+        //var db = firebase.database();
         
 
         //List current rooms in firebase
@@ -225,12 +225,8 @@
 
             // Show button only when currentplayer is dealer
             currentDealer = val["currentDealer"];
-            if (currentDealer != currentPlayer) {
-              $("#nextCard").hide();
-            } else {
-              $("#nextCard").show();
-            }
-
+            if (currentDealer != currentPlayer) {$("#nextCard").hide();
+            } else {$("#nextCard").show();}
           });
 
             //List players
@@ -240,13 +236,10 @@
               
               //remove empty player-index
               var players = [];
-                
-              
               $.each(ex_players,function(k,player){
                 players.push(player);
               });
                         
-              
               $.each(players,function(k,v){
 
                 var playerRef = firebase.database().ref('players/'+v);
@@ -261,14 +254,12 @@
                     // Add player pid as a data attribute
                     $("#player" + playerPos + " .name").attr("data-pid", playerkey);
                     if(val.photo){
-                      $("#player" + playerPos + " .playercards").css("background-image", "url("+val.photo+")");
-                      $("#player" + playerPos + " .playercards").css("background-size", "auto");
+                      $("#player" + playerPos + " .playercards").css("background-image", "url("+val.photo+"?width=135)");
+                      $("#player" + playerPos + " .playercards").css("background-size", "contain");
                       $("#player" + playerPos + " .playercards").html("<div class='infotext'></div>");
                     }else{
 
                     }
-                    
-
                     // Add dealer class
                     if (playerkey == currentDealer) {
                       $("[data-pid='" + v + "']").addClass("dealer");
@@ -321,6 +312,7 @@
             foldedRef.on('value', function(snapshot) {
               folded = snapshot.val();
               $.each(folded, function(k,v){
+                console.log(k,v);
                 if (v) {
                   jQuery("[data-pid='"+v['currentPlayer']+"']").parent().find(".infotext").text("Folded");
                   if (v['currentPlayer'] == currentPlayer) {
