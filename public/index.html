@@ -312,6 +312,9 @@
             foldedRef.on('value', function(snapshot) {
               console.log("updated folded");
               folded = snapshot.val();
+              if(folded.length == 0){
+                jQuery("#fold").removeAttr("disabled");
+              }
               setTimeout(function(){
                 $.each(folded, function(k,v){
                   if (v) {
@@ -322,7 +325,7 @@
                     }
                   }
                 })  
-              },1000);
+              },500);
               
               
                 
