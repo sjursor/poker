@@ -310,9 +310,8 @@
 
             var foldedRef = firebase.database().ref('rooms').child(currentRoom).child("folded");
             foldedRef.on('value', function(snapshot) {
-              console.log("updated folded");
               folded = snapshot.val();
-              if(folded.length == 0){
+              if(folded && folded.length == 0){
                 jQuery("#fold").removeAttr("disabled");
               }
               setTimeout(function(){
