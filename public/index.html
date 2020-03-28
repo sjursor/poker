@@ -25,7 +25,9 @@
   </div>
 
     <div id="container">
-
+      <div id="loginContainer">
+        <button id="login">Logg inn</button>
+      </div>
       <div id="game">
         <div id="admin">
           <div id="profile">
@@ -90,17 +92,8 @@
         $("#game").show();
         jQuery("#userinfoname").text("User: "+user.displayName);
         $("#logout").show();
-        $("#logout").on("click", function(){
-            //removePlayerFromTable(user.uid);
-          firebase.auth().signOut().then(function() {
-            console.log("signed out success");
-            $("#logout").hide();
-            $("#userinfoname").text("You must log in to play the game (reload page)");
-            $("#game").hide();
-          }).catch(function(error) {
-            console.log("error", error);
-          });
-        });
+        $("#login").hide();
+        
       }
 
       $(document).ready(function(){

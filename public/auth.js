@@ -4,15 +4,17 @@ loginHandler = function(){
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         console.log("user is signed in");
-        newPlayer(user.uid, user.email, user.displayName, user.photoURL, function(pid){
+        //newPlayer(user.uid, user.email, user.displayName, user.photoURL, function(pid){
           addPlayerToTable(user.uid, "-M3NcGg4RPa6ShpXgZXa");
           currentPlayer = user.uid;
         
           showGame(user);
           updateUserCards();
-        });
+        //});
     } else {
-      firebase.auth().signInWithPopup(provider).then(function(result) {
+
+      $("#login").click(function(){
+        firebase.auth().signInWithPopup(provider).then(function(result) {
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         var token = result.credential.accessToken;
         // The signed-in user info.
@@ -26,21 +28,39 @@ loginHandler = function(){
           addPlayerToTable(pid,currentRoom);
           jQuery("#userinfo").text("User: "+user.displayName);
         });
-          showGame();
-          updateUserCards();
+
+        showGame();
+        updateUserCards();
+
+
+        $("#logout").on("click", function(){
+            //removePlayerFromTable(user.uid);
+          firebase.auth().signOut().then(function() {
+            console.log("signed out success");
+            $("#logout").hide();
+            $("#userinfoname").text("You must log in to play the game (reload page)");
+            $("#game").hide();
+          }).catch(function(error) {
+            console.log("error", error);
+          });
+        });
+
+
+
 
         // ...
-      }).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        console.log(errorMessage, errorCode, email);
-        // ...
-      });
+        }).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // The email of the user's account used.
+          var email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          var credential = error.credential;
+          console.log(errorMessage, errorCode, email);
+          // ...
+        }); 
+      })  
     }
   });  
 }
