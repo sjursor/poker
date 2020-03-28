@@ -14,6 +14,7 @@ setNextDealerAndDealHand = function() {
     firebase.database().ref('rooms/'+currentRoom+"/flop").set("");
     firebase.database().ref('rooms/'+currentRoom+"/turn").set("");
     firebase.database().ref('rooms/'+currentRoom+"/river").set("");
+    firebase.database().ref('rooms/'+currentRoom+"/folded").set("");
 
 
 	currentDealerRef = firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
@@ -37,6 +38,7 @@ setNextDealerAndDealHand = function() {
 				var updates = {};
 				updates["rooms/"+currentRoom+"/deck"] = newDeck;
 				updates["rooms/"+currentRoom+"/currentDealer"] = currentDealer;
+				updates["rooms/"+currentRoom+"/folded"] = [];
 				return firebase.database().ref().update(updates);
 			});
 
