@@ -310,16 +310,21 @@
 
             var foldedRef = firebase.database().ref('rooms').child(currentRoom).child("folded");
             foldedRef.on('value', function(snapshot) {
+              console.log("updated folded");
               folded = snapshot.val();
-              $.each(folded, function(k,v){
-                console.log(k,v);
-                if (v) {
-                  jQuery("[data-pid='"+v['currentPlayer']+"']").parent().find(".infotext").text("Folded");
-                  if (v['currentPlayer'] == currentPlayer) {
-                    $("#fold").attr("disabled","disabled");
+              setTimeout(function(){
+                $.each(folded, function(k,v){
+                  if (v) {
+                    jQuery("[data-pid='"+v['currentPlayer']+"']").parent().find(".infotext").text("Folded");
+                    jQuery("[data-pid='"+v['currentPlayer']+"']").parent().find(".infotext").css("background","white");
+                    if (v['currentPlayer'] == currentPlayer) {
+                      $("#fold").attr("disabled","disabled");
+                    }
                   }
-                }
-              })
+                })  
+              },1000);
+              
+              
                 
             });
 
