@@ -39,7 +39,7 @@ setNextDealerAndDealHand = function() {
 				updates["rooms/"+currentRoom+"/deck"] = newDeck;
 				updates["rooms/"+currentRoom+"/currentDealer"] = currentDealer;
 				updates["rooms/"+currentRoom+"/folded"] = [];
-				return firebase.database().ref().update(updates);
+
 			});
 
 		} else {
@@ -68,10 +68,16 @@ setNextDealerAndDealHand = function() {
 				var updates = {};
 				updates["rooms/"+currentRoom+"/deck"] = newDeck;
 				updates["rooms/"+currentRoom+"/currentDealer"] = nextDealer;
-				return firebase.database().ref().update(updates);
+				updates["rooms/"+currentRoom+"/folded"] = [];
+
 			});
 
 		}
+
+		// Reset fold-button state
+		$("#fold").attr("disabled", null);
+
+		return firebase.database().ref().update(updates);
 
 	});
 /*
