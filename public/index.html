@@ -407,13 +407,11 @@
         $("#showcards").click(function() {
 
           if (confirm("Show cards?")) {
-            
-            var card1 = $("#userCard1").attr("class").replace("card ", "");
-            var card2 = $("#userCard2").attr("class").replace("card ", "");
-            cards = card1+";"+card2;
+
+            cardsshown = true;
 
             firebase.database().ref('rooms/'+currentRoom+"/shownCards/"+currentPlayer).set({
-               cards
+              cardsshown
             });
             $("#showCards").attr("disabled","disabled");
           }
