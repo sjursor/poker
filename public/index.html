@@ -49,7 +49,6 @@
             <div class="player" id="player10">
               <div class="name">&nbsp;</div>
               <div class="playercards">
-                <div class="profilepicture"></div>
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
               </div>
@@ -57,7 +56,6 @@
             <div class="player" id="player1">
               <div class="name">&nbsp;</div>
               <div class="playercards">
-                <div class="profilepicture"></div>
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
               </div>
@@ -65,7 +63,6 @@
             <div class="player" id="player2">
               <div class="name">&nbsp;</div>
               <div class="playercards">
-                <div class="profilepicture"></div>
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
               </div>
@@ -73,7 +70,6 @@
             <div class="player" id="player3">
               <div class="name">&nbsp;</div>
               <div class="playercards">
-                <div class="profilepicture"></div>
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
               </div>
@@ -83,7 +79,6 @@
             <div class="player" id="player9">
               <div class="name">&nbsp;</div>
               <div class="playercards">
-                <div class="profilepicture"></div>
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
               </div>
@@ -91,7 +86,6 @@
             <div class="player" id="player4">
               <div class="name">&nbsp;</div>
               <div class="playercards">
-                <div class="profilepicture"></div>
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
               </div>
@@ -101,7 +95,6 @@
             <div class="player" id="player8">
               <div class="name">&nbsp;</div>
               <div class="playercards">
-                <div class="profilepicture"></div>
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
               </div>
@@ -109,7 +102,6 @@
             <div class="player" id="player7">
               <div class="name">&nbsp;</div>
               <div class="playercards">
-                <div class="profilepicture"></div>
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
               </div>
@@ -117,7 +109,6 @@
             <div class="player" id="player6">
               <div class="name">&nbsp;</div>
               <div class="playercards">
-                <div class="profilepicture"></div>
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
               </div>
@@ -125,7 +116,6 @@
             <div class="player" id="player5">
               <div class="name">&nbsp;</div>
               <div class="playercards">
-                <div class="profilepicture"></div>
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
               </div>
@@ -227,6 +217,51 @@
             currentDealer = val["currentDealer"];
             if (currentDealer != currentPlayer) {$("#nextCard").hide();
             } else {$("#nextCard").show();}
+
+
+            // Show the cards of those who have decided to show their cards
+            shownCards = val["shownCards"];
+            $(".playercards").each(function(e, obj) {
+              $(this).find(".playercard1").removeClass().addClass("playercard1");
+              $(this).find(".playercard2").removeClass().addClass("playercard2");
+            });
+
+            if (shownCards) {
+              $.each(shownCards,function(k, v){
+                // Find the cards of the player
+                var playersRef = firebase.database().ref('players').child(k);
+
+                //var playersRef = firebase.database().ref('players').child("9qEcvtXYbzMHg5kLU8YOjKFpvLh2");  // Stian
+
+                playersRef.once('value', function(snapshot) {
+                  playerval = snapshot.val();
+                  console.log(playerval["name"])
+
+                  if (playerval["activeCards"]) {
+                    // Remove profile picture (not working..)
+                    $("[data-pid='" + k + "'] .playercards").css("background-color", "#fff");
+                    $("[data-pid='" + k + "'] .playercards").css("background-image", "none");
+
+                    console.log($("[data-pid='" + k + "'] .playercards"));
+
+                    // Get active cards
+                    var userCards = playerval["activeCards"].split(";");
+
+                    // Show card 1
+                    var klass1 = userCards[0].split(",");
+                    var type = getType(klass1[0]);
+                    $("[data-pid='" + k + "'] .playercards .playercard1").addClass(getCardClass(klass1, true));
+
+                    // Show card 2
+                    var klass2 = userCards[1].split(",");
+                    var type = getType(klass2[0]);
+                    $("[data-pid='" + k + "'] .playercards .playercard2").addClass(getCardClass(klass2, true));
+                  }
+                });
+
+              });
+            }
+
           });
 
             //List players
@@ -239,7 +274,7 @@
               $.each(ex_players,function(k,player){
                 players.push(player);
               });
-                        
+
               $.each(players,function(k,v){
 
                 var playerRef = firebase.database().ref('players/'+v);
@@ -252,19 +287,19 @@
 
                   if(val !== null) {
                     // Add player pid as a data attribute
-                    $("#player" + playerPos + " .name").attr("data-pid", playerkey);
+                    $("#player" + playerPos).attr("data-pid", playerkey);
                     if(val.photo){
                       $("#player" + playerPos + " .playercards").css("background-image", "url("+val.photo+"?width=135)");
                       $("#player" + playerPos + " .playercards").css("background-size", "contain");
-                      $("#player" + playerPos + " .playercards").html("<div class='infotext'></div>");
+                      //$("#player" + playerPos + " .playercards").html("<div class='infotext'></div>");
                     }else{
 
                     }
                     // Add dealer class
                     if (playerkey == currentDealer) {
-                      $("[data-pid='" + v + "']").addClass("dealer");
+                      $("[data-pid='" + v + "'] .name").addClass("dealer");
                     } else {
-                      $("[data-pid='" + v + "']").removeClass("dealer");
+                      $("[data-pid='" + v + "'] .name").removeClass("dealer");
                     }
 
                     // Write the player name
@@ -311,23 +346,24 @@
             var foldedRef = firebase.database().ref('rooms').child(currentRoom).child("folded");
             foldedRef.on('value', function(snapshot) {
               folded = snapshot.val();
-              if(folded && folded.length == 0){
+
+              if(!folded || folded.length == 0){
                 jQuery("#fold").removeAttr("disabled");
               }
               setTimeout(function(){
                 $.each(folded, function(k,v){
                   if (v) {
-                    jQuery("[data-pid='"+v['currentPlayer']+"']").parent().find(".infotext").text("Folded");
-                    jQuery("[data-pid='"+v['currentPlayer']+"']").parent().find(".infotext").css("background","white");
+                    jQuery("[data-pid='"+v['currentPlayer']+"']").find(".infotext").text("Folded");
+                    jQuery("[data-pid='"+v['currentPlayer']+"']").find(".infotext").css("background","white");
                     if (v['currentPlayer'] == currentPlayer) {
                       $("#fold").attr("disabled","disabled");
                     }
                   }
-                })  
+                })
               },500);
-              
-              
-                
+
+
+
             });
 
 
@@ -423,10 +459,10 @@
             
       });
 
-      getCardClass = function(card){
+      getCardClass = function(card, removeDefault){
         if(!card){return;}
         var type = getType(card[0]);
-        return "card "+card[1].toLowerCase()+'_'+type;
+        return (removeDefault == true ? "" : "card ")+card[1].toLowerCase()+'_'+type;
       }
 
       getType = function(s){
