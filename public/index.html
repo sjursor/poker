@@ -29,21 +29,6 @@
         <button id="login">Logg inn</button>
       </div>
       <div id="game">
-        <div id="admin">
-          <div id="profile">
-            <div id="activePlayers">
-              <h3>Players</h3>
-              <ul></ul>
-            </div>
-          </div>
-        
-          <div id="rooming">
-           <div id="roomlist">
-              <h3>Existing tables</h3>
-              <ul></ul>
-            </div>
-          </div>
-        </div>
         <div id="seats">
           <div class="seatrow" id="row1">
             <div class="player" id="player10">
@@ -173,10 +158,6 @@
         photoURLs = {};
         
         loginHandler();
-
-        //Show admin tools if ?admin=true
-        let searchParams = new URLSearchParams(window.location.search)
-        if(searchParams.has('admin')){$("#admin").show();}
 
         // Table states:
         // 0: No cards dealt (only when initializing new table)
