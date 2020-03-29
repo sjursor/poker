@@ -170,6 +170,7 @@
         let app = firebase.app();
         currentRoom   = "";
         currentPlayer = "";
+        photoURLs = {};
         
         loginHandler();
 
@@ -190,53 +191,163 @@
         
 
         //List current rooms in firebase
-        var roomsRef = firebase.database().ref('rooms');
+        /*var roomsRef = firebase.database().ref('rooms');
         roomsRef.on('value', function(snapshot) {
           $("#roomlist ul li").remove();
           $.each(snapshot.val(), function(key,roomData){
             var li = $("#roomlist ul").append('<li data-fid="'+key+'" data-name="'+roomData['name']+'">'+roomData['name']+'</li>'); 
           });
-
-            //var name = $(this).data("name");
-            //$("#currentTableName").html(name);
-            currentRoom = "-M3NcGg4RPa6ShpXgZXa";
-            currentDealer = "";
-            resetTableCards();
-
-
-            activeRoom = roomsRef.child(currentRoom);
-          activeRoom.on('value', function(snapshot) {
-            var val = snapshot.val();
-            $("#currentTableName").html(val["name"]);
-
-            if (val["flop"] == "") {
-              tableState = 1;
-              $("#nextCard").html("Show flop");
-            } else if (val["turn"] == "") {
-              tableState = 2;
-              $("#nextCard").html("Show turn");
-            } else if (val["river"] == "") {
-              tableState = 3;
-              $("#nextCard").html("Show river");
-            } else {
-              tableState = 4;
-              $("#nextCard").html("End game and deal new hand");
-            }
-
-            // Show button only when currentplayer is dealer
-            currentDealer = val["currentDealer"];
-            if (currentDealer != currentPlayer) {$("#nextCard").hide();
-            } else {$("#nextCard").show();}
+*/
+          //var name = $(this).data("name");
+          //$("#currentTableName").html(name);
+          currentRoom = "-M3NcGg4RPa6ShpXgZXa";
+          currentDealer = "";
+          resetTableCards();
 
 
-            // Show the cards of those who have decided to show their cards
-            shownCards = val["shownCards"];
-            $(".playercards").each(function(e, obj) {
-              $(this).find(".playercard1").removeClass().addClass("playercard1");
-              $(this).find(".playercard2").removeClass().addClass("playercard2");
+          //List players
+          var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
+          playersRef.on('value', function(snapshot){
+            var ex_players = snapshot.val();
+
+            //remove empty player-index
+            var players = [];
+            $.each(ex_players,function(k,player){
+              players.push(player);
             });
 
-            setTimeout(function() {
+            $.each(players,function(k,v){
+
+              var playerRef = firebase.database().ref('players/'+v);
+              //console.log(playerRef)
+              playerRef.on('value', function(snapshot) {
+                var val = snapshot.val();
+                var playerkey = snapshot.key;
+
+                var playerPos = $.inArray(playerkey,players)+1;
+
+                if(val !== null) {
+                  // Add player pid as a data attribute
+                  $("#player" + playerPos).attr("data-pid", playerkey);
+                  if (val.photo) {
+                    photoURLs[playerkey] = val.photo + "?width=135";
+                    $("#player" + playerPos + " .playercards").css("background-image", "url("+photoURLs[playerkey]+")");
+                    $("#player" + playerPos + " .playercards").css("background-size", "contain");
+                  }
+
+
+                  // Write the player name
+                  $("#player" + playerPos + " .name").html(val["name"]);
+
+                }
+
+              });
+            });
+            $( document ).on( "click", "span.removePlayerFromTable", function() {
+              var table = $(this).data("table");
+              var uid   = $(this).data("uid");
+              removePlayerFromTable(uid,table);
+            });
+          });
+
+          // Listen for changes to current room
+          setTimeout(function() {
+            console.log(photoURLs)
+            console.log(photoURLs.J0GfoIqLhzaxL1SrAeYigI7oXVx1)
+            activeRoom = firebase.database().ref('rooms/'+currentRoom);
+            activeRoom.on('value', function(snapshot) {
+              var val = snapshot.val();
+              $("#currentTableName").html(val["name"]);
+
+              // Set tablestate and button text
+              if (val["flop"] == "") {
+                tableState = 1;
+                $("#nextCard").html("Show flop");
+              } else if (val["turn"] == "") {
+                tableState = 2;
+                $("#nextCard").html("Show turn");
+              } else if (val["river"] == "") {
+                tableState = 3;
+                $("#nextCard").html("Show river");
+              } else {
+                tableState = 4;
+                $("#nextCard").html("End game and deal new hand");
+              }
+
+              // Show button only when currentplayer is dealer
+              currentDealer = val["currentDealer"];
+              if (currentDealer != currentPlayer) {$("#nextCard").hide();
+              } else {$("#nextCard").show();}
+
+
+              // Show the flop
+              if(!val["flop"] || val["flop"] === ""){
+                jQuery(".flop span").removeClass();
+              } else {
+                flop = val["flop"].split(";");
+                jQuery("#flopp1").removeClass().addClass(getCardClass(flop[0].split(",")));
+                jQuery("#flopp2").removeClass().addClass(getCardClass(flop[1].split(",")));
+                jQuery("#flopp3").removeClass().addClass(getCardClass(flop[2].split(",")));
+              }
+
+
+              // Show the turn
+              if(!val["turn"] || val["turn"] === "") {
+                jQuery("#turn").removeClass();
+              } else {
+                jQuery("#turn").removeClass().addClass(getCardClass(val["turn"]));
+              }
+
+              // Show the river
+              if(!val["river"] || val["river"] === "") {
+                jQuery("#river").removeClass();
+              } else {
+                jQuery("#river").removeClass().addClass(getCardClass(val["river"]));
+              }
+
+              // Show folded
+              if (val["folded"]) {
+                folded = val["folded"];
+
+                if(!folded || folded.length == 0){
+                  jQuery("#fold").removeAttr("disabled");
+                }
+                $.each(folded, function(k,v){
+                  if (v) {
+                    jQuery("[data-pid='"+v['currentPlayer']+"']").find(".infotext").text("FOLDED");
+                    if (v['currentPlayer'] == currentPlayer) {
+                      $("#fold").attr("disabled","disabled");
+                    }
+                  }
+                });
+              }
+
+              // Add dealer class
+              console.log("dealer is "+val["currentDealer"])
+              if (val["currentDealer"]) {
+                $.each($(".player"), function(k, v) {
+                  if (val["currentDealer"] == $(this).attr("data-pid")) {
+                    console.log("Found dealer, changing to dealer class for " + val["currentDealer"])
+                    $(this).find(".name").addClass("dealer");
+                  } else {
+                    $(this).find(".name").removeClass("dealer");
+                  }
+                });
+              }
+
+
+              // Reset photo URLs
+              $.each(photoURLs, function(k, v) {
+                $("[data-pid='" + k + "'] .playercards").css("background-image", "url(" + photoURLs[k] + ")");
+              });
+
+              // Show the cards of those who have decided to show their cards
+              shownCards = val["shownCards"];
+              $(".playercards").each(function(e, obj) {
+                $(this).find(".playercard1").removeClass().addClass("playercard1");
+                $(this).find(".playercard2").removeClass().addClass("playercard2");
+              });
+
               if (shownCards) {
                 $.each(shownCards,function(k, v) {
 
@@ -251,117 +362,12 @@
                   // Show card 2
                   $("[data-pid='" + k + "'] .playercards .playercard2").addClass(userCards[1]);
                 });
-
               }
-            },500);
-
-          });
-
-            //List players
-            var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
-            playersRef.on('value', function(snapshot){
-              var ex_players = snapshot.val();
-              
-              //remove empty player-index
-              var players = [];
-              $.each(ex_players,function(k,player){
-                players.push(player);
-              });
-
-              $.each(players,function(k,v){
-
-                var playerRef = firebase.database().ref('players/'+v);
-                //console.log(playerRef)
-                playerRef.once('value', function(snapshot) {
-                  var val = snapshot.val();
-                  var playerkey = snapshot.key;
-
-                  var playerPos = $.inArray(playerkey,players)+1;
-
-                  if(val !== null) {
-                    // Add player pid as a data attribute
-                    $("#player" + playerPos).attr("data-pid", playerkey);
-                    if(val.photo){
-                      $("#player" + playerPos + " .playercards").css("background-image", "url("+val.photo+"?width=135)");
-                      $("#player" + playerPos + " .playercards").css("background-size", "contain");
-                      //$("#player" + playerPos + " .playercards").html("<div class='infotext'></div>");
-                    }else{
-
-                    }
-                    // Add dealer class
-                    if (playerkey == currentDealer) {
-                      $("[data-pid='" + v + "'] .name").addClass("dealer");
-                    } else {
-                      $("[data-pid='" + v + "'] .name").removeClass("dealer");
-                    }
-
-                    // Write the player name
-                    $("#player" + playerPos + " .name").html(val["name"]);
-
-                  }
-
-                });
-              });
-              $( document ).on( "click", "span.removePlayerFromTable", function() {
-                var table = $(this).data("table");
-                var uid   = $(this).data("uid");
-                removePlayerFromTable(uid,table);
-              });
-            });
-            
-            var flop = firebase.database().ref('rooms').child(currentRoom).child("flop");
-            flop.on('value', function(snapshot) {
-              flop = snapshot.val();
-                if(!flop){
-                  //console.log("no flop");
-                  jQuery(".flop span").removeClass();
-                } else {
-                  flop = flop.split(";");
-                  jQuery("#flopp1").removeClass().addClass(getCardClass(flop[0].split(",")));
-                  jQuery("#flopp2").removeClass().addClass(getCardClass(flop[1].split(",")));
-                  jQuery("#flopp3").removeClass().addClass(getCardClass(flop[2].split(",")));
-                }
 
             });
+          }, 2000);
 
-            var turn = firebase.database().ref('rooms').child(currentRoom).child("turn");
-            turn.on('value', function(snapshot) {
-              turn = snapshot.val();
-                jQuery("#turn").removeClass().addClass(getCardClass(turn));
-            });
-
-            var river = firebase.database().ref('rooms').child(currentRoom).child("river");
-            river.on('value', function(snapshot) {
-              river = snapshot.val();
-                jQuery("#river").removeClass().addClass(getCardClass(river));
-            });
-
-            var foldedRef = firebase.database().ref('rooms').child(currentRoom).child("folded");
-            foldedRef.on('value', function(snapshot) {
-              folded = snapshot.val();
-
-              if(!folded || folded.length == 0){
-                jQuery("#fold").removeAttr("disabled");
-              }
-              setTimeout(function(){
-                $.each(folded, function(k,v){
-                  if (v) {
-                    jQuery("[data-pid='"+v['currentPlayer']+"']").find(".infotext").text("FOLDED");
-                    if (v['currentPlayer'] == currentPlayer) {
-                      $("#fold").attr("disabled","disabled");
-                    }
-                  }
-                })
-              },500);
-
-
-
-            });
-
-
-
-        });
-
+        //});
 
           //Click handlers
           // New room

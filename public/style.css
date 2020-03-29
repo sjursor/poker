@@ -42,13 +42,8 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
           width:72px;
           height: 104px;
           background-size: cover;
-        animation-name: appearcard;
-        animation-duration: 1s;
       }
-      @keyframes appearcard {
-        from {opacity: 0;}
-        to {opacity: 1;}
-      }
+
       .flop{
         border: 1px solid white;
         margin-right: 20px;
