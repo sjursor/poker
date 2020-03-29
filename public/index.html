@@ -233,8 +233,6 @@
 
           // Listen for changes to current room
           setTimeout(function() {
-            console.log(photoURLs)
-            console.log(photoURLs.J0GfoIqLhzaxL1SrAeYigI7oXVx1)
             activeRoom = firebase.database().ref('rooms/'+currentRoom);
             activeRoom.on('value', function(snapshot) {
               var val = snapshot.val();
@@ -304,11 +302,9 @@
               }
 
               // Add dealer class
-              console.log("dealer is "+val["currentDealer"])
               if (val["currentDealer"]) {
                 $.each($(".player"), function(k, v) {
                   if (val["currentDealer"] == $(this).attr("data-pid")) {
-                    console.log("Found dealer, changing to dealer class for " + val["currentDealer"])
                     $(this).find(".name").addClass("dealer");
                   } else {
                     $(this).find(".name").removeClass("dealer");
