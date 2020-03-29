@@ -118,8 +118,8 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       }
 
       #player5 {
-        transform: rotate(138deg);
-          padding-top: 28px;
+        transform: rotate(-42deg);
+          padding-top: 30px;
       }
 
       #player6 {
@@ -131,8 +131,8 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       }
 
       #player8 {
-        transform: rotate(-138deg);
-          padding-top: 28px;
+        transform: rotate(42deg);
+          padding-top: 30px;
       }
 
       #player9 {
@@ -177,6 +177,7 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
           color: orangered;
           height: 16px;
           text-align: center;
+          font-size: 14px;
       }
 
       .player.nocards .playercards {
