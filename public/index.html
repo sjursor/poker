@@ -236,41 +236,24 @@
               $(this).find(".playercard2").removeClass().addClass("playercard2");
             });
 
-            if (shownCards) {
-              $.each(shownCards,function(k, v){
-                // Find the cards of the player
-                var playersRef = firebase.database().ref('players').child(k);
+            setTimeout(function() {
+              if (shownCards) {
+                $.each(shownCards,function(k, v) {
 
-                //var playersRef = firebase.database().ref('players').child("9qEcvtXYbzMHg5kLU8YOjKFpvLh2");  // Stian
+                  // Remove profile picture
+                  $("[data-pid='" + k + "'] .playercards").css("background-color", "#fff");
+                  $("[data-pid='" + k + "'] .playercards").css("background-image", "none");
 
-                playersRef.once('value', function(snapshot) {
-                  playerval = snapshot.val();
-                  console.log(playerval["name"])
-
-                  if (playerval["activeCards"]) {
-                    // Remove profile picture (not working..)
-                    $("[data-pid='" + k + "'] .playercards").css("background-color", "#fff");
-                    $("[data-pid='" + k + "'] .playercards").css("background-image", "none");
-
-                    console.log($("[data-pid='" + k + "'] .playercards"));
-
-                    // Get active cards
-                    var userCards = playerval["activeCards"].split(";");
-
-                    // Show card 1
-                    var klass1 = userCards[0].split(",");
-                    var type = getType(klass1[0]);
-                    $("[data-pid='" + k + "'] .playercards .playercard1").addClass(getCardClass(klass1, true));
-
-                    // Show card 2
-                    var klass2 = userCards[1].split(",");
-                    var type = getType(klass2[0]);
-                    $("[data-pid='" + k + "'] .playercards .playercard2").addClass(getCardClass(klass2, true));
-                  }
+                  // Get active cards
+                  var userCards = shownCards[k].cards.split(";");
+                  // Show card 1
+                  $("[data-pid='" + k + "'] .playercards .playercard1").addClass(userCards[0]);
+                  // Show card 2
+                  $("[data-pid='" + k + "'] .playercards .playercard2").addClass(userCards[1]);
                 });
 
-              });
-            }
+              }
+            },500);
 
           });
 
@@ -452,10 +435,12 @@
 
           if (confirm("Show cards?")) {
 
-            cardsshown = true;
+            var card1 = $("#userCard1").attr("class").replace("card ", "");
+            var card2 = $("#userCard2").attr("class").replace("card ", "");
+            cards = card1+";"+card2;
 
             firebase.database().ref('rooms/'+currentRoom+"/shownCards/"+currentPlayer).set({
-              cardsshown
+              cards
             });
             $("#showCards").attr("disabled","disabled");
           }
