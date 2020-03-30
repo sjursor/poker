@@ -291,6 +291,10 @@
                 if(!folded || folded.length == 0){
                   jQuery("#fold").removeAttr("disabled");
                 }
+
+                // Clear all infotext before applying folded-state
+                jQuery(".infotext").empty();
+
                 $.each(folded, function(k,v){
                   if (v) {
                     jQuery("[data-pid='"+v['currentPlayer']+"']").find(".infotext").text("FOLDED");
@@ -299,6 +303,9 @@
                     }
                   }
                 });
+              } else {
+                // Nobody is folded, reset all infotext
+                jQuery(".infotext").empty();
               }
 
               // Add dealer class

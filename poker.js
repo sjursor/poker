@@ -17,10 +17,7 @@ setNextDealerAndDealHand = function() {
     firebase.database().ref('rooms/'+currentRoom+"/folded").set("");
     firebase.database().ref('rooms/'+currentRoom+"/shownCards").set("");
 
-    jQuery(".infotext").empty();
-
-
-	currentDealerRef = firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
+    currentDealerRef = firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
 	currentDealerRef.once('value', function(snapshot){
 		currentDealer = snapshot.val();
 
