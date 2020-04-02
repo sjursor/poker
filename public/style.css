@@ -87,6 +87,7 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         font-weight: bold;
           font-size: 12px;
         padding-top: 54px;
+
       }
 
       .dealer {
@@ -153,9 +154,24 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         border: 1px solid #aaa;
           border-radius: 4px;
           padding: 4px;
+
           display: flex;
           justify-content: center;
+          position: relative;
+
       }
+    .playercards .infotext {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 79%;
+        color: #fff;
+        display: none;
+        font-size: 16px;
+        padding-top: 20px;
+        background: rgba(0, 0, 0, .7);
+    }
 
       .playercards .playercard1,
       .playercards .playercard2 {
@@ -171,14 +187,6 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
           margin-right: 4px;
       }
 
-
-      .infotext {
-          width: 100%;
-          color: orangered;
-          height: 16px;
-          text-align: center;
-          font-size: 14px;
-      }
 
       .player.nocards .playercards {
         background: none;

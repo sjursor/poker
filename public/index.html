@@ -36,32 +36,33 @@
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="infotext">asd</div>
               </div>
-              <div class="infotext"></div>
             </div>
             <div class="player" id="player1">
               <div class="name">&nbsp;</div>
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="infotext"></div>
               </div>
-              <div class="infotext"></div>
+
             </div>
             <div class="player" id="player2">
               <div class="name">&nbsp;</div>
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="infotext"></div>
               </div>
-              <div class="infotext"></div>
             </div>
             <div class="player" id="player3">
               <div class="name">&nbsp;</div>
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="infotext"></div>
               </div>
-              <div class="infotext"></div>
             </div>
           </div>
           <div class="seatrow" id="row2">
@@ -70,16 +71,16 @@
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="infotext"></div>
               </div>
-              <div class="infotext"></div>
             </div>
             <div class="player" id="player4">
               <div class="name">&nbsp;</div>
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="infotext"></div>
               </div>
-              <div class="infotext"></div>
             </div>
           </div>
           <div class="seatrow" id="row3">
@@ -88,32 +89,32 @@
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="infotext"></div>
               </div>
-              <div class="infotext"></div>
             </div>
             <div class="player" id="player7">
               <div class="name">&nbsp;</div>
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="infotext"></div>
               </div>
-              <div class="infotext"></div>
             </div>
             <div class="player" id="player6">
               <div class="name">&nbsp;</div>
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="infotext"></div>
               </div>
-              <div class="infotext"></div>
             </div>
             <div class="player" id="player5">
               <div class="name">&nbsp;</div>
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="infotext"></div>
               </div>
-              <div class="infotext"></div>
             </div>
           </div>
           <div id="currentTable">
@@ -294,10 +295,12 @@
 
                 // Clear all infotext before applying folded-state
                 jQuery(".infotext").empty();
+                jQuery(".infotext").hide();
 
                 $.each(folded, function(k,v){
                   if (v) {
                     jQuery("[data-pid='"+v['currentPlayer']+"']").find(".infotext").text("FOLDED");
+                    jQuery("[data-pid='"+v['currentPlayer']+"']").find(".infotext").show();
                     if (v['currentPlayer'] == currentPlayer) {
                       $("#fold").attr("disabled","disabled");
                     }
@@ -306,6 +309,7 @@
               } else {
                 // Nobody is folded, reset all infotext
                 jQuery(".infotext").empty();
+                jQuery(".infotext").hide();
               }
 
               // Add dealer class
