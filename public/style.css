@@ -7,13 +7,12 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
       #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
 
-      #container{width: 1000px; margin:auto;}
+      #container{width: 1030px; margin:auto;}
 
       #userinfowrapper {
           width: 100%;
           background-color: #000;
           color: #fff;
-          padding: 2px;
           font-size: 14px;
           text-align: right;
       }
@@ -31,7 +30,7 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       #userinfo {
           margin: auto;
           max-width: 980px;
-
+          padding:5px 0;
       }
 
       #profile{width:50%; float:left;}
@@ -72,7 +71,7 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         justify-content: space-between;
         padding-left: 60px;
         padding-right: 60px;
-        height: 200px;
+        height: 215px;
       }
       #row2 {
         justify-content: space-between;
@@ -114,7 +113,6 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       }
 
       #player4 {
-        transform: rotate(90deg);
         padding-top: 0;
       }
 
@@ -137,7 +135,7 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       }
 
       #player9 {
-        transform: rotate(-90deg);
+        
         padding-top: 0;
       }
 
@@ -195,10 +193,10 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       #currentTable {
         background-image: url("https://www.transparenttextures.com/patterns/black-felt.png");
         background-color:rgb(7, 99, 36);
-        width:720px; border:6px solid black; min-height:300px; clear:both; margin-top:20px;border-radius: 182px;
+        width:670px; border:6px solid black; min-height:300px; clear:both; margin-top:20px;border-radius: 182px;
         position: absolute;
         top: 124px;
-        left: 134px;
+        left: 170px;
       }
       #currentTable h3{
         color:white;
