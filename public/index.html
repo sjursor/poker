@@ -302,7 +302,7 @@
                     jQuery("[data-pid='"+v['currentPlayer']+"']").find(".infotext").text("FOLDED");
                     jQuery("[data-pid='"+v['currentPlayer']+"']").find(".infotext").show();
                     if (v['currentPlayer'] == currentPlayer) {
-                      $("#fold").attr("disabled","disabled");
+                      //$("#fold").attr("disabled","disabled");
                     }
                   }
                 });
@@ -419,7 +419,7 @@
             firebase.database().ref('rooms/'+currentRoom+"/folded").push({
               currentPlayer
             });
-            $("#fold").attr("disabled","disabled");
+            //$("#fold").attr("disabled","disabled");
           }
         });
 
