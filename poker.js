@@ -9,13 +9,7 @@ getNewDeck = function(){
 setNextDealerAndDealHand = function() {
 	var newDeck = getNewDeck();
 	console.log("setting dealer and dealing new hand");
-	let roomKey 		= firebase.database().ref().child('rooms/'+currentRoom);
-	let flopRef 		= firebase.database().ref('rooms/'+currentRoom+"/flop");
-	let turnRef			= firebase.database().ref('rooms/'+currentRoom+"/turn");
-	let riverRef		= firebase.database().ref('rooms/'+currentRoom+"/river");
-	let foldedRef 		= firebase.database().ref('rooms/'+currentRoom+"/folded");
-	let shownCardsRef 	= firebase.database().ref('rooms/'+currentRoom+"/shownCards");
-    
+     
     var updates = {};
     updates["rooms/"+currentRoom+"/flop"] = "";
 	updates["rooms/"+currentRoom+"/turn"] = "";
@@ -40,8 +34,6 @@ setNextDealerAndDealHand = function() {
 				$(players).each(function(k,v){
 					firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
 					firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
-
-
 				});
 
 				// Reset fold-button state

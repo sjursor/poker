@@ -260,6 +260,7 @@
 
                 $.each(folded, function(k,v){
                   if (v) {
+                    jQuery("[data-pid='"+v['currentPlayer']+"']").addClass("folded");
                     jQuery("[data-pid='"+v['currentPlayer']+"']").find(".infotext").text("FOLDED");
                     jQuery("[data-pid='"+v['currentPlayer']+"']").find(".infotext").show();
                     if (v['currentPlayer'] == currentPlayer) {
@@ -269,6 +270,7 @@
                 });
               } else {
                 // Nobody is folded, reset all infotext
+                jQuery(".folded").removeClass("folded");
                 jQuery(".infotext").empty();
                 jQuery(".infotext").hide();
               }
@@ -304,6 +306,7 @@
               });
 
               if (shownCards) {
+                let rank = [];
                 $.each(shownCards,function(k, v) {
 
                   // Remove profile picture
@@ -319,8 +322,24 @@
 
                   solvShownCards();
                   $("[data-pid='" + k + "'] .playercards .descr").text(shownCards[k].descr).show();
+
+                  //Solving Rank
+                  let tableCards = getTableCards();
+                  var folded = jQuery("[data-pid='"+k+"']").hasClass("folded");
+                  if(!folded){
+                    rank.push(Hand.solve(tableCards.concat(shownCards[k].cards)));
+                  }
+
+                  //var hand1 = Hand.solve(tableCards);
+                  //var hand2 = Hand.solve(['3d', 'As', 'Jc', 'Th', '2d', '4s', 'Qd']);
+                  //var winner = Hand.winners([hand1, hand2]); // hand2
                   
                 });
+                let winner = Hand.winners(rank); // hand2
+                //console.log(rank);
+                //console.log(winner);
+                var winPlayer = jQuery(".player .descr:contains("+winner[0].descr+")");
+                winPlayer.css("background-color","#efcc00");
               }
 
             });
