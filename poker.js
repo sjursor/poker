@@ -1,30 +1,35 @@
-const doc 		= require('deck-o-cards')
+const doc 	= require('deck-o-cards')
+const Hand 	= require('pokersolver').Hand;
 
 getNewDeck = function(){
 	deck = doc.randomizedDeck();
 	return deck;
 }
 
-
 setNextDealerAndDealHand = function() {
 	var newDeck = getNewDeck();
 	console.log("setting dealer and dealing new hand");
-	//let roomKey = firebase.database().ref().child('rooms/'+currentRoom);
+	let roomKey = firebase.database().ref().child('rooms/'+currentRoom);
+	let flopRef 		= firebase.database().ref('rooms/'+currentRoom+"/flop");
+	let turnRef			= firebase.database().ref('rooms/'+currentRoom+"/turn");
+	let riverRef		= firebase.database().ref('rooms/'+currentRoom+"/river");
+	let foldedRef 		= firebase.database().ref('rooms/'+currentRoom+"/folded");
+	let shownCardsRef 	= firebase.database().ref('rooms/'+currentRoom+"/shownCards");
     
-    firebase.database().ref('rooms/'+currentRoom+"/flop").set("");
-    firebase.database().ref('rooms/'+currentRoom+"/turn").set("");
-    firebase.database().ref('rooms/'+currentRoom+"/river").set("");
-    firebase.database().ref('rooms/'+currentRoom+"/folded").set("");
-    firebase.database().ref('rooms/'+currentRoom+"/shownCards").set("");
+    flopRef.set("");
+    turnRef.set("");
+    riverRef.set("");
+    foldedRef.set("");
+    shownCardsRef.set("");
 
-    currentDealerRef = firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
+    let currentDealerRef= firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
 	currentDealerRef.once('value', function(snapshot){
 		currentDealer = snapshot.val();
 
 		if (currentDealer == 0) {
 
 			console.log("currentdealer is 0")
-			var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
+			let playersRef 		= firebase.database().ref('rooms/'+currentRoom+"/players");
 			playersRef.once('value', function(snapshot){
 				var players = snapshot.val();
 				currentDealer = players.pop();
@@ -88,7 +93,7 @@ setNextDealerAndDealHand = function() {
 				return firebase.database().ref().update(updates);
 			});
 
-			console.log("HEI")
+			//console.log("HEI")
 
 		}
 
@@ -109,14 +114,10 @@ setNextDealerAndDealHand = function() {
 */
 }
 
-
-
 showFlop = function() {
 	//console.log("showing flop")
-	
-	var deckRef = firebase.database().ref('rooms/'+currentRoom+"/deck");
-	var flopRef  = firebase.database().ref('rooms/'+currentRoom+"/flop");
-	
+	let deckRef			= firebase.database().ref('rooms/'+currentRoom+"/deck");
+	let flopRef 		= firebase.database().ref('rooms/'+currentRoom+"/flop");
 	deckRef.once('value', function(snapshot) {
 		var deck = snapshot.val();
 		var flop = deck.pop()+";"+deck.pop()+";"+deck.pop();
@@ -127,29 +128,102 @@ showFlop = function() {
 }
 
 showTurn = function() {
-	//console.log("showing turn")
-	var deckRef = firebase.database().ref('rooms/'+currentRoom+"/deck");
-	var ref  = firebase.database().ref('rooms/'+currentRoom+"/turn");
-	
+	let turnRef  = firebase.database().ref('rooms/'+currentRoom+"/turn");
+	let deckRef	 = firebase.database().ref('rooms/'+currentRoom+"/deck");
+
 	deckRef.once('value', function(snapshot) {
 		var deck = snapshot.val();
 		var turn = deck.pop();
-		ref.set(turn);
+		turnRef.set(turn);
 		deckRef.set(deck);
 	});
 }
 
 
 showRiver = function() {
-	//console.log("showing river")
-	var deckRef = firebase.database().ref('rooms/'+currentRoom+"/deck");
-	var ref  = firebase.database().ref('rooms/'+currentRoom+"/river");
-	
+	let deckRef	 = firebase.database().ref('rooms/'+currentRoom+"/deck");
+	let riverRef		= firebase.database().ref('rooms/'+currentRoom+"/river");
+
 	deckRef.once('value', function(snapshot) {
 		var deck = snapshot.val();
 		var river = deck.pop();
-		ref.set(river);
+		riverRef.set(river);
 		deckRef.set(deck);
 	});
+}
 
+getTableCards = function(){
+	//Table cards
+	let tableCards = [];
+  	firebase.database().ref('rooms/'+currentRoom+"/flop").on('value',function(s){
+  		if(s.val()){
+  			let flop = s.val().split(";");
+			tableCards.push(convertCardToSolver(flop[0].split(",")));
+			tableCards.push(convertCardToSolver(flop[1].split(",")));
+			tableCards.push(convertCardToSolver(flop[2].split(",")));	
+  		}
+  	});
+  	firebase.database().ref('rooms/'+currentRoom+"/turn").on('value',function(s){
+  		if(s.val()){
+  			tableCards.push(convertCardToSolver(s.val()));
+  		}
+  	});
+  	firebase.database().ref('rooms/'+currentRoom+"/river").on('value',function(s){
+  		if(s.val()){
+  			tableCards.push(convertCardToSolver(s.val()));	
+  		}
+  	});
+  	return tableCards;
+}
+
+currentPlayerHandDescription = function(){
+	
+	var tableCards = getTableCards();
+  	
+  	//Players cards
+  	firebase.database().ref('players/'+currentPlayer+"/activeCards").once('value', function(s){
+  		let cards = s.val().split(";");
+  		let playerCards = [];
+  		playerCards.push(convertCardToSolver(cards[0].split(",")));
+  		playerCards.push(convertCardToSolver(cards[1].split(",")));
+  		
+  		var hand = Hand.solve(tableCards.concat(playerCards));
+  		jQuery("#myCardCurrentStatus").text(hand.descr);
+
+  		return hand;
+  	});
+	
+	//var hand1 = Hand.solve(tableCards);
+	//var hand2 = Hand.solve(['3d', 'As', 'Jc', 'Th', '2d', '4s', 'Qd']);
+	//var winner = Hand.winners([hand1, hand2]); // hand2
+	//console.log("Winner is "+winner);
+	//console.log(hand1.descr);
+	//console.log(hand2.name); // Two Pair
+	//console.log(hand2.descr); // Two Pair, A's & Q's
+
+}
+
+convertCardToSolver = function(card){
+	let type;
+	let value;
+	//determine type
+	switch(card[0]) {
+	  	case '♠️':type = 's';break;
+	  	case '♦️':type = 'd';break;
+	    case '♣️':type = 'c';break;
+	    case '❤️':type = 'h';break;
+	}
+	//determine value
+	if(card[2]<10){
+		value = card[2];
+	}else{
+		switch(card[1]){
+			case 'Jack':value = 'J';break;
+			case 'Queen':value = 'Q';break;
+			case 'King':value = 'K';break;
+			case 'Ace':value = 'A';break;
+			case 'Ten':value = 'T';break;
+		}
+	}
+	return value+type;
 }

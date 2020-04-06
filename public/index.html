@@ -14,6 +14,8 @@
     <script type="application/javascript" src="/bundle.js"></script>
     <script type="application/javascript" src="/auth.js"></script>
     <script type="application/javascript" src="/jQuery_3.4.1.min.js"></script>
+    <script type="application/javascript" src="/players.js"></script>
+    <script type="application/javascript" src="/rooms.js"></script>
 
     <link rel="stylesheet" type="text/css" href="cardStyling.css">
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -131,6 +133,7 @@
             <h3>User cards</h3>
             <div class="card" id="userCard1"></div>
             <div class="card" id="userCard2"></div>
+            <div class="" id="myCardCurrentStatus"></div>
           </div>
           <div id="userButtons" class="userfunction">
             <button id="fold">Fold hand</button><br>
@@ -167,70 +170,18 @@
         // 3: Turn
         // 4: River
         tableState = 0;
+
         
 
-        //var db = firebase.database();
-        
 
-        //List current rooms in firebase
-        /*var roomsRef = firebase.database().ref('rooms');
-        roomsRef.on('value', function(snapshot) {
-          $("#roomlist ul li").remove();
-          $.each(snapshot.val(), function(key,roomData){
-            var li = $("#roomlist ul").append('<li data-fid="'+key+'" data-name="'+roomData['name']+'">'+roomData['name']+'</li>'); 
-          });
-*/
-          //var name = $(this).data("name");
-          //$("#currentTableName").html(name);
           currentRoom = "-M3NcGg4RPa6ShpXgZXa";
           currentDealer = "";
+
           resetTableCards();
 
 
-          //List players
-          var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
-          playersRef.on('value', function(snapshot){
-            var ex_players = snapshot.val();
-
-            //remove empty player-index
-            var players = [];
-            $.each(ex_players,function(k,player){
-              players.push(player);
-            });
-
-            $.each(players,function(k,v){
-
-              var playerRef = firebase.database().ref('players/'+v);
-              //console.log(playerRef)
-              playerRef.on('value', function(snapshot) {
-                var val = snapshot.val();
-                var playerkey = snapshot.key;
-
-                var playerPos = $.inArray(playerkey,players)+1;
-
-                if(val !== null) {
-                  // Add player pid as a data attribute
-                  $("#player" + playerPos).attr("data-pid", playerkey);
-                  if (val.photo) {
-                    photoURLs[playerkey] = val.photo + "?width=135";
-                    $("#player" + playerPos + " .playercards").css("background-image", "url("+photoURLs[playerkey]+")");
-                    $("#player" + playerPos + " .playercards").css("background-size", "contain");
-                  }
-
-
-                  // Write the player name
-                  $("#player" + playerPos + " .name").html(val["name"]);
-
-                }
-
-              });
-            });
-            $( document ).on( "click", "span.removePlayerFromTable", function() {
-              var table = $(this).data("table");
-              var uid   = $(this).data("uid");
-              removePlayerFromTable(uid,table);
-            });
-          });
+          //List players around Table
+          listPlayersAroundTable();
 
           // Listen for changes to current room
           setTimeout(function() {
@@ -322,6 +273,9 @@
                   }
                 });
               }
+
+              //See currentPlayerHandDescription
+              currentPlayerHandDescription();
 
 
               // Reset photo URLs
