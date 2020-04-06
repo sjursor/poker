@@ -38,7 +38,8 @@
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
-                <div class="infotext">asd</div>
+                <div class="descr"></div>
+                <div class="infotext"></div>
               </div>
             </div>
             <div class="player" id="player1">
@@ -46,6 +47,7 @@
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="descr"></div>
                 <div class="infotext"></div>
               </div>
 
@@ -55,6 +57,7 @@
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="descr"></div>
                 <div class="infotext"></div>
               </div>
             </div>
@@ -63,6 +66,7 @@
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="descr"></div>
                 <div class="infotext"></div>
               </div>
             </div>
@@ -73,6 +77,7 @@
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="descr"></div>
                 <div class="infotext"></div>
               </div>
             </div>
@@ -81,6 +86,7 @@
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="descr"></div>
                 <div class="infotext"></div>
               </div>
             </div>
@@ -91,6 +97,7 @@
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="descr"></div>
                 <div class="infotext"></div>
               </div>
             </div>
@@ -99,6 +106,7 @@
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="descr"></div>
                 <div class="infotext"></div>
               </div>
             </div>
@@ -107,6 +115,7 @@
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="descr"></div>
                 <div class="infotext"></div>
               </div>
             </div>
@@ -115,6 +124,7 @@
               <div class="playercards">
                 <div class="playercard1"></div>
                 <div class="playercard2"></div>
+                <div class="descr"></div>
                 <div class="infotext"></div>
               </div>
             </div>
@@ -210,7 +220,6 @@
               if (currentDealer != currentPlayer) {$("#nextCard").hide();
               } else {$("#nextCard").show();}
 
-
               // Show the flop
               if(!val["flop"] || val["flop"] === ""){
                 jQuery(".flop span").removeClass();
@@ -283,7 +292,9 @@
                 $("[data-pid='" + k + "'] .playercards").css("background-image", "url(" + photoURLs[k] + ")");
               });
 
+
               // Show the cards of those who have decided to show their cards
+
               shownCards = val["shownCards"];
               $(".playercards").each(function(e, obj) {
                 $(this).find(".playercard1").removeClass().addClass("playercard1");
@@ -298,11 +309,15 @@
                   $("[data-pid='" + k + "'] .playercards").css("background-image", "none");
 
                   // Get active cards
-                  var userCards = shownCards[k].cards.split(";");
+                  var userCards = shownCards[k].cardClass.split(";");
                   // Show card 1
                   $("[data-pid='" + k + "'] .playercards .playercard1").addClass(userCards[0]);
                   // Show card 2
                   $("[data-pid='" + k + "'] .playercards .playercard2").addClass(userCards[1]);
+
+                  solvShownCards();
+                  $("[data-pid='" + k + "'] .playercards .descr").text(shownCards[k].descr).show();
+                  
                 });
               }
 
@@ -385,16 +400,21 @@
 
             var card1 = $("#userCard1").attr("class").replace("card ", "");
             var card2 = $("#userCard2").attr("class").replace("card ", "");
-            cards = card1+";"+card2;
+            let cardClass = card1+";"+card2;
 
-            firebase.database().ref('rooms/'+currentRoom+"/shownCards/"+currentPlayer).set({
-              cards
-            });
+            currentPlayerHandDescription(function(hand,playerCards){
+              firebase.database().ref('rooms/'+currentRoom+"/shownCards/"+currentPlayer).set({
+                cardClass:cardClass,
+                descr:hand.descr,
+                cards:playerCards
+              });
+            })
+
+            
             $("#showCards").attr("disabled","disabled");
           }
 
         });
-
 
 
         resetTableCards();

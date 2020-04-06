@@ -1956,11 +1956,12 @@ setNextDealerAndDealHand = function() {
 	let foldedRef 		= firebase.database().ref('rooms/'+currentRoom+"/folded");
 	let shownCardsRef 	= firebase.database().ref('rooms/'+currentRoom+"/shownCards");
     
+    shownCardsRef.set("");
     flopRef.set("");
     turnRef.set("");
     riverRef.set("");
     foldedRef.set("");
-    shownCardsRef.set("");
+    
 
     let currentDealerRef= firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
 	currentDealerRef.once('value', function(snapshot){
@@ -1988,6 +1989,8 @@ setNextDealerAndDealHand = function() {
 
 				// Reset fold-button state
 				$("#fold").attr("disabled", null);
+
+				$(".playercards .descr").hide();
 
 				$(".playercards").each(function(e,t) {
 					console.log(e)
@@ -2116,12 +2119,27 @@ getTableCards = function(){
   	return tableCards;
 }
 
-currentPlayerHandDescription = function(){
-	
+solvShownCards = function(callback, pid){
+	let pRef = firebase.database().ref('rooms/'+currentRoom+'/shownCards');
+	pRef.once('value', function(s){
+  		let shown = s.val();
+  		var tableCards = getTableCards();
+
+  		$.each(shown, function(pid,v){
+  			var hand = Hand.solve(tableCards.concat(v.cards));
+  			firebase.database().ref('rooms/'+currentRoom+'/shownCards/'+pid+'/descr').set(hand.descr);
+  		});
+
+  		if(typeof(callback)=="function")callback(hand,playerCards);
+  	});
+}
+
+currentPlayerHandDescription = function(callback){	
 	var tableCards = getTableCards();
-  	
+  	let pRef = firebase.database().ref('players/'+currentPlayer+"/activeCards");
+
   	//Players cards
-  	firebase.database().ref('players/'+currentPlayer+"/activeCards").once('value', function(s){
+  	pRef.once('value', function(s){
   		let cards = s.val().split(";");
   		let playerCards = [];
   		playerCards.push(convertCardToSolver(cards[0].split(",")));
@@ -2129,9 +2147,10 @@ currentPlayerHandDescription = function(){
   		
   		var hand = Hand.solve(tableCards.concat(playerCards));
   		jQuery("#myCardCurrentStatus").text(hand.descr);
-
-  		return hand;
+  		if(typeof(callback)=="function")callback(hand,playerCards);
   	});
+
+
 	
 	//var hand1 = Hand.solve(tableCards);
 	//var hand2 = Hand.solve(['3d', 'As', 'Jc', 'Th', '2d', '4s', 'Qd']);

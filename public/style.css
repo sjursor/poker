@@ -173,6 +173,16 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         padding-top: 30px;
         background: rgba(0, 0, 0, .6);
     }
+    .playercards .descr{
+      height: 10px;
+      background:rgb(95, 158, 160);
+      position: absolute;
+      bottom: 0;
+      padding: 8px 0;
+      color:white;
+      width: 100%;
+      display:none;
+    }
 
       .playercards .playercard1,
       .playercards .playercard2 {
