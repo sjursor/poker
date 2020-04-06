@@ -1949,21 +1949,24 @@ getNewDeck = function(){
 setNextDealerAndDealHand = function() {
 	var newDeck = getNewDeck();
 	console.log("setting dealer and dealing new hand");
-	let roomKey = firebase.database().ref().child('rooms/'+currentRoom);
+	let roomKey 		= firebase.database().ref().child('rooms/'+currentRoom);
 	let flopRef 		= firebase.database().ref('rooms/'+currentRoom+"/flop");
 	let turnRef			= firebase.database().ref('rooms/'+currentRoom+"/turn");
 	let riverRef		= firebase.database().ref('rooms/'+currentRoom+"/river");
 	let foldedRef 		= firebase.database().ref('rooms/'+currentRoom+"/folded");
 	let shownCardsRef 	= firebase.database().ref('rooms/'+currentRoom+"/shownCards");
     
-    shownCardsRef.set("");
-    flopRef.set("");
-    turnRef.set("");
-    riverRef.set("");
-    foldedRef.set("");
+    var updates = {};
+    updates["rooms/"+currentRoom+"/flop"] = "";
+	updates["rooms/"+currentRoom+"/turn"] = "";
+	updates["rooms/"+currentRoom+"/river"] = "";
+	updates["rooms/"+currentRoom+"/shownCards"] = "";
+	updates["rooms/"+currentRoom+"/folded"] = "";
+	
+	firebase.database().ref().update(updates);
     
-
     let currentDealerRef= firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
+
 	currentDealerRef.once('value', function(snapshot){
 		currentDealer = snapshot.val();
 
@@ -1981,21 +1984,15 @@ setNextDealerAndDealHand = function() {
 
 				});
 
-				var updates = {};
-				updates["rooms/"+currentRoom+"/deck"] = newDeck;
-				updates["rooms/"+currentRoom+"/currentDealer"] = currentDealer;
-				updates["rooms/"+currentRoom+"/folded"] = [];
-				updates["rooms/"+currentRoom+"/shownCards"] = [];
-
 				// Reset fold-button state
 				$("#fold").attr("disabled", null);
 
 				$(".playercards .descr").hide();
 
-				$(".playercards").each(function(e,t) {
-					console.log(e)
-					console.log(t)
-				});
+				var updates = {};
+				updates["rooms/"+currentRoom+"/deck"] = newDeck;
+				updates["rooms/"+currentRoom+"/currentDealer"] = currentDealer;
+				updates["rooms/"+currentRoom+"/folded"] = [];
 
 				return firebase.database().ref().update(updates);
 
@@ -2027,12 +2024,11 @@ setNextDealerAndDealHand = function() {
 				var updates = {};
 				updates["rooms/"+currentRoom+"/deck"] = newDeck;
 				updates["rooms/"+currentRoom+"/currentDealer"] = nextDealer;
-				updates["rooms/"+currentRoom+"/folded"] = [];
-				updates["rooms/"+currentRoom+"/shownCards"] = [];
+				//updates["rooms/"+currentRoom+"/folded"] = [];
+				//updates["rooms/"+currentRoom+"/shownCards"] = [];
 
 				// Reset fold-button state
 				$("#fold").attr("disabled", null);
-
 				return firebase.database().ref().update(updates);
 			});
 
@@ -2103,7 +2099,7 @@ getTableCards = function(){
   			let flop = s.val().split(";");
 			tableCards.push(convertCardToSolver(flop[0].split(",")));
 			tableCards.push(convertCardToSolver(flop[1].split(",")));
-			tableCards.push(convertCardToSolver(flop[2].split(",")));	
+			tableCards.push(convertCardToSolver(flop[2].split(",")));
   		}
   	});
   	firebase.database().ref('rooms/'+currentRoom+"/turn").on('value',function(s){

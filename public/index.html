@@ -190,7 +190,6 @@
 
           resetTableCards();
 
-
           //List players around Table
           listPlayersAroundTable();
 
@@ -199,6 +198,7 @@
             activeRoom = firebase.database().ref('rooms/'+currentRoom);
             activeRoom.on('value', function(snapshot) {
               var val = snapshot.val();
+
               $("#currentTableName").html(val["name"]);
 
               // Set tablestate and button text
@@ -295,11 +295,12 @@
 
 
               // Show the cards of those who have decided to show their cards
-
               shownCards = val["shownCards"];
+
               $(".playercards").each(function(e, obj) {
                 $(this).find(".playercard1").removeClass().addClass("playercard1");
                 $(this).find(".playercard2").removeClass().addClass("playercard2");
+                $(this).find(".descr").text("").hide();
               });
 
               if (shownCards) {
