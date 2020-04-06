@@ -304,6 +304,7 @@
                 $(this).find(".playercard2").removeClass().addClass("playercard2");
                 $(this).find(".descr").text("").hide();
               });
+              $(".winner").removeClass("winner");
 
               if (shownCards) {
                 let rank = [];
@@ -339,7 +340,7 @@
                 //console.log(rank);
                 //console.log(winner);
                 var winPlayer = jQuery(".player .descr:contains("+winner[0].descr+")");
-                winPlayer.css("background-color","#efcc00");
+                winPlayer.addClass("winner");
               }
 
             });
