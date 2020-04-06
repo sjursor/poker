@@ -16,6 +16,7 @@
     <script type="application/javascript" src="/jQuery_3.4.1.min.js"></script>
     <script type="application/javascript" src="/players.js"></script>
     <script type="application/javascript" src="/rooms.js"></script>
+    <script type="application/javascript" src="/clickHandlers.js"></script>
 
     <link rel="stylesheet" type="text/css" href="cardStyling.css">
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -326,95 +327,7 @@
 
         //});
 
-          //Click handlers
-          // New room
-          $("#newRoomSubmit").click(function(){
-              var roomName = jQuery("#roomInput").val();
-              createNewRoom(roomName);
-          });
-
-
-          // Next card
-          $("#nextCard").click(function() {
-            switch (tableState) {
-              case 0:
-                if (confirm("Deal new hand?")) {
-                  setNextDealerAndDealHand();
-                  $("#nextCard").html("Show flop");
-                  tableState = 1;
-                }
-                break;
-
-              case 1:
-                if (confirm("Show flop?")) {
-                  showFlop();
-                  $("#nextCard").html("Show turn");
-                  tableState = 2;
-                }
-                break;
-
-              case 2:
-                if (confirm("Show turn?")) {
-                  showTurn();
-                  $("#nextCard").html("Show river");
-                  tableState = 3;
-                }
-                break;
-
-              case 3:
-                if (confirm("Show river?")) {
-                  showRiver();
-                  $("#nextCard").html("End game and deal new hand");
-                  tableState = 4;
-                }
-                break;
-
-              case 4:
-                if (confirm("End game and deal new hand?")) {
-                  setNextDealerAndDealHand();
-                  $("#nextCard").html("Show flop");
-                  tableState = 1;
-                }
-                break;
-            }
-
-          });
-
-
-        // Fold-button
-        $("#fold").click(function() {
-
-          if (confirm("Fold hand?")) {
-            firebase.database().ref('rooms/'+currentRoom+"/folded").push({
-              currentPlayer
-            });
-            //$("#fold").attr("disabled","disabled");
-          }
-        });
-
-
-        // Show card-button
-        $("#showcards").click(function() {
-
-          if (confirm("Show cards?")) {
-
-            var card1 = $("#userCard1").attr("class").replace("card ", "");
-            var card2 = $("#userCard2").attr("class").replace("card ", "");
-            let cardClass = card1+";"+card2;
-
-            currentPlayerHandDescription(function(hand,playerCards){
-              firebase.database().ref('rooms/'+currentRoom+"/shownCards/"+currentPlayer).set({
-                cardClass:cardClass,
-                descr:hand.descr,
-                cards:playerCards
-              });
-            })
-
-            
-            $("#showCards").attr("disabled","disabled");
-          }
-
-        });
+        clickHandlers();
 
 
         resetTableCards();
@@ -452,128 +365,10 @@
         </div>');
       }
 
-      //Create new rooms
-      createNewRoom = function(name){
-        let roomData = {
-          name:name,
-          players:0,
-          currentDealer:0,
-          flop:[],
-          turn:"",
-          river:""
-        };
-        let newRoomKey = firebase.database().ref().child('rooms').push().key;
-        
-        var updates = {};
-        updates['/rooms/' + newRoomKey] = roomData;
-        firebase.database().ref().update(updates);
-        currentRoom = newRoomKey;
-        return newRoomKey;
-      }
-
-      //Create new player
-      newPlayer = function(uid, email, displayName, photoURL, callback){
-        let newPlayerKey = firebase.database().ref('players/'+uid);
-        createNewPlayer(uid, email, displayName, photoURL,callback);
-        callback(uid);
-        // newPlayerKey.once("value", function(snapshot){
-        //   if(snapshot.val() == null){
-        //     createNewPlayer(uid, email, displayName, photoURL,callback);
-        //   }else{
-        //     currentPlayer = uid;
-        //     callback(uid);
-        //   }
-        // });
-      }
-
-      createNewPlayer = function(uid, email, displayName, photoURL,callback){
-        firebase.database().ref().child('players/'+uid).set({
-          name:displayName,
-          email:email,
-          photo:photoURL,
-          stack:0,
-          currentRoom:currentRoom
-        },function(error) {
-          if (error) {
-            console.log("The write failed...");
-          } else {
-            // Data saved successfully!
-            currentPlayer = uid;
-            //callback(uid);
-          }
-        });
-      }
-
-      addPlayerToTable = function(player,table){
-        var ref = firebase.database().ref('rooms/'+table+'/players');
-        ref.once("value", function(snapshot){
-          var ex_players = snapshot.val();
-          var players = [];
-          $.each(ex_players,function(k,p){
-            if(p){players.push(p);}
-          });
-
-          //Add player to playerslist if not already on table
-          if($.inArray(player,players)==-1){players.push(player); }
-
-          //setting currentRoom on player obj
-          firebase.database().ref('players/'+player+'/currentRoom').set(table);
-          //setting players on table
-          firebase.database().ref('rooms/'+table+'/players').set(players);
-
-        });
-      }
-          
-      removePlayerFromTable = function(player,table){
-        var ref = firebase.database().ref('rooms/'+table);
-        ref.once("value", function(snapshot){
-          var data = snapshot.val();
-          var players = data['players'];
-
-          console.log(players);
-          var newPlayers = [];
-          $.each(players,function(k,v){
-            console.log(k,v);
-            if(v == player){
-              return;
-            }else{
-              newPlayers.push(v);
-            }
-          });
-
-          var updates = {};
-          updates['/rooms/' + table + '/players'] = newPlayers;
-          return firebase.database().ref().update(updates);
-        });
-      }
+      
 
 
-      updateUserCards = function() {
-          playerRef = firebase.database().ref('players/'+currentPlayer);
-          playerRef.on('value', function(snapshot){
-            var userData = snapshot.val();
-
-            // if (userData['currentRoom'] == table) {
-              if(userData['activeCards']){
-                var userCards = userData['activeCards'].split(";");
-                var klass1 = userCards[0].split(",");
-                var type = getType(klass1[0]);
-                $("#userCard1").removeClass().addClass(getCardClass(klass1));
-
-                var klass2 = userCards[1].split(",");
-                var type = getType(klass2[0]);
-                $("#userCard2").removeClass().addClass(getCardClass(klass2));//"card "+klass2[1].toLowerCase()+'_'+type);  
-              }
-              
-
-            // } else {
-            //   $("#userCard1").text("Error: currentTable is not players currentTable");
-            //   console.log("User not on current table error");
-            //   console.log(userData['currentRoom'], table);
-            // }
-          });
-
-      }
+      
 
       
     </script>

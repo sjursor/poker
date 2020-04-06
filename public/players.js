@@ -43,3 +43,36 @@ listPlayersAroundTable = function(){
 		});
 	});	
 }
+
+//Create new player
+newPlayer = function(uid, email, displayName, photoURL, callback){
+let newPlayerKey = firebase.database().ref('players/'+uid);
+createNewPlayer(uid, email, displayName, photoURL,callback);
+callback(uid);
+// newPlayerKey.once("value", function(snapshot){
+//   if(snapshot.val() == null){
+//     createNewPlayer(uid, email, displayName, photoURL,callback);
+//   }else{
+//     currentPlayer = uid;
+//     callback(uid);
+//   }
+// });
+}
+
+createNewPlayer = function(uid, email, displayName, photoURL,callback){
+firebase.database().ref().child('players/'+uid).set({
+  name:displayName,
+  email:email,
+  photo:photoURL,
+  stack:0,
+  currentRoom:currentRoom
+},function(error) {
+  if (error) {
+    console.log("The write failed...");
+  } else {
+    // Data saved successfully!
+    currentPlayer = uid;
+    //callback(uid);
+  }
+});
+}

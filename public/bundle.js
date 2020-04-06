@@ -2096,7 +2096,7 @@ showRiver = function() {
 }
 
 getTableCards = function(){
-	//Table cards
+	//Table cards 
 	let tableCards = [];
   	firebase.database().ref('rooms/'+currentRoom+"/flop").on('value',function(s){
   		if(s.val()){
@@ -2185,5 +2185,24 @@ convertCardToSolver = function(card){
 		}
 	}
 	return value+type;
+}
+
+updateUserCards = function() {
+  playerRef = firebase.database().ref('players/'+currentPlayer);
+  playerRef.on('value', function(snapshot){
+    var userData = snapshot.val();
+
+    if(userData['activeCards']){
+      var userCards = userData['activeCards'].split(";");
+      var klass1 = userCards[0].split(",");
+      var type = getType(klass1[0]);
+      $("#userCard1").removeClass().addClass(getCardClass(klass1));
+
+      var klass2 = userCards[1].split(",");
+      var type = getType(klass2[0]);
+      $("#userCard2").removeClass().addClass(getCardClass(klass2));//"card "+klass2[1].toLowerCase()+'_'+type);  
+    }
+    
+  });
 }
 },{"deck-o-cards":1,"pokersolver":2}]},{},[3]);
