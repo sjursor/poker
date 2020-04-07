@@ -62,7 +62,8 @@
         border-radius: 20px;
       }
       #fold{
-        background-color:#C6241E;
+        background-color: #E31D1D;
+        color: white;
       }
       #check,#bet{
         display:none;
