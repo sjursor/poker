@@ -1,4 +1,17 @@
-body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      
+      body { 
+        background: #ECEFF1;
+
+        background: url("imgs/tables_and_carpet/carpet_blue.png");
+        background-position:center;
+        background-size: cover;
+
+        color: rgba(0,0,0,0.87); 
+        font-family: 'Titillium Web', sans-serif;
+        
+        margin: 0; 
+        padding: 0; 
+      }
       #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
       #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
       #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
@@ -7,7 +20,12 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
       #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
 
-      #container{width: 1030px; margin:auto auto 100px;}
+      #container{
+        width: 1024px;
+        margin:auto auto 100px;
+        /*background: url("imgs/tables_and_carpet/carpet_blue.png");
+        background-size: contain;*/
+      }
 
       #userinfowrapper {
           width: 100%;
@@ -27,31 +45,44 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
           text-decoration: underline;
           cursor: pointer;
       }
+      
       #userinfo {
           margin: auto;
           max-width: 980px;
           padding:5px 0;
+      }
+      #userControls{
+        text-align: center;
+        padding: 10px;
+      }
+      #userControls button{
+        padding:10px 24px;
+        border:none;
+        font-size:18px;
+        border-radius: 20px;
+      }
+      #fold{
+        background-color:#C6241E;
+      }
+      #check,#bet{
+        display:none;
+        background-color:#0F1214;
       }
 
       #profile{width:50%; float:left;}
       #rooming{width:50%; float:left;}
       .card{
         float:left;
-        margin:10px 10px;
-          width:72px;
-          height: 104px;
-          background-size: cover;
-          -webkit-box-shadow: 10px 10px 17px -10px rgba(0,0,0,0.75);
-          -moz-box-shadow: 10px 10px 17px -10px rgba(0,0,0,0.75);
-          box-shadow: 10px 10px 17px -10px rgba(0,0,0,0.75);
+        margin: 10px 5px;
+        width:67px;
+        height: 97px;
+        background-size: cover;
       }
 
       .flop{
-        border: 1px solid white;
-        margin-right: 20px;
-        width: 280px;
+        width: 235px;
         height: 120px;
-        float: left;
+        position:absolute;
       }
       #activePlayers li,
       #roomlist li{
@@ -74,22 +105,22 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         justify-content: space-between;
         padding-left: 60px;
         padding-right: 60px;
-        height: 215px;
+        height: 230px;
       }
       #row2 {
         justify-content: space-between;
         height: 160px;
       }
+      #row3{
+        margin-top:35px;
+      }
       .player {
         margin: 4px;
-        /*background-color: gray;*/
-        height: auto;
-        width: 140px;
+        height: 115px;
+        width: 135px;
         text-align: center;
         font-weight: bold;
-          font-size: 12px;
-        padding-top: 54px;
-
+        font-size: 12px;
       }
 
       .dealer {
@@ -100,7 +131,9 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       }
 
       .player .name {
-          padding-bottom: 2px;
+        background-color: #1d496c;
+        color: white;
+        padding: 3px 0px 2px;
       }
 
       #player1 {
@@ -111,17 +144,17 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         padding-top: 2px;
       }
 
-      #player3 {
-        transform: rotate(42deg);
+      #player3,#player10 {
+        margin-top:50px;
       }
 
       #player4 {
         padding-top: 0;
       }
 
-      #player5 {
-        transform: rotate(-42deg);
-          padding-top: 30px;
+      #player5, #player8 {
+        
+          margin-top: 15px;
       }
 
       #player6 {
@@ -132,34 +165,26 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         padding-top: 92px;
       }
 
-      #player8 {
-        transform: rotate(42deg);
-          padding-top: 30px;
-      }
 
       #player9 {
         
         padding-top: 0;
       }
 
-      #player10 {
-        transform: rotate(-42deg);
-      }
 
       .playercards {
-          height: 88px;
-          width: 125px;
-          background-repeat: no-repeat;
-          background-position: center;
+        height: 88px;
+        width: 125px;
+        background-repeat: no-repeat;
+        background-position: center;
         margin: auto;
-        border: 1px solid #aaa;
-          border-radius: 4px;
-          padding: 4px;
-
-          display: flex;
-          justify-content: center;
-          position: relative;
-
+        border: 1px solid #131134;
+        border-radius: 4px;
+        padding: 4px;
+        display: flex;
+        justify-content: center;
+        position: relative;
+        background-color: #001a33;
       }
     .playercards .infotext {
         position: absolute;
@@ -174,17 +199,18 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         background: rgba(0, 0, 0, .6);
     }
     .playercards .descr{
-      height: 10px;
+      height: 20px;
       background:rgb(95, 158, 160);
       position: absolute;
       bottom: 0;
-      padding: 8px 0;
+      padding: 2px 0;
       color:white;
       width: 100%;
       display:none;
     }
     .playercards .winner{
       background-color:#efcc00;
+      color:black;
     }
 
       .playercards .playercard1,
@@ -207,20 +233,28 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
       }
 
       #currentTable {
-        background-image: url("https://www.transparenttextures.com/patterns/black-felt.png");
-        background-color:rgb(7, 99, 36);
-        width:670px; border:6px solid black; min-height:300px; clear:both; margin-top:20px;border-radius: 182px;
+        background: url("imgs/tables_and_carpet/table_2_blue.png");
+        background-size: 675px;
+        width:670px; 
+        height:380px; 
+        clear:both; 
+        margin-top:20px;
+        border-radius: 182px;
         position: absolute;
         top: 124px;
         left: 170px;
       }
       #currentTable h3{
+        display:none;
         color:white;
         margin-left:100px;
       }
       .duken{
-        margin-left: 70px;
-        margin-top: 35px;
+        left: 130px;
+        position: relative;
+        top:108px;
+        width: 375px;
+        height:120px;
       }
       #nextCard{
         display: none;
@@ -228,10 +262,24 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
         float: left;
         margin:20px 0px 0px 220px;
         font-size: 18px;
-        padding: 8px;
+        padding: 8px 24px;
+        position: absolute;
+        top:245px;
+        display: inline-block;
+        background: #FCE6A6;
+        border-radius: 20px;
+        color: black;
       }
       #playersAtTable{
         float:left;
+      }
+      #turn{
+        position: absolute;
+        left: 260px;
+      }
+      #river{
+        position: absolute;
+        left: 342px;
       }
 
       #userfunctions {
@@ -241,8 +289,8 @@ body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvet
           justify-content: center;
       }
       .userfunction {
-        width: 185px;
-        height: 200px;
+        width: 154px;
+        height: 132px;
         border: 1px dotted black;
         text-align:center;
         position: relative;

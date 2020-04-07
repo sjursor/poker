@@ -18,6 +18,7 @@
     <script type="application/javascript" src="/rooms.js"></script>
     <script type="application/javascript" src="/clickHandlers.js"></script>
 
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200;400;700;900&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" type="text/css" href="cardStyling.css">
     <link rel="stylesheet" type="text/css" href="style.css">
     
@@ -32,6 +33,12 @@
         <button id="login">Logg inn</button>
       </div>
       <div id="game">
+        <div id="userControls">
+          <button id="check">Check</button>
+          <button id="fold">Fold</button>
+          <button id="bet">Bet</button>
+          <button id="showcards">Show cards</button>
+        </div>
         <div id="seats">
           <div class="seatrow" id="row1">
             <div class="player" id="player10">
@@ -51,7 +58,11 @@
                 <div class="descr"></div>
                 <div class="infotext"></div>
               </div>
-
+            </div>
+            <div id="userCards" class="userfunction">
+              <div class="card" id="userCard1"></div>
+              <div class="card" id="userCard2"></div>
+              <div class="" id="myCardCurrentStatus"></div>
             </div>
             <div class="player" id="player2">
               <div class="name">&nbsp;</div>
@@ -138,22 +149,6 @@
             <button id="nextCard">Deal new hand</button>
           </div>
         </div>
-
-        <div id="userfunctions">
-          <div id="userCards" class="userfunction">
-            <h3>User cards</h3>
-            <div class="card" id="userCard1"></div>
-            <div class="card" id="userCard2"></div>
-            <div class="" id="myCardCurrentStatus"></div>
-          </div>
-          <div id="userButtons" class="userfunction">
-            <button id="fold">Fold hand</button><br>
-            <button id="showcards">Show cards</button>
-
-          </div>
-        </div>
-
-      </div>
     </div>
 
     <script>
@@ -337,7 +332,8 @@
                   
                 });
                 let winner = Hand.winners(rank); // hand2
-                //console.log(rank);
+                console.log(winner);
+                console.log(rank);
                 //console.log(winner);
                 var winPlayer = jQuery(".player .descr:contains("+winner[0].descr+")");
                 winPlayer.addClass("winner");
