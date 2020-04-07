@@ -28,11 +28,23 @@
       }
 
       #userinfowrapper {
-          width: 100%;
-          background-color: #000;
-          color: #fff;
-          font-size: 14px;
-          text-align: right;
+        width: 100%;
+        background-color: #000;
+        color: #fff;
+        font-size: 14px;
+        height: 64px;
+        padding: 2px 0px;
+      }
+      #topmenu {
+          margin: auto;
+          max-width: 980px;
+          padding:5px 0;
+      }
+      .userinfo{
+        float:right;
+      }
+      #logo{
+        float:left;
       }
       #logout {
         margin-left: 22px;
@@ -46,14 +58,11 @@
           cursor: pointer;
       }
       
-      #userinfo {
-          margin: auto;
-          max-width: 980px;
-          padding:5px 0;
-      }
+      
       #userControls{
         text-align: center;
         padding: 10px;
+        clear:both;
       }
       #userControls button{
         padding:10px 24px;
