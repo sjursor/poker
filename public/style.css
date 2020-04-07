@@ -70,7 +70,9 @@
       }
 
       .desk{
+        top:30px;
         left:300px;
+        position:absolute;
       }
       #profile{width:50%; float:left;}
       #rooming{width:50%; float:left;}
