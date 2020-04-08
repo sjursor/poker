@@ -134,7 +134,8 @@
           font-weight: bold;
       }
 
-      .player .name {
+      .player .name,
+      .player .wallet {
         background-color: #1d496c;
         color: white;
         padding: 3px 0px 2px;
