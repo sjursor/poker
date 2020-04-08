@@ -9,6 +9,24 @@ listPlayersAroundTable = function(){
 		  players.push(player);
 		});
 
+		currentPlayerIndex = players.indexOf(currentPlayer);
+
+		// currentPlayer needs to sit first on each client
+		// First make new array starting with currentPlayer
+		var playersorganized = [];
+		for (var i = currentPlayerIndex; i < players.length; i++) {
+			playersorganized.push(players[i]);
+		}
+
+		// Then finish the array with the rest of the players, unless currentPlayer was already first in the database
+		if (currentPlayerIndex > 0) {
+			for (var i = 0; i < currentPlayerIndex; i++) {
+				playersorganized.push(players[i]);
+			}
+		}
+
+		players = playersorganized;
+
 		$.each(players,function(k,v){
 
 		  var playerRef = firebase.database().ref('players/'+v);
@@ -28,12 +46,9 @@ listPlayersAroundTable = function(){
 		        $("#player" + playerPos + " .playercards").css("background-size", "contain");
 		      }
 
-
 		      // Write the player name
 		      $("#player" + playerPos + " .name").html(val["name"]);
-
 		    }
-
 		  });
 		});
 		$( document ).on( "click", "span.removePlayerFromTable", function() {

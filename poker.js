@@ -1,6 +1,11 @@
 const doc 	= require('deck-o-cards')
 const Hand 	= require('pokersolver').Hand;
 
+// Notes...
+// Sjur: 0oGinVvghrYgAHc1GJz1VGpR8XL2
+// John: J0GfoIqLhzaxL1SrAeYigI7oXVx1
+// Stian: 9qEcvtXYbzMHg5kLU8YOjKFpvLh2
+
 getNewDeck = function(){
 	deck = doc.randomizedDeck();
 	return deck;
@@ -59,6 +64,7 @@ setNextDealerAndDealHand = function() {
 
 				players = players.filter(function (el) {return el != null; });
 				dealerpos = $.inArray(currentDealer, players);
+				console.log(dealerpos)
 
 				playercount = players.length;
 

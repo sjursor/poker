@@ -134,15 +134,13 @@
         height: 115px;
         width: 135px;
         text-align: center;
-        font-weight: bold;
-        font-size: 12px;
+        font-weight: normal;
+        font-size: 13px;
       }
 
-      .dealer {
-        color: blueviolet;
-      }
       .dealer:after {
           content: " (D)";
+          font-weight: bold;
       }
 
       .player .name,
@@ -150,6 +148,10 @@
         background-color: #1d496c;
         color: white;
         padding: 3px 0px 2px;
+      }
+
+      .dealer.name {
+          background-color: blueviolet;
       }
 
       #player1 {
@@ -307,23 +309,32 @@
       .userfunction {
         width: 154px;
         height: 132px;
-        border: 1px dotted black;
+        border: 3px solid #fff;
+          border-radius: 6px;
         text-align:center;
         position: relative;
+          background-color: #1d496c;
+          padding: 0px 20px 0 20px;
       }
-      .userfunction button {
+
+      .userfunction .card {
+          margin-top: 4px;
+      }
+      .userfunction .mycards {
+          color: #fff;
+          font-weight: bold;
           font-size: 18px;
-          padding: 8px;
-          margin-top: 20px;
       }
       #myCardCurrentStatus{
         background-color:rgb(95, 158, 160);
-        overflow: hidden;
-        height: 24px;
+        color: #fff;
+        /*overflow: hidden;*/
+        height: 16px;
         width: 100%;
-        padding: 10px 0px;
+        padding: 4px 0 10px 0;
         position: absolute;
         bottom: 0;
+          left: 0;
       }
       .active {
         border: 1px solid black;
