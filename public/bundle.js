@@ -2014,6 +2014,8 @@ setNextDealerAndDealHand = function() {
 					nextDealer = players[dealerpos + 1];
 				}
 
+				initBetting(players,currentDealer);
+
 				$(players).each(function(k,v){
 					firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
 					firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
