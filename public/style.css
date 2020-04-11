@@ -76,7 +76,9 @@
       }
       #check,#bet{
         display:none;
-        background-color:#0F1214;
+      }
+      .playerToTalk{
+        border:1px solid yellow;
       }
 
       .desk{
@@ -131,7 +133,7 @@
       }
       .player {
         margin: 4px;
-        height: 115px;
+        height: 120px;
         width: 135px;
         text-align: center;
         font-weight: normal;
@@ -191,8 +193,8 @@
 
 
       .playercards {
-        height: 88px;
-        width: 125px;
+        height: 78px;
+        width: 122px;
         background-repeat: no-repeat;
         background-position: center;
         margin: auto;

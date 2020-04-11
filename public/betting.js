@@ -1,10 +1,3 @@
-let playersInGame;
-//let dealer;
-//let smallBlind;
-//let bigBlind;
-//let utg;
-//let playerToTalk;
-
 initBetting = function(players,currentDealer){
 	var updates = {};
 	playersInGame = players;
@@ -25,9 +18,22 @@ initBetting = function(players,currentDealer){
 	smallBlind 	= getAtIndex(players,1,currentDealerPosInArray);
 	bigBlind 	= getAtIndex(players,2,currentDealerPosInArray);
 	utg			= getAtIndex(players,3,currentDealerPosInArray);
-	playerToTalk = utg;
+	playerToTalk= utg;
+	currentBet = 2;
 	
+	firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+smallBlind).set(1);
+	firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+bigBlind).set(2);
+	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(2);
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(utg);
+}
+
+function getBetting(){
+	firebase.database().ref('rooms/'+currentRoom+"/betting/").once("value", function(s){
+		let betting = s.val();
+		playerToTalk = betting.playerToTalk;
+
+		return betting;
+	});
 }
 
 function setNextPlayerToTalk(){
@@ -36,16 +42,9 @@ function setNextPlayerToTalk(){
 		playersInGame = s.val();
 
 		let index = $.inArray(playerToTalk, playersInGame);
-		//console.log(index);
-		//console.log(playerToTalk, playersInGame);
-
-		let nextPlayerToTalk;
-		if(playersInGame.length == index){
-			nextPlayerToTalk = playersInGame[0];
-		}else{
-			nextPlayerToTalk = playersInGame[index+1];
-		}
-
+		nextPlayerToTalk = getAtIndex(players,1,index);
+		
+		playerToTalk = nextPlayerToTalk;
 
 		firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(nextPlayerToTalk);
 		console.log(nextPlayerToTalk);
@@ -53,13 +52,48 @@ function setNextPlayerToTalk(){
 }
 
 function talkingPlayer(){
-	$("#check").show().unbind();
-	$("#bet").show().unbind();
-	$("#fold").show().unbind();
+	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").on("value", function(s){
+		var talkingPlayer = s.val();
+		if(talkingPlayer == currentPlayer){
+			$("#check").show().unbind();
+			$("#bet").show().unbind();
 
-	$("#check").click(function(){
+			$("#check").click(function(){
+				firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+currentPlayer).set(0);
+				setNextPlayerToTalk();
+			});
+			$("#bet").click(function(){
+				var bet = parseInt(prompt("Please enter your bet", "10"));
 
+				if (bet == null || bet == "") {
+				  bet = 0;
+				} else {
+					if(bet>=currentBet){
+						if(bet>currentBet){
+							firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet);	
+						}
+						firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+currentPlayer).set(bet);
+						setNextPlayerToTalk();
+					}else{
+						alert("Bet to small, current bet is "+currentBet);
+					}
+				}
+			});
+		}else{
+			$("#check").hide().unbind();
+			$("#bet").hide().unbind();
+		}
 	});
+	
+}
+
+function getPot(){
+
+}
+
+function endRoundBetting(){
+	//Set current bet to 0
+	//set player to talk = smallBlind
 }
 
 function getAtIndex(theArray,i,currentIndex) {

@@ -40,10 +40,9 @@
       </div>
       <div id="game">
         <div id="userControls">
-          <button id="check">Check</button>
           <button id="fold">Fold</button>
-          <button id="bet">Bet</button>
           <button id="showcards">Show cards</button>
+          <button id="check">Check</button><button id="bet">Bet</button>
         </div>
         <div id="seats">
           <div class="seatrow" id="row1">
@@ -293,6 +292,14 @@
                 });
               }
 
+              if (val.betting["playerToTalk"]) {
+                console.log(val.betting["playerToTalk"]);
+                $(".playerToTalk").removeClass("playerToTalk");
+                $(".player[data-pid='"+val.betting["playerToTalk"]+"']").addClass("playerToTalk");
+              }else{
+                console.log("found no player to talk", val);
+              }
+
               //See currentPlayerHandDescription
               currentPlayerHandDescription();
 
@@ -359,8 +366,10 @@
 
         resetTableCards();
         
+        talkingPlayer();
+
         setTimeout(function(){
-          initBetting(players,currentDealer);
+          getBetting(players,currentDealer);
         },2500);
             
       });
