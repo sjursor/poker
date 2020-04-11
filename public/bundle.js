@@ -1986,6 +1986,8 @@ setNextDealerAndDealHand = function() {
 
 				$(".playercards .descr").hide();
 
+				initBetting(players,currentDealer);
+
 				var updates = {};
 				updates["rooms/"+currentRoom+"/deck"] = newDeck;
 				updates["rooms/"+currentRoom+"/currentDealer"] = currentDealer;
@@ -2014,12 +2016,12 @@ setNextDealerAndDealHand = function() {
 					nextDealer = players[dealerpos + 1];
 				}
 
-				initBetting(players,currentDealer);
-
 				$(players).each(function(k,v){
 					firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
 					firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
 				});
+
+				initBetting(players,nextDealer);
 
 				var updates = {};
 				updates["rooms/"+currentRoom+"/deck"] = newDeck;

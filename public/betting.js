@@ -1,9 +1,9 @@
 let playersInGame;
-let dealer;
-let smallBlind;
-let bigBlind;
-let utg;
-let playerToTalk;
+//let dealer;
+//let smallBlind;
+//let bigBlind;
+//let utg;
+//let playerToTalk;
 
 initBetting = function(players,currentDealer){
 	var updates = {};
@@ -19,11 +19,12 @@ initBetting = function(players,currentDealer){
 	
 	firebase.database().ref().update(updates);
 
-	index 		= $.inArray(currentDealer, players);
-	dealer 		= getAtIndex(players,1,index);
-	smallBlind 	= getAtIndex(players,2,index);
-	bigBlind 	= getAtIndex(players,3,index);
-	utg			= getAtIndex(players,4,index);
+	let currentDealerPosInArray = $.inArray(currentDealer, players);
+	//console.log("CDPIA ",currentDealerPosInArray, players);
+	//dealer 		= getAtIndex(players,0,currentDealerPosInArray);
+	smallBlind 	= getAtIndex(players,1,currentDealerPosInArray);
+	bigBlind 	= getAtIndex(players,2,currentDealerPosInArray);
+	utg			= getAtIndex(players,3,currentDealerPosInArray);
 	playerToTalk = utg;
 	
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(utg);
@@ -35,7 +36,17 @@ function setNextPlayerToTalk(){
 		playersInGame = s.val();
 
 		let index = $.inArray(playerToTalk, playersInGame);
-		let nextPlayerToTalk = getAtIndex(playersInGame,2,index);
+		//console.log(index);
+		//console.log(playerToTalk, playersInGame);
+
+		let nextPlayerToTalk;
+		if(playersInGame.length == index){
+			nextPlayerToTalk = playersInGame[0];
+		}else{
+			nextPlayerToTalk = playersInGame[index+1];
+		}
+
+
 		firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(nextPlayerToTalk);
 		console.log(nextPlayerToTalk);
 	});
@@ -50,15 +61,6 @@ function talkingPlayer(){
 
 	});
 }
-
-
-getPlayers = function(){
-	var roomsRef = firebase.database().ref('rooms/'+currentRoom+"/betting");
-	roomsRef.on('value', function(snapshot) {
-		console.log()
-	});
-}
-
 
 function getAtIndex(theArray,i,currentIndex) {
     if (i === 0) {

@@ -4,7 +4,7 @@ listPlayersAroundTable = function(){
 		var ex_players = snapshot.val();
 
 		//remove empty player-index
-		var players = [];
+		players = [];
 		$.each(ex_players,function(k,player){
 		  players.push(player);
 		});

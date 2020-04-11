@@ -228,7 +228,7 @@
               if (currentDealer != currentPlayer) {$("#nextCard").hide();
               } else {$("#nextCard").show();}
 
-              // Show the flop
+              // Show the flop if available
               if(!val["flop"] || val["flop"] === ""){
                 jQuery(".flop span").removeClass();
               } else {
@@ -239,21 +239,21 @@
               }
 
 
-              // Show the turn
+              // Show the turn if available
               if(!val["turn"] || val["turn"] === "") {
                 jQuery("#turn").removeClass();
               } else {
                 jQuery("#turn").removeClass().addClass(getCardClass(val["turn"]));
               }
 
-              // Show the river
+              // Show the river if available
               if(!val["river"] || val["river"] === "") {
                 jQuery("#river").removeClass();
               } else {
                 jQuery("#river").removeClass().addClass(getCardClass(val["river"]));
               }
 
-              // Show folded
+              // Show folded if anyone
               if (val["folded"]) {
                 folded = val["folded"];
 
@@ -295,7 +295,6 @@
 
               //See currentPlayerHandDescription
               currentPlayerHandDescription();
-
 
               // Reset photo URLs
               $.each(photoURLs, function(k, v) {
@@ -358,8 +357,11 @@
 
         clickHandlers();
 
-
         resetTableCards();
+        
+        setTimeout(function(){
+          initBetting(players,currentDealer);
+        },2500);
             
       });
 
