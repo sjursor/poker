@@ -68,8 +68,8 @@ clickHandlers = function(){
 	    	if (index > -1) {
 			  playersInGame.splice(index, 1);
 			}
-			firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").set(playersInGame);
 			setNextPlayerToTalk();
+			firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").set(playersInGame);
 	    });
 
 	    //$("#fold").attr("disabled","disabled");
