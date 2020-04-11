@@ -21,8 +21,10 @@ initBetting = function(players,currentDealer){
 	playerToTalk= utg;
 	currentBet = 2;
 	
+	firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(0);
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+smallBlind).set(1);
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+bigBlind).set(2);
+	firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+bigBlind).set(3);
 	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(2);
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(utg);
 }
@@ -84,11 +86,13 @@ function talkingPlayer(){
 			$("#bet").hide().unbind();
 		}
 	});
-	
 }
 
 function getPot(){
-
+	firebase.database().ref('rooms/'+currentRoom+"/betting/pot/").on("value", function(s){
+		pot = s.val();
+		return pot;
+	});
 }
 
 function endRoundBetting(){

@@ -157,6 +157,7 @@
             <div class="duken" id="duken">
 
             </div>
+            <div class="pot">0</div>
             <button id="nextCard">Deal new hand</button>
           </div>
         </div>
@@ -293,11 +294,13 @@
               }
 
               if (val.betting["playerToTalk"]) {
-                console.log(val.betting["playerToTalk"]);
                 $(".playerToTalk").removeClass("playerToTalk");
                 $(".player[data-pid='"+val.betting["playerToTalk"]+"']").addClass("playerToTalk");
               }else{
                 console.log("found no player to talk", val);
+              }
+              if(val.betting["pot"]){
+                $(".pot").text(val.betting["pot"]);
               }
 
               //See currentPlayerHandDescription

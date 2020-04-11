@@ -1,4 +1,4 @@
-      
+
       body { 
         background: #ECEFF1;
 
@@ -268,6 +268,19 @@
         display:none;
         color:white;
         margin-left:100px;
+      }
+      .pot{
+        width: 70px;
+        height: 20px;
+        position: absolute;
+        left: 220px;
+        top: 50px;
+        padding: 3px;
+        color:white;
+        font-size:20px;
+      }
+      .pot:after {
+        content: " kr"
       }
       .duken{
         left: 130px;
