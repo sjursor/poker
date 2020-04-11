@@ -1,13 +1,14 @@
 initBetting = function(players,currentDealer){
+	console.log("initing betting");
 	var updates = {};
 	playersInGame = players;
     updates["rooms/"+currentRoom+"/betting/playersInGame"] = players;
-	updates["rooms/"+currentRoom+"/betting/currentPot"] = "0";
+	updates["rooms/"+currentRoom+"/betting/pot"] = "0";
 	updates["rooms/"+currentRoom+"/betting/playerToTalk"] = players[0];
 	updates["rooms/"+currentRoom+"/betting/currentBet"] = "0";
-	//updates["rooms/"+currentRoom+"/betting/smallBlind"] = 1;
-	//updates["rooms/"+currentRoom+"/betting/bigBlind"] = 2;
-	updates["rooms/"+currentRoom+"/betting/lastBet"] = 0;
+	updates["rooms/"+currentRoom+"/betting/smallBlind"] = 1;
+	updates["rooms/"+currentRoom+"/betting/bigBlind"] = 2;
+	updates["rooms/"+currentRoom+"/betting/currentBet"] = 2;
 	updates["rooms/"+currentRoom+"/betting/currentDealer"] = currentDealer;
 	
 	firebase.database().ref().update(updates);
@@ -21,11 +22,6 @@ initBetting = function(players,currentDealer){
 	playerToTalk= utg;
 	currentBet = 2;
 	
-	firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(0);
-	firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+smallBlind).set(1);
-	firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+bigBlind).set(2);
-	firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+bigBlind).set(3);
-	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(2);
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(utg);
 }
 
@@ -57,12 +53,15 @@ function talkingPlayer(){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").on("value", function(s){
 		var talkingPlayer = s.val();
 		if(talkingPlayer == currentPlayer){
+
 			$("#check").show().unbind();
 			$("#bet").show().unbind();
 
 			$("#check").click(function(){
-				firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+currentPlayer).set(0);
-				setNextPlayerToTalk();
+				if (confirm("Check?")) {
+		        	firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+currentPlayer).set(0);
+					setNextPlayerToTalk();
+		        }
 			});
 			$("#bet").click(function(){
 				var bet = parseInt(prompt("Please enter your bet", "10"));
@@ -72,7 +71,7 @@ function talkingPlayer(){
 				} else {
 					if(bet>=currentBet){
 						if(bet>currentBet){
-							firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet);	
+							firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet);
 						}
 						firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+currentPlayer).set(bet);
 						setNextPlayerToTalk();

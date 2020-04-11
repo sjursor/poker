@@ -62,6 +62,16 @@ clickHandlers = function(){
 	    firebase.database().ref('rooms/'+currentRoom+"/folded").push({
 	      currentPlayer
 	    });
+	    firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").once("value",function(s){
+	    	playersInGame = s.val();
+	    	const index = playersInGame.indexOf(currentPlayer);
+	    	if (index > -1) {
+			  playersInGame.splice(index, 1);
+			}
+			firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").set(playersInGame);
+			setNextPlayerToTalk();
+	    });
+
 	    //$("#fold").attr("disabled","disabled");
 	  }
 	});

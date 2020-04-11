@@ -251,6 +251,16 @@
       .player.nocards .playercards {
         background: none;
       }
+      .bet{
+        clear: both;
+        height: 20px;
+        width: 131px;
+        background: #001A33;
+        color: white;
+        position: absolute;
+        bottom: -18px;
+        left: -0.9px;
+      }
 
       #currentTable {
         background: url("imgs/tables_and_carpet/table_2_blue.png");
