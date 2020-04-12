@@ -42,7 +42,7 @@
         <div id="userControls">
           <button id="fold">Fold</button>
           <button id="showcards">Show cards</button>
-          <button id="check">Check</button><button id="bet">Bet</button>
+          <button id="check">Check</button><button id="call">Call</button><button id="bet">Bet</button>
         </div>
         <div id="seats">
           <div class="seatrow" id="row1">
@@ -305,7 +305,13 @@
 
               if (val.betting["playerToTalk"]) {
                 $(".playerToTalk").removeClass("playerToTalk");
-                $(".player[data-pid='"+val.betting["playerToTalk"]+"']").addClass("playerToTalk");
+                var ptt = $(".player[data-pid='"+val.betting["playerToTalk"]+"']");
+                if(ptt.hasClass('folded')){
+                  setNextPlayerToTalk(val.betting["playerToTalk"]);
+                }else{
+                  ptt.addClass("playerToTalk");  
+                }
+                
               }else{
                 console.log("found no player to talk", val);
               }
@@ -363,12 +369,15 @@
                   //var winner = Hand.winners([hand1, hand2]); // hand2
                   
                 });
-                let winner = Hand.winners(rank); // hand2
-                console.log(winner);
-                console.log(rank);
-                //console.log(winner);
-                var winPlayer = jQuery(".player .descr:contains("+winner[0].descr+")");
-                winPlayer.addClass("winner");
+                if(rank.length){
+                  let winner = Hand.winners(rank); // hand2
+                  console.log(winner);
+                  console.log(rank);
+                  //console.log(winner);
+                  var winPlayer = jQuery(".player .descr:contains("+winner[0].descr+")");
+                  winPlayer.addClass("winner");  
+                }
+                
               }
 
             });

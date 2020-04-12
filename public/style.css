@@ -74,11 +74,11 @@
         background-color: #E31D1D;
         color: white;
       }
-      #check,#bet{
+      #check,#bet, #call{
         display:none;
       }
       .playerToTalk{
-        border:1px solid yellow;
+        border:3px solid yellow;
       }
 
       .desk{

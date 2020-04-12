@@ -63,12 +63,15 @@ clickHandlers = function(){
 	      currentPlayer
 	    });
 	    firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").once("value",function(s){
-	    	playersInGame = s.val();
-	    	const index = playersInGame.indexOf(currentPlayer);
+	    	const index = s.val().indexOf(currentPlayer);
 	    	if (index > -1) {
-			  playersInGame.splice(index, 1);
+			  playersInGame = s.val().splice(index, 1);
+			}else{
+				playersInGame = s.val();
 			}
+			
 			setNextPlayerToTalk();
+
 			firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").set(playersInGame);
 	    });
 

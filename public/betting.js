@@ -5,7 +5,7 @@ initBetting = function(players,currentDealer){
     updates["rooms/"+currentRoom+"/betting/playersInGame"] = players;
 	updates["rooms/"+currentRoom+"/betting/pot"] = "0";
 	updates["rooms/"+currentRoom+"/betting/playerToTalk"] = players[0];
-	updates["rooms/"+currentRoom+"/betting/currentBet"] = "0";
+	updates["rooms/"+currentRoom+"/betting/currentBet"] = 0;
 	updates["rooms/"+currentRoom+"/betting/smallBlind"] = 1;
 	updates["rooms/"+currentRoom+"/betting/bigBlind"] = 2;
 	updates["rooms/"+currentRoom+"/betting/currentBet"] = 2;
@@ -34,18 +34,21 @@ function getBetting(){
 	});
 }
 
-function setNextPlayerToTalk(){
+function setNextPlayerToTalk(ptt){
 	let pttRef = firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame");
 	pttRef.once('value', function(s){
 		playersInGame = s.val();
-
+		if(typeof playerToTalk == 'undefined'){
+			playerToTalk = ptt;
+		}
 		let index = $.inArray(playerToTalk, playersInGame);
+		console.log("index", index);
 		nextPlayerToTalk = getAtIndex(players,1,index);
 		
 		playerToTalk = nextPlayerToTalk;
 
-		firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(nextPlayerToTalk);
-		console.log(nextPlayerToTalk);
+		firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(playerToTalk);
+		console.log("Player To Talk",playerToTalk);
 	});
 }
 
@@ -74,6 +77,10 @@ function talkingPlayer(){
 							firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet);
 						}
 						firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+currentPlayer).set(bet);
+						//update pot
+						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
+							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseInt(s.val())+bet);
+						});
 						setNextPlayerToTalk();
 					}else{
 						alert("Bet to small, current bet is "+currentBet);
