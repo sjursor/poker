@@ -5,7 +5,8 @@ loginHandler = function(){
     if (user) {
         console.log("user is signed in");
         //newPlayer(user.uid, user.email, user.displayName, user.photoURL, function(pid){
-          addPlayerToTable(user.uid, "-M3NcGg4RPa6ShpXgZXa");
+          let roomId = "-M3NcGg4RPa6ShpXgZXa";
+          addPlayerToTable(user.uid, roomId);
           currentPlayer = user.uid;
         
           showGame(user);

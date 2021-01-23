@@ -1,3 +1,7 @@
+smallBlind = 1;
+bigBlind   = 2;
+
+//happens every round
 initBetting = function(players,currentDealer){
 	console.log("initing betting");
 	var updates = {};
@@ -5,7 +9,6 @@ initBetting = function(players,currentDealer){
     updates["rooms/"+currentRoom+"/betting/playersInGame"] = players;
 	updates["rooms/"+currentRoom+"/betting/pot"] = "0";
 	updates["rooms/"+currentRoom+"/betting/playerToTalk"] = players[0];
-	updates["rooms/"+currentRoom+"/betting/currentBet"] = 0;
 	updates["rooms/"+currentRoom+"/betting/smallBlind"] = 1;
 	updates["rooms/"+currentRoom+"/betting/bigBlind"] = 2;
 	updates["rooms/"+currentRoom+"/betting/currentBet"] = 2;
@@ -20,9 +23,44 @@ initBetting = function(players,currentDealer){
 	bigBlind 	= getAtIndex(players,2,currentDealerPosInArray);
 	utg			= getAtIndex(players,3,currentDealerPosInArray);
 	playerToTalk= utg;
-	currentBet = 2;
+	currentBet 	= bigBlind;
 	
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(utg);
+}
+
+function setPlayerBalance(pid,balance){
+	var updates = {};
+	console.log("rooms/"+currentRoom+"/betting/balance/"+pid);
+    updates["rooms/"+currentRoom+"/betting/balance/"+pid] = balance;
+    firebase.database().ref().update(updates);
+}
+function addToPlayersBalance(pid,add){
+	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+pid).once("value", function(s){
+		newBalance = s.val()+add;
+	});
+	setPlayerBalance(pid,newBalance);
+}
+
+
+function winner(pids){
+	//del currentPot på alle pids i array
+	let winnerCount = pids.length;
+
+	firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
+		let pot = s.val();
+		let potshare = pot/winnerCount;
+
+		$.each(pids, function(k,v){
+			addToPlayersBalance(v,potshare);
+		});
+		
+
+		var updates = {};
+	    updates["rooms/"+currentRoom+"/betting/pot"] = 0;
+	    firebase.database().ref().update(updates);
+		$(".pot").text(0);
+	});
+
 }
 
 function getBetting(){
@@ -43,6 +81,9 @@ function setNextPlayerToTalk(ptt){
 		}
 		let index = $.inArray(playerToTalk, playersInGame);
 		console.log("index", index);
+
+		//TODO: Check if this round is finished and enable show flop
+		//If last player checks or calls, showFlop()
 		nextPlayerToTalk = getAtIndex(players,1,index);
 		
 		playerToTalk = nextPlayerToTalk;
@@ -54,7 +95,12 @@ function setNextPlayerToTalk(ptt){
 
 function talkingPlayer(){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").on("value", function(s){
-		var talkingPlayer = s.val();
+		let talkingPlayer = s.val();
+		let talkingPlayersBalance = 0;
+
+		firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+talkingPlayer).once("value", function(s){
+			talkingPlayersBalance = s.val();
+		});
 		if(talkingPlayer == currentPlayer){
 
 			$("#check").show().unbind();
@@ -72,7 +118,9 @@ function talkingPlayer(){
 				if (bet == null || bet == "") {
 				  bet = 0;
 				} else {
-					if(bet>=currentBet){
+					if(bet>talkingPlayersBalance){
+						alert("Bet larger than balance");
+					}else if(bet>=currentBet){
 						if(bet>currentBet){
 							firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet);
 						}
@@ -81,6 +129,8 @@ function talkingPlayer(){
 						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
 							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseInt(s.val())+bet);
 						});
+						currentBet = bet;
+						setPlayerBalance(talkingPlayer,talkingPlayersBalance-bet);
 						setNextPlayerToTalk();
 					}else{
 						alert("Bet to small, current bet is "+currentBet);
@@ -95,7 +145,7 @@ function talkingPlayer(){
 }
 
 function getPot(){
-	firebase.database().ref('rooms/'+currentRoom+"/betting/pot/").on("value", function(s){
+	firebase.database().ref('rooms/'+currentRoom+"/betting/pot").on("value", function(s){
 		pot = s.val();
 		return pot;
 	});

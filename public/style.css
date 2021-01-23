@@ -194,12 +194,11 @@
 
       .playercards {
         height: 78px;
-        width: 122px;
+        width: 125px;
         background-repeat: no-repeat;
         background-position: center;
         margin: auto;
         border: 1px solid #131134;
-        border-radius: 4px;
         padding: 4px;
         display: flex;
         justify-content: center;
@@ -251,15 +250,18 @@
       .player.nocards .playercards {
         background: none;
       }
-      .bet{
+      .balance{
         clear: both;
         height: 20px;
-        width: 131px;
+        width: 135px;
         background: #001A33;
         color: white;
         position: absolute;
         bottom: -18px;
         left: -0.9px;
+      }
+      .balance:before{
+        content:"$ ";
       }
 
       #currentTable {
@@ -279,15 +281,27 @@
         color:white;
         margin-left:100px;
       }
-      .pot{
+      .cbetContainer{
+        position:absolute;
+        left:280px;
+        top:86px;
+        padding: 3px;
+        color:white;
+        font-size:17px;
+      }
+      .potContainer{
         width: 70px;
-        height: 20px;
         position: absolute;
         left: 220px;
-        top: 50px;
+        top: 38px;
         padding: 3px;
         color:white;
         font-size:20px;
+        line-height:20px;
+      }
+      .potContainer .pot{
+        display:block;
+        font-weight: 200;
       }
       .pot:after {
         content: " kr"

@@ -9,7 +9,7 @@ const Hand 	= require('pokersolver').Hand;
 getNewDeck = function(){
 	deck = doc.randomizedDeck();
 	return deck;
-}
+}  
 
 setNextDealerAndDealHand = function() {
 	var newDeck = getNewDeck();
@@ -30,8 +30,6 @@ setNextDealerAndDealHand = function() {
 		currentDealer = snapshot.val();
 
 		if (currentDealer == 0) {
-
-			console.log("currentdealer is 0")
 			let playersRef 		= firebase.database().ref('rooms/'+currentRoom+"/players");
 			playersRef.once('value', function(snapshot){
 				var players = snapshot.val();
@@ -198,14 +196,16 @@ currentPlayerHandDescription = function(callback){
 
   	//Players cards
   	pRef.once('value', function(s){
-  		let cards = s.val().split(";");
-  		let playerCards = [];
-  		playerCards.push(convertCardToSolver(cards[0].split(",")));
-  		playerCards.push(convertCardToSolver(cards[1].split(",")));
-  		
-  		var hand = Hand.solve(tableCards.concat(playerCards));
-  		jQuery("#myCardCurrentStatus").text(hand.descr);
-  		if(typeof(callback)=="function")callback(hand,playerCards);
+  		if(s.val()){ 
+  			let cards = s.val().split(";");
+	  		let playerCards = [];
+	  		playerCards.push(convertCardToSolver(cards[0].split(",")));
+	  		playerCards.push(convertCardToSolver(cards[1].split(",")));
+	  		
+	  		var hand = Hand.solve(tableCards.concat(playerCards));
+	  		jQuery("#myCardCurrentStatus").text(hand.descr);
+	  		if(typeof(callback)=="function")callback(hand,playerCards);
+  		}
   	});
 
 

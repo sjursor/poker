@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "x--comment--x": "run this scripts by npm run [scriptname]",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "watch": "poker.js -o public/bundle.js"
+    "watch": "watchify poker.js -o public/bundle.js"
   },
   "repository": {
     "type": "git",

@@ -20,10 +20,10 @@ app.use(ecstatic({
   showdir: false,
 }));
 
-//var httpServer = http.createServer(app);
+var httpServer = http.createServer(app);
 var httpsServer = https.createServer(credentials, app);
 
-//httpServer.listen(8080);
+httpServer.listen(8080);
 httpsServer.listen(8443);
 
 //http.createServer(app).listen(8080);
