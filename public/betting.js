@@ -127,6 +127,24 @@ function talkingPlayer(){
 
 			$("#check").show().unbind();
 			$("#bet").show().unbind();
+			$("#call").show().unbind();
+
+			$("#call").click(function(){
+				if (confirm("Call "+currentBet+"?")) {
+		        	if(currentBet>talkingPlayersBalance){
+		        		alert("Insufficient funds");
+		        	}else{
+						firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+currentPlayer).set(currentBet);
+						//update pot
+						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
+							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseInt(s.val())+currentBet);
+						});
+						setPlayerBalance(talkingPlayer,talkingPlayersBalance-currentBet);
+						setNextPlayerToTalk();
+					}
+					setNextPlayerToTalk();
+		        }
+			});
 
 			$("#check").click(function(){
 				if (confirm("Check?")) {
@@ -162,6 +180,7 @@ function talkingPlayer(){
 		}else{
 			$("#check").hide().unbind();
 			$("#bet").hide().unbind();
+			$("#call").hide().unbind();
 		}
 	});
 }
