@@ -1,5 +1,5 @@
-smallBlind = 1;
-bigBlind   = 2;
+smallBlindBet = 1;
+bigBlindBet   = 2;
 
 //happens every round
 initBetting = function(players,currentDealer){
@@ -24,15 +24,31 @@ initBetting = function(players,currentDealer){
 	utg			= getAtIndex(players,3,currentDealerPosInArray);
 	playerToTalk= utg;
 	currentBet 	= bigBlind;
+	pot = smallBlindBet+bigBlindBet;
+	blinds(smallBlind, bigBlind);
 	
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(utg);
 }
 
+function blinds(smallBlindPlayer, bigBlindPlayer){
+	//Collect Small blind to the pot
+	
+	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/").once("value", function(s){
+		let balance = s.val();
+		let smallBlindBalance 	= balance[smallBlindPlayer];
+		firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+smallBlind).set(smallBlindBalance-smallBlindBet);
+
+		let bigBlindBalance 	= balance[bigBlindPlayer];
+		firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+bigBlind).set(bigBlindBalance-bigBlindBet);
+		
+		let pot = bigBlindBet+smallBlindBet;
+		firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(pot);
+	});
+}
+
 function setPlayerBalance(pid,balance){
 	var updates = {};
-	console.log("rooms/"+currentRoom+"/betting/balance/"+pid);
-    updates["rooms/"+currentRoom+"/betting/balance/"+pid] = balance;
-    firebase.database().ref().update(updates);
+    firebase.database().ref("rooms/"+currentRoom+"/betting/balance/"+pid).set(balance);
 }
 function addToPlayersBalance(pid,add){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+pid).once("value", function(s){
@@ -40,7 +56,13 @@ function addToPlayersBalance(pid,add){
 	});
 	setPlayerBalance(pid,newBalance);
 }
-
+function setAllPlayersBalance(balance){
+	var updates = {};
+	$.each(players,function(k,pid){
+		updates["rooms/"+currentRoom+"/betting/balance/"+pid] = balance;
+	});
+	firebase.database().ref().update(updates);
+}
 
 function winner(pids){
 	//del currentPot på alle pids i array
