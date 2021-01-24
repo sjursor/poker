@@ -14,6 +14,7 @@ clickHandlers = function(){
 	      case 0:
 	        if (confirm("Deal new hand?")) {
 	          setNextDealerAndDealHand();
+
 	          $("#nextCard").html("Show flop");
 	          tableState = 1;
 	        }

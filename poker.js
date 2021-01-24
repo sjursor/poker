@@ -12,105 +12,97 @@ getNewDeck = function(){
 }  
 
 setNextDealerAndDealHand = function() {
-	var newDeck = getNewDeck();
-	console.log("setting dealer and dealing new hand");
-     
-    var updates = {};
-    updates["rooms/"+currentRoom+"/flop"] = "";
-	updates["rooms/"+currentRoom+"/turn"] = "";
-	updates["rooms/"+currentRoom+"/river"] = "";
-	updates["rooms/"+currentRoom+"/shownCards"] = "";
-	updates["rooms/"+currentRoom+"/folded"] = "";
 	
-	firebase.database().ref().update(updates);
-    
-    let currentDealerRef= firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
+	console.log("setting dealer and dealing new hand");
+	if(parseInt($(".pot").text()) !== 0){
+		alert("Settle pot first");
+		return false;
+	}else{
+		var newDeck = getNewDeck();
+		var updates = {};
+	    updates["rooms/"+currentRoom+"/flop"] = "";
+		updates["rooms/"+currentRoom+"/turn"] = "";
+		updates["rooms/"+currentRoom+"/river"] = "";
+		updates["rooms/"+currentRoom+"/shownCards"] = "";
+		updates["rooms/"+currentRoom+"/folded"] = "";
+		
+		firebase.database().ref().update(updates);
+	    
+	    let currentDealerRef= firebase.database().ref('rooms/'+currentRoom+"/currentDealer");
 
-	currentDealerRef.once('value', function(snapshot){
-		currentDealer = snapshot.val();
+		currentDealerRef.once('value', function(snapshot){
+			currentDealer = snapshot.val();
 
-		if (currentDealer == 0) {
-			let playersRef 		= firebase.database().ref('rooms/'+currentRoom+"/players");
-			playersRef.once('value', function(snapshot){
-				var players = snapshot.val();
-				currentDealer = players.pop();
-				$(players).each(function(k,v){
-					firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
-					firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
+			if (currentDealer == 0) {
+				let playersRef 		= firebase.database().ref('rooms/'+currentRoom+"/players");
+				playersRef.once('value', function(snapshot){
+					var players = snapshot.val();
+					currentDealer = players.pop();
+					$(players).each(function(k,v){
+						firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
+						firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
+					});
+
+					// Reset fold-button state
+					$("#fold").attr("disabled", null);
+
+					$(".playercards .descr").hide();
+
+					initBetting(players,currentDealer);
+
+					var updates = {};
+					updates["rooms/"+currentRoom+"/deck"] = newDeck;
+					updates["rooms/"+currentRoom+"/currentDealer"] = currentDealer;
+					updates["rooms/"+currentRoom+"/folded"] = [];
+
+					return firebase.database().ref().update(updates);
+
 				});
 
-				// Reset fold-button state
-				$("#fold").attr("disabled", null);
+			} else {
 
-				$(".playercards .descr").hide();
+				var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
+				playersRef.once('value', function(snapshot){
+					var players = snapshot.val();
+					Array.prototype.next = function() {     return this[++this.current]; };
 
-				initBetting(players,currentDealer);
+					players = players.filter(function (el) {return el != null; });
+					dealerpos = $.inArray(currentDealer, players);
+					console.log(dealerpos)
 
-				var updates = {};
-				updates["rooms/"+currentRoom+"/deck"] = newDeck;
-				updates["rooms/"+currentRoom+"/currentDealer"] = currentDealer;
-				updates["rooms/"+currentRoom+"/folded"] = [];
+					playercount = players.length;
 
-				return firebase.database().ref().update(updates);
+					if (typeof players[dealerpos + 1] === "undefined") {
+						nextDealer = players[0]
+					} else {
+						nextDealer = players[dealerpos + 1];
+					}
 
-			});
+					$(players).each(function(k,v){
+						firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
+						firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
+					});
 
-		} else {
+					initBetting(players,nextDealer);
 
-			var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
-			playersRef.once('value', function(snapshot){
-				var players = snapshot.val();
-				Array.prototype.next = function() {     return this[++this.current]; };
+					var updates = {};
+					updates["rooms/"+currentRoom+"/deck"] = newDeck;
+					updates["rooms/"+currentRoom+"/currentDealer"] = nextDealer;
+					//updates["rooms/"+currentRoom+"/folded"] = [];
+					//updates["rooms/"+currentRoom+"/shownCards"] = [];
 
-				players = players.filter(function (el) {return el != null; });
-				dealerpos = $.inArray(currentDealer, players);
-				console.log(dealerpos)
-
-				playercount = players.length;
-
-				if (typeof players[dealerpos + 1] === "undefined") {
-					nextDealer = players[0]
-				} else {
-					nextDealer = players[dealerpos + 1];
-				}
-
-				$(players).each(function(k,v){
-					firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
-					firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
+					// Reset fold-button state
+					$("#fold").attr("disabled", null);
+					return firebase.database().ref().update(updates);
 				});
 
-				initBetting(players,nextDealer);
+				//console.log("HEI")
 
-				var updates = {};
-				updates["rooms/"+currentRoom+"/deck"] = newDeck;
-				updates["rooms/"+currentRoom+"/currentDealer"] = nextDealer;
-				//updates["rooms/"+currentRoom+"/folded"] = [];
-				//updates["rooms/"+currentRoom+"/shownCards"] = [];
+			}
 
-				// Reset fold-button state
-				$("#fold").attr("disabled", null);
-				return firebase.database().ref().update(updates);
-			});
-
-			//console.log("HEI")
-
-		}
-
-	});
-/*
-    var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
-    playersRef.once('value', function(snapshot){
-    	var players = snapshot.val();
-    	$(players).each(function(k,v){
-    		firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
-    		firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
-    	});
-    });
-
-    var updates = {};
-    updates["rooms/"+currentRoom+"/deck"] = newDeck;
-    return firebase.database().ref().update(updates);
-*/
+		});
+		return true;
+	}
 }
 
 showFlop = function() {

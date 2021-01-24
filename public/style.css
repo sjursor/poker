@@ -391,4 +391,7 @@
         color:white;
         box-shadow: 0px 0px 15px 5px black;
       }
+      .adminTool{
+        margin-bottom:10px;
+      }
       #game{display:none;}

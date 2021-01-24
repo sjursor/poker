@@ -109,7 +109,6 @@ function setNextPlayerToTalk(ptt){
 			playerToTalk = ptt;
 		}
 		let index = $.inArray(playerToTalk, playersInGame);
-		console.log("index", index);
 
 		//TODO: Check if this round is finished and enable show flop
 		//If last player checks or calls, showFlop()
