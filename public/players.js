@@ -51,11 +51,6 @@ listPlayersAroundTable = function(){
 		    }
 		  });
 		});
-		$( document ).on( "click", "span.removePlayerFromTable", function() {
-		  var table = $(this).data("table");
-		  var uid   = $(this).data("uid");
-		  removePlayerFromTable(uid,table);
-		});
 	});	
 }
 

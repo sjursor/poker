@@ -108,16 +108,17 @@ function setNextPlayerToTalk(ptt){
 		if(typeof playerToTalk == 'undefined'){
 			playerToTalk = ptt;
 		}
+		console.log("asdf: "+playerToTalk,playersInGame);
 		let index = $.inArray(playerToTalk, playersInGame);
 
 		//TODO: Check if this round is finished and enable show flop
 		//If last player checks or calls, showFlop()
-		nextPlayerToTalk = getAtIndex(players,1,index);
+		nextPlayerToTalk = getAtIndex(playersInGame,1,index);
 		
 		playerToTalk = nextPlayerToTalk;
 
 		firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(playerToTalk);
-		console.log("Player To Talk",playerToTalk);
+		//console.log("Player To Talk",playerToTalk);
 	});
 }
 
