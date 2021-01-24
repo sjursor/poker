@@ -85,7 +85,6 @@ function winner(pids){
 
 		var updates = {};
 	    updates["rooms/"+currentRoom+"/betting/pot"] = 0;
-	    
 	    firebase.database().ref().update(updates);
 		$(".pot").text(0);
 	});
