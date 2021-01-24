@@ -93,12 +93,18 @@ function winner(pids){
 }
 
 function getBetting(){
+	console.log("enabling betting");
+	bettingEnabled = true;
 	firebase.database().ref('rooms/'+currentRoom+"/betting/").once("value", function(s){
 		let betting = s.val();
 		playerToTalk = betting.playerToTalk;
-
-		return betting;
 	});
+	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet").on("value", function(s){
+		console.info("currentBet updated");
+		currentBet = parseInt(s.val());
+		$("span.currentBet").text(currentBet);
+	});
+
 }
 
 function setNextPlayerToTalk(ptt){
@@ -108,14 +114,18 @@ function setNextPlayerToTalk(ptt){
 		if(typeof playerToTalk == 'undefined'){
 			playerToTalk = ptt;
 		}
-		let index = $.inArray(playerToTalk, playersInGame);
-		//TODO: Check if this round is finished and enable show flop
-		//If last player checks or calls, showFlop()
-		nextPlayerToTalk = getAtIndex(playersInGame,1,index);
-		
+		if(ptt !== 'undefined'){
+			nextPlayerToTalk = ptt;
+		}else{
+			let index = $.inArray(playerToTalk, playersInGame);
+			//TODO: Check if this round is finished and enable show flop
+			//If last player checks or calls, showFlop()
+			nextPlayerToTalk = getAtIndex(playersInGame,1,index);
+			
+		}
 		playerToTalk = nextPlayerToTalk;
-
-		firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(playerToTalk);
+		firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(nextPlayerToTalk);
+		
 		//console.log("Player To Talk",playerToTalk);
 	});
 }
@@ -209,7 +219,6 @@ function talkingPlayer(){
 function getPot(){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/pot").on("value", function(s){
 		pot = s.val();
-		return pot;
 	});
 }
 

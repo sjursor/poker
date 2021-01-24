@@ -7,7 +7,6 @@ clickHandlers = function(){
 	      createNewRoom(roomName);
 	  });
 
-
 	  // Next card
 	  $("#nextCard").click(function() {
 	    switch (tableState) {

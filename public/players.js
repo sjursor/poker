@@ -1,4 +1,4 @@
-listPlayersAroundTable = function(){
+listPlayersAroundTable = function(callback){
 	var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
 	playersRef.on('value', function(snapshot){
 		var ex_players = snapshot.val();
@@ -32,6 +32,7 @@ listPlayersAroundTable = function(){
 		  var playerRef = firebase.database().ref('players/'+v);
 		  //console.log(playerRef)
 		  playerRef.on('value', function(snapshot) {
+		  	console.log("playerUpdate");
 		    var val = snapshot.val();
 		    var playerkey = snapshot.key;
 
@@ -51,6 +52,8 @@ listPlayersAroundTable = function(){
 		    }
 		  });
 		});
+		
+		if(typeof(callback)=="function"){callback();}
 	});	
 }
 

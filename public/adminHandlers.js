@@ -1,5 +1,5 @@
 adminHandlers = function(){
-
+console.log("adminHandlers");
 	//Click handlers
 	  // New room
 	  $("#submitsetNextDealerAndDealHand").click(function(){
@@ -70,39 +70,19 @@ adminHandlers = function(){
 	  });
 
 
-	// Show card-button
-	$("#showcardsadsfasdf").click(function() {
-
-	  if (confirm("Show cards?")) {
-
-	    var card1 = $("#userCard1").attr("class").replace("card ", "");
-	    var card2 = $("#userCard2").attr("class").replace("card ", "");
-	    let cardClass = card1+";"+card2;
-
-	    currentPlayerHandDescription(function(hand,playerCards){
-	      firebase.database().ref('rooms/'+currentRoom+"/shownCards/"+currentPlayer).set({
-	        cardClass:cardClass,
-	        descr:hand.descr,
-	        cards:playerCards
-	      });
-	    })
-
-	    
-	    $("#showCards").attr("disabled","disabled");
-	  }
-
-	});
-
+	setTimeout(function(){
+		console.log("Filling admin with data");
+		let players = $(".player[data-pid]");
+		let selects = $("#admin select");
+	  	$.each(players, function(k,v){
+			let pid  = $(v).data("pid");
+			let name = $(".name", $(v)).text();
+			$.each(selects, function (kk,vv){
+				let ins = '<option value="'+pid+'">'+name+'</option>';
+				$(vv).append(ins);
+	  		});
+		});
+	},3000);
 	
-	let players = $(".player[data-pid]");
-	let selects = $("#admin select");
-  	$.each(players, function(k,v){
-		let pid  = $(v).data("pid");
-		let name = $(".name", $(v)).text();
-		$.each(selects, function (kk,vv){
-			let ins = '<option value="'+pid+'">'+name+'</option>';
-			$(vv).append(ins);
-  		});
-	});
 }
 
