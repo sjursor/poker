@@ -77,8 +77,9 @@
       #check,#bet, #call{
         display:none;
       }
-      .playerToTalk{
+      .player.playerToTalk{
         border:3px solid yellow;
+        height:130px;
       }
 
       .desk{
@@ -283,11 +284,13 @@
       }
       .cbetContainer{
         position:absolute;
-        left:280px;
-        top:86px;
+        left:380px;
+        top:38px;
         padding: 3px;
+        color: white;
+        font-size: 20px;
+        line-height: 20px;
         color:white;
-        font-size:17px;
       }
       .potContainer{
         width: 70px;
@@ -299,6 +302,7 @@
         font-size:20px;
         line-height:20px;
       }
+      .cbetContainer .currentBet,
       .potContainer .pot{
         display:block;
         font-weight: 200;

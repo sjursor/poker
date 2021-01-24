@@ -1,5 +1,6 @@
 smallBlindBet = 1;
 bigBlindBet   = 2;
+playerToTalk  = "";
 
 //happens every round
 initBetting = function(players,currentDealer){
@@ -120,6 +121,25 @@ function setNextPlayerToTalk(ptt){
 		console.log("Player To Talk",playerToTalk);
 	});
 }
+
+function setPrevPlayerToTalk(){
+	let pttRef = firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame");
+	pttRef.once('value', function(s){
+		playersInGame = s.val();
+		if(typeof playerToTalk == 'undefined'){
+			playerToTalk = ptt;
+		}
+		let index = $.inArray(playerToTalk, playersInGame);
+
+		//TODO: Check if this round is finished and enable show flop
+		//If last player checks or calls, showFlop()
+		playerToTalk = getAtIndex(players,-1,index);
+
+		firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(playerToTalk);
+		console.log("Player To Talk",playerToTalk);
+	});
+}
+
 
 function talkingPlayer(){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").on("value", function(s){

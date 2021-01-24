@@ -123,7 +123,6 @@ showFlop = function() {
 		flopRef.set(flop);
 		deckRef.set(deck);
 	});
-
 }
 
 showTurn = function() {

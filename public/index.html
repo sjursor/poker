@@ -229,16 +229,32 @@
         <button type="submit" id="submitWinner">Ok</button>
       </div>
 
-      <div class="adminTool" id="setNextDealerAndDealHand">
-        <b>setNextDealerAndDealHand</b>
-        <button type="submit" id="submitsetNextDealerAndDealHand">Deal new hand</button>
-      </div>
-
       <div class="adminTool" id="numbers">
         <b>Numbers</b>
         Sum table: <input type="number" disabled="disabled" id="inputSumTable"/>
         <button id="submitinputSumTable">Update</button>
       </div>
+
+      <div class="adminTool" id="nextPlayerToTalk">
+        <b>NexPlayerToTalk</b>
+        <button id="submitnextPlayerToTalk">Skip current player to talk</button>
+      </div>
+      <div class="adminTool" id="prevPlayerToTalk">
+        <b>PrevPlayerToTalk</b>
+        <button id="submitprevPlayerToTalk">Set previous player to talk</button>
+      </div>
+
+      <div class="adminTool" id="showCards">
+        <button id="submitadmShowFlop">Show Flop</button>
+        <button id="submitadmShowTurn">Show Turn</button>
+        <button id="submitadmShowRiver">Show River</button>
+      </div>
+
+      <div class="adminTool" id="setNextDealerAndDealHand">
+        <b>setNextDealerAndDealHand</b>
+        <button type="submit" id="submitsetNextDealerAndDealHand">Deal new hand</button>
+      </div>
+      
 
     </div>
 
@@ -472,12 +488,13 @@
         talkingPlayer();
 
         setTimeout(function(){
+          bettingEnabled = true;
           getBetting(players,currentDealer);
 
           $("#admin").show();
           adminHandlers();
           
-        },2500);
+        },3000);
             
       });
 
