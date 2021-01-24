@@ -13,9 +13,9 @@ initBetting = function(players,currentDealer){
 	updates["rooms/"+currentRoom+"/betting/smallBlind"] = 1;
 	updates["rooms/"+currentRoom+"/betting/bigBlind"] = 2;
 	updates["rooms/"+currentRoom+"/betting/currentBet"] = 2;
-	updates["rooms/"+currentRoom+"/betting/currentDealer"] = currentDealer;
+	//updates["rooms/"+currentRoom+"/betting/currentDealer"] = currentDealer;
 	
-	firebase.database().ref().update(updates);
+	//firebase.database().ref().update(updates);
 
 	let currentDealerPosInArray = $.inArray(currentDealer, players);
 	//console.log("CDPIA ",currentDealerPosInArray, players);
@@ -27,8 +27,16 @@ initBetting = function(players,currentDealer){
 	currentBet 	= bigBlind;
 	pot = smallBlindBet+bigBlindBet;
 	blinds(smallBlind, bigBlind);
+
+	updates["rooms/"+currentRoom+"/betting/smallBlindPlayer"] 	= smallBlind;
+	updates["rooms/"+currentRoom+"/betting/bigBlindPlayer"] 	= bigBlind;
+	updates["rooms/"+currentRoom+"/betting/utg"] 				= utg;
+	updates["rooms/"+currentRoom+"/betting/playerToTalk"] 		= utg;
+	updates["rooms/"+currentRoom+"/betting/pot"] 				= pot;
+
+	firebase.database().ref().update(updates);
 	
-	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(utg);
+	//firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(utg);
 }
 
 function blinds(smallBlindPlayer, bigBlindPlayer){

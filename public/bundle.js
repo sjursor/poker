@@ -2046,7 +2046,6 @@ setNextDealerAndDealHand = function() {
 }
 
 showFlop = function() {
-	//console.log("showing flop")
 	let deckRef			= firebase.database().ref('rooms/'+currentRoom+"/deck");
 	let flopRef 		= firebase.database().ref('rooms/'+currentRoom+"/flop");
 	deckRef.once('value', function(snapshot) {
@@ -2056,6 +2055,8 @@ showFlop = function() {
 		deckRef.set(deck);
 	});
 	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
+	console.log("setting smallBlindPlayer to Talk", smallBlindPlayer);
+	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk/").set(smallBlindPlayer);
 }
 
 showTurn = function() {
@@ -2069,6 +2070,7 @@ showTurn = function() {
 		deckRef.set(deck);
 	});
 	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
+	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk/").set(smallBlindPlayer);
 }
 
 
@@ -2083,6 +2085,7 @@ showRiver = function() {
 		deckRef.set(deck);
 	});
 	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
+	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk/").set(smallBlindPlayer);
 }
 
 getTableCards = function(){

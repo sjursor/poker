@@ -109,6 +109,15 @@ function listenForChangesInTheRoom(){
 	  if(val.betting["pot"]){
 		$(".pot").text(val.betting["pot"]);
 	  }
+	  if(val.betting["smallBlindPlayer"]){
+		smallBlindPlayer = val.betting["smallBlindPlayer"];
+	  }
+	  if(val.betting["bigBlindPlayer"]){
+		bigBlindPlayer = val.betting["bigBlindPlayer"];
+	  }
+	  if(val.betting["utg"]){
+		utgPlayer = val.betting["utg"];
+	  }
 	  if(val.betting["currentBet"] !== 'undefined'){
 	    currentBet = parseInt(val.betting["currentBet"]);
 	    console.log("Current bet: "+currentBet);

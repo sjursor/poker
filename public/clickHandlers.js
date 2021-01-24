@@ -13,8 +13,8 @@ clickHandlers = function(){
 	      case 0:
 	        if (confirm("Deal new hand?")) {
 	          setNextDealerAndDealHand();
-
 	          $("#nextCard").html("Show flop");
+
 	          tableState = 1;
 	        }
 	        break;
@@ -30,7 +30,6 @@ clickHandlers = function(){
 	      case 2:
 	        if (confirm("Show turn?")) {
 	          showTurn();
-	          setNextPlayerToTalk(smallBlind);
 	          $("#nextCard").html("Show river");
 	          tableState = 3;
 	        }
@@ -39,7 +38,6 @@ clickHandlers = function(){
 	      case 3:
 	        if (confirm("Show river?")) {
 	          showRiver();
-	          setNextPlayerToTalk(smallBlind);
 	          $("#nextCard").html("End game and deal new hand");
 	          tableState = 4;
 	        }
@@ -48,7 +46,7 @@ clickHandlers = function(){
 	      case 4:
 	        if (confirm("End game and deal new hand?")) {
 	          setNextDealerAndDealHand();
-	          setNextPlayerToTalk(smallBlind);
+	          setNextPlayerToTalk(smallBlindPlayer);
 	          $("#nextCard").html("Show flop");
 	          tableState = 1;
 	        }
