@@ -17,6 +17,7 @@
     <script type="application/javascript" src="/players.js"></script>
     <script type="application/javascript" src="/rooms.js"></script>
     <script type="application/javascript" src="/clickHandlers.js"></script>
+    <script type="application/javascript" src="/adminHandlers.js"></script>
     <script type="application/javascript" src="/betting.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200;400;700;900&display=swap" rel="stylesheet"> 
@@ -172,6 +173,73 @@
             <button id="nextCard">Deal new hand</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div id="admin">
+      <h3>Admin toolz</h3>
+      <div class="adminTool" id="setPlayerBalance">
+        <b>Set player balance:</b>
+        <select name="players" id="">
+          <option value="0oGinVvghrYgAHc1GJz1VGpR8XL2">Sjur</option>
+          <option value="J0GfoIqLhzaxL1SrAeYigI7oXVx1">John</option>
+          <option value="9qEcvtXYbzMHg5kLU8YOjKFpvLh2">Stian</option>
+        </select>
+        <input type="number" />
+        <button type="submit" id="submitPlayerBalance">Ok</button>
+      </div>
+      
+      <div class="adminTool" id="addToPlayersBalance">
+        <b>Add amount to players balance:</b>
+        Add <input type="number" />Kr to 
+        <select name="players" id="">
+          <option value="0oGinVvghrYgAHc1GJz1VGpR8XL2">Sjur</option>
+          <option value="J0GfoIqLhzaxL1SrAeYigI7oXVx1">John</option>
+          <option value="9qEcvtXYbzMHg5kLU8YOjKFpvLh2">Stian</option>
+        </select>
+        
+        <button type="submit" id="submitaddToPlayersBalance">Ok</button>
+      </div>
+
+      <div class="adminTool" id="subtractFromPlayersBalance">
+        <b>Subtract amount from players balance:</b>
+        Subtract <input type="number" />Kr from 
+        <select name="players" id="">
+          <option value="0oGinVvghrYgAHc1GJz1VGpR8XL2">Sjur</option>
+          <option value="J0GfoIqLhzaxL1SrAeYigI7oXVx1">John</option>
+          <option value="9qEcvtXYbzMHg5kLU8YOjKFpvLh2">Stian</option>
+        </select>
+        
+        <button type="submit" id="submitsubtractFromPlayersBalance">Ok</button>
+      </div>
+      
+      <div class="adminTool" id="setAllPlayersBalance">
+        <b>Set all players balance to:</b>
+        <input type="number" />
+        <button type="submit" id="submitsetAllPlayersBalance">Ok</button>
+      </div>
+      
+      <div class="adminTool" id="winner">
+        <b>Announce winner:</b>
+        <select name="players" id="" multiple>
+          <option value="0oGinVvghrYgAHc1GJz1VGpR8XL2">Sjur</option>
+          <option value="J0GfoIqLhzaxL1SrAeYigI7oXVx1">John</option>
+          <option value="9qEcvtXYbzMHg5kLU8YOjKFpvLh2">Stian</option>
+        </select>
+        <button type="submit" id="submitWinner">Ok</button>
+      </div>
+
+      <div class="adminTool" id="setNextDealerAndDealHand">
+        <b>setNextDealerAndDealHand</b>
+        <button type="submit" id="submitsetNextDealerAndDealHand">Deal new hand</button>
+      </div>
+
+      <div class="adminTool" id="numbers">
+        <b>Numbers</b>
+        Sum table: <input type="number" disabled="disabled" id="inputSumTable"/>
+        <button id="submitinputSumTable">Update</button>
+      </div>
+
     </div>
 
     <script>
@@ -398,13 +466,17 @@
         //});
 
         clickHandlers();
-
+        
         resetTableCards();
         
         talkingPlayer();
 
         setTimeout(function(){
           getBetting(players,currentDealer);
+          if(currentPlayer == '0oGinVvghrYgAHc1GJz1VGpR8XL2'){
+            $("#admin").show();
+            adminHandlers();
+          }
         },2500);
             
       });

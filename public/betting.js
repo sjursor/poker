@@ -47,12 +47,18 @@ function blinds(smallBlindPlayer, bigBlindPlayer){
 }
 
 function setPlayerBalance(pid,balance){
-	var updates = {};
-    firebase.database().ref("rooms/"+currentRoom+"/betting/balance/"+pid).set(balance);
+    firebase.database().ref("rooms/"+currentRoom+"/betting/balance/"+pid).set(parseInt(balance));
+    console.log(balance);
 }
 function addToPlayersBalance(pid,add){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+pid).once("value", function(s){
-		newBalance = s.val()+add;
+		newBalance = parseInt(s.val())+parseInt(add);
+	});
+	setPlayerBalance(pid,newBalance);
+}
+function subtractFromPlayersBalance(pid,subtract){
+	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+pid).once("value", function(s){
+		newBalance = parseInt(s.val())-subtract;
 	});
 	setPlayerBalance(pid,newBalance);
 }
@@ -79,6 +85,7 @@ function winner(pids){
 
 		var updates = {};
 	    updates["rooms/"+currentRoom+"/betting/pot"] = 0;
+	    
 	    firebase.database().ref().update(updates);
 		$(".pot").text(0);
 	});

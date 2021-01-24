@@ -53,22 +53,27 @@ ref.once("value", function(snapshot){
 removePlayerFromTable = function(player,table){
 var ref = firebase.database().ref('rooms/'+table);
 ref.once("value", function(snapshot){
-  var data = snapshot.val();
-  var players = data['players'];
+  if(snapshot){
 
-  console.log(players);
-  var newPlayers = [];
-  $.each(players,function(k,v){
-    console.log(k,v);
-    if(v == player){
-      return;
-    }else{
-      newPlayers.push(v);
-    }
-  });
+    var data = snapshot.val();
+    var players = data['players'];
 
-  var updates = {};
-  updates['/rooms/' + table + '/players'] = newPlayers;
-  return firebase.database().ref().update(updates);
+    console.log(players);
+    var newPlayers = [];
+    $.each(players,function(k,v){
+      console.log(k,v);
+      if(v == player){
+        return;
+      }else{
+        newPlayers.push(v);
+      }
+    });
+
+    var updates = {};
+    updates['/rooms/' + table + '/players'] = newPlayers;
+    return firebase.database().ref().update(updates);
+  }else{
+    console.log("No room data available");
+  }
 });
 }

@@ -34,17 +34,7 @@ loginHandler = function(){
         updateUserCards();
 
 
-        $("#logout").on("click", function(){
-            //removePlayerFromTable(user.uid);
-          firebase.auth().signOut().then(function() {
-            console.log("signed out success");
-            $("#logout").hide();
-            $("#userinfoname").text("You must log in to play the game (reload page)");
-            $("#game").hide();
-          }).catch(function(error) {
-            console.log("error", error);
-          });
-        });
+        
 
 
 
@@ -63,6 +53,20 @@ loginHandler = function(){
         }); 
       })  
     }
+
+    $("#logout").on("click", function(){
+      removePlayerFromTable(user.uid);
+      firebase.auth().signOut().then(function() {
+        console.log("signed out success");
+        $("#logout").hide();
+        $("#userinfoname").text("You must log in to play the game (reload page)");
+        $("#game").hide();
+      }).catch(function(error) {
+        console.log("error", error);
+      });
+    });
+
+
   });  
 }
 
