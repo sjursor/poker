@@ -115,6 +115,7 @@ showFlop = function() {
 		flopRef.set(flop);
 		deckRef.set(deck);
 	});
+	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
 }
 
 showTurn = function() {
@@ -127,6 +128,7 @@ showTurn = function() {
 		turnRef.set(turn);
 		deckRef.set(deck);
 	});
+	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
 }
 
 
@@ -140,6 +142,7 @@ showRiver = function() {
 		riverRef.set(river);
 		deckRef.set(deck);
 	});
+	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
 }
 
 getTableCards = function(){

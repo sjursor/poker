@@ -263,6 +263,18 @@
       .balance:after{
         content:" Kr";
       }
+      .thisRoundBet{
+        clear: both;
+        width: 70px;
+        background: black;
+        color: white;
+        position: absolute;
+        bottom: -50px;
+        left: 80.1px;
+        z-index: 100;
+        font-size: 22px;
+        border-radius: 100px;
+      }
 
       #currentTable {
         background: url("imgs/tables_and_carpet/table_2_blue.png");
