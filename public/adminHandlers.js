@@ -82,7 +82,7 @@ console.log("adminHandlers");
 				$(vv).append(ins);
 	  		});
 		});
-	},3000);
+	},2000);
 	
 }
 

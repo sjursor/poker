@@ -99,11 +99,11 @@ function getBetting(){
 		let betting = s.val();
 		playerToTalk = betting.playerToTalk;
 	});
-	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet").on("value", function(s){
-		console.info("currentBet updated");
-		currentBet = parseInt(s.val());
-		$("span.currentBet").text(currentBet);
-	});
+	// firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet").on("value", function(s){
+	// 	console.info("currentBet updated");
+	// 	currentBet = parseInt(s.val());
+	// 	$("span.currentBet").text(currentBet);
+	// });
 
 }
 
@@ -111,19 +111,20 @@ function setNextPlayerToTalk(ptt){
 	let pttRef = firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame");
 	pttRef.once('value', function(s){
 		playersInGame = s.val();
-		if(typeof playerToTalk == 'undefined'){
-			playerToTalk = ptt;
-		}
-		if(ptt !== 'undefined'){
+		if(ptt){
 			nextPlayerToTalk = ptt;
 		}else{
+			console.log("PlayerToTalk",playerToTalk);
 			let index = $.inArray(playerToTalk, playersInGame);
+			console.log("index: "+index);
+			console.log("playersInGame",playersInGame);
 			//TODO: Check if this round is finished and enable show flop
 			//If last player checks or calls, showFlop()
 			nextPlayerToTalk = getAtIndex(playersInGame,1,index);
-			
+			console.log("Found to be new talking player:  "+nextPlayerToTalk);
 		}
 		playerToTalk = nextPlayerToTalk;
+		console.log("setting player to talk: ", nextPlayerToTalk);
 		firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(nextPlayerToTalk);
 		
 		//console.log("Player To Talk",playerToTalk);
