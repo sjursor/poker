@@ -79,7 +79,6 @@
       }
       .player.playerToTalk{
         border:3px solid yellow;
-        height:130px;
       }
 
       .desk{
@@ -261,8 +260,8 @@
         bottom: -18px;
         left: -0.9px;
       }
-      .balance:before{
-        content:"$ ";
+      .balance:after{
+        content:" Kr";
       }
 
       #currentTable {
