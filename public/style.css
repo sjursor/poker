@@ -266,7 +266,7 @@
       .thisRoundBet{
         clear: both;
         width: 70px;
-        background: black;
+        background: darkcyan;
         color: white;
         position: absolute;
         bottom: -50px;

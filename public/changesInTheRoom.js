@@ -106,6 +106,15 @@ function listenForChangesInTheRoom(){
 	  }else{
 		console.log("found no player to talk", val);
 	  }
+
+	  if(val.betting["playersBets"]){
+	  	let playersBets = val.betting["playersBets"];
+	  	$.each(playersBets, function(k,v){
+	  		$(".player[data-pid='"+k+"'] .thisRoundBet").text(v);
+	  	});
+	  }else{
+	  	$(".player .thisRoundBet").text("");
+	  }
 	  
 	  $(".pot").text(parseInt(val.betting["pot"]));
 	  

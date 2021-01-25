@@ -13,23 +13,24 @@ initBetting = function(players,currentDealer){
 	updates["rooms/"+currentRoom+"/betting/smallBlind"] = 1;
 	updates["rooms/"+currentRoom+"/betting/bigBlind"] = 2;
 	updates["rooms/"+currentRoom+"/betting/currentBet"] = 2;
-	//updates["rooms/"+currentRoom+"/betting/currentDealer"] = currentDealer;
 	
 	//firebase.database().ref().update(updates);
 
 	let currentDealerPosInArray = $.inArray(currentDealer, players);
 	//console.log("CDPIA ",currentDealerPosInArray, players);
 	//dealer 		= getAtIndex(players,0,currentDealerPosInArray);
-	smallBlind 	= getAtIndex(players,1,currentDealerPosInArray);
-	bigBlind 	= getAtIndex(players,2,currentDealerPosInArray);
+	smallBlindPlayer 	= getAtIndex(players,1,currentDealerPosInArray);
+	bigBlindPlayer	 	= getAtIndex(players,2,currentDealerPosInArray);
 	utg			= getAtIndex(players,3,currentDealerPosInArray);
 	playerToTalk= utg;
-	currentBet 	= bigBlind;
+	currentBet 	= bigBlindBet;
 	pot = smallBlindBet+bigBlindBet;
-	blinds(smallBlind, bigBlind);
+	blinds(smallBlindPlayer, bigBlindPlayer);
 
-	updates["rooms/"+currentRoom+"/betting/smallBlindPlayer"] 	= smallBlind;
-	updates["rooms/"+currentRoom+"/betting/bigBlindPlayer"] 	= bigBlind;
+	updates["rooms/"+currentRoom+"/betting/playersBets/"+smallBlindPlayer] 	= smallBlindBet;
+	updates["rooms/"+currentRoom+"/betting/playersBets/"+bigBlindPlayer] 		= bigBlindBet;
+	updates["rooms/"+currentRoom+"/betting/smallBlindPlayer"] 	= smallBlindPlayer;
+	updates["rooms/"+currentRoom+"/betting/bigBlindPlayer"] 	= bigBlindPlayer;
 	updates["rooms/"+currentRoom+"/betting/utg"] 				= utg;
 	updates["rooms/"+currentRoom+"/betting/playerToTalk"] 		= utg;
 	updates["rooms/"+currentRoom+"/betting/pot"] 				= pot;
@@ -41,14 +42,14 @@ initBetting = function(players,currentDealer){
 
 function blinds(smallBlindPlayer, bigBlindPlayer){
 	//Collect Small blind to the pot
-	
+	console.log(smallBlindPlayer,bigBlindPlayer);
 	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/").once("value", function(s){
 		let balance = s.val();
 		let smallBlindBalance 	= balance[smallBlindPlayer];
-		firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+smallBlind).set(smallBlindBalance-smallBlindBet);
+		firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+smallBlindPlayer).set(smallBlindBalance-smallBlindBet);
 
 		let bigBlindBalance 	= balance[bigBlindPlayer];
-		firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+bigBlind).set(bigBlindBalance-bigBlindBet);
+		firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+bigBlindPlayer).set(bigBlindBalance-bigBlindBet);
 		
 		let pot = bigBlindBet+smallBlindBet;
 		firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(pot);
@@ -184,17 +185,23 @@ function talkingPlayer(){
 			$("#call").show().unbind();
 
 			$("#call").click(function(){
+
+				let toCall = currentBet;
+				if(tableState == 1){
+					if(talkingPlayer == smallBlindPlayer){toCall = currentBet-smallBlindBet;}
+					if(talkingPlayer == bigBlindPlayer){toCall = currentBet-bigBlindBet;}	
+				}
+				
 				if (confirm("Call "+currentBet+"?")) {
-		        	if(currentBet>talkingPlayersBalance){
+		        	if(toCall>talkingPlayersBalance){
 		        		alert("Insufficient funds");
 		        	}else{
-						firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+currentPlayer).set(currentBet);
+						firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(currentBet);
 						//update pot
 						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
-							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseInt(s.val())+currentBet);
+							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseInt(s.val())+toCall);
 						});
-						setPlayerBalance(talkingPlayer,talkingPlayersBalance-currentBet);
-						setNextPlayerToTalk();
+						setPlayerBalance(talkingPlayer,talkingPlayersBalance-toCall);
 					}
 					setNextPlayerToTalk();
 		        }
@@ -202,7 +209,7 @@ function talkingPlayer(){
 
 			$("#check").click(function(){
 				if (confirm("Check?")) {
-		        	firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+currentPlayer).set(0);
+		        	firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(0);
 					setNextPlayerToTalk();
 		        }
 			});
@@ -218,7 +225,7 @@ function talkingPlayer(){
 						if(bet>currentBet){
 							firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet);
 						}
-						firebase.database().ref('rooms/'+currentRoom+"/betting/playerBet/"+currentPlayer).set(bet);
+						firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(bet);
 						//update pot
 						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
 							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseInt(s.val())+bet);

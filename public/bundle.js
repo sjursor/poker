@@ -2057,6 +2057,8 @@ showFlop = function() {
 	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
 	console.log("setting smallBlindPlayer to Talk", smallBlindPlayer);
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk/").set(smallBlindPlayer);
+	console.log("asdf");
+	firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/").set([]);
 }
 
 showTurn = function() {
@@ -2071,6 +2073,7 @@ showTurn = function() {
 	});
 	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk/").set(smallBlindPlayer);
+	firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/").set([]);
 }
 
 
@@ -2086,6 +2089,7 @@ showRiver = function() {
 	});
 	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk/").set(smallBlindPlayer);
+	firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/").set([]);
 }
 
 getTableCards = function(){
