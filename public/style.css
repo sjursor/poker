@@ -400,10 +400,15 @@
         background-color: #131134;
         min-height: 100px;
         padding: 20px;
-        color:white;
+        color: white;
+        position: absolute;
         box-shadow: 0px 0px 15px 5px black;
+        left: 0;
+        z-index: 101;
+        top: 100px;
       }
       .adminTool{
         margin-bottom:10px;
       }
+      #adminBtn{display:none;}
       #game{display:none;}

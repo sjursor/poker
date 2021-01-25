@@ -103,5 +103,9 @@ clickHandlers = function(){
 	  }
 
 	});
+
+	$("#adminBtn").click(function(){
+		$("#admin").toggle();
+	});
 }
 
