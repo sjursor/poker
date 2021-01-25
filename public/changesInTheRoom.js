@@ -1,8 +1,8 @@
 
+//State handler 
 function listenForChangesInTheRoom(){
 	activeRoom = firebase.database().ref('rooms/'+currentRoom);
 	activeRoom.on('value', function(snapshot) {
-		console.log("Change in the room");
 	  var val = snapshot.val();
 
 	  $("#currentTableName").html(val["name"]);
@@ -106,9 +106,9 @@ function listenForChangesInTheRoom(){
 	  }else{
 		console.log("found no player to talk", val);
 	  }
-	  if(val.betting["pot"]){
-		$(".pot").text(val.betting["pot"]);
-	  }
+	  
+	  $(".pot").text(parseInt(val.betting["pot"]));
+	  
 	  if(val.betting["smallBlindPlayer"]){
 		smallBlindPlayer = val.betting["smallBlindPlayer"];
 	  }
@@ -120,7 +120,7 @@ function listenForChangesInTheRoom(){
 	  }
 	  if(val.betting["currentBet"] !== 'undefined'){
 	    currentBet = parseInt(val.betting["currentBet"]);
-	    console.log("Current bet: "+currentBet);
+	    //console.log("Current bet: "+currentBet);
 	    $("span.currentBet").text(parseInt(currentBet));
 	  }
 	  if(val.betting["balance"]){

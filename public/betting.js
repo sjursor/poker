@@ -57,7 +57,7 @@ function blinds(smallBlindPlayer, bigBlindPlayer){
 
 function setPlayerBalance(pid,balance){
     firebase.database().ref("rooms/"+currentRoom+"/betting/balance/"+pid).set(parseInt(balance));
-    console.log(balance);
+    //console.log(balance);
 }
 function addToPlayersBalance(pid,add){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+pid).once("value", function(s){
@@ -71,6 +71,20 @@ function subtractFromPlayersBalance(pid,subtract){
 	});
 	setPlayerBalance(pid,newBalance);
 }
+function moveFromPotToPlayer(pid, amount){
+	//Trekk fra pot
+	firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
+		let pot = s.val();	
+		var updates = {};
+		console.log("Moving "+amount+" from pot of "+pot+". New pot: "+(pot-amount));
+	    updates["rooms/"+currentRoom+"/betting/pot"] = (pot-amount);
+	    firebase.database().ref().update(updates);
+		//$(".pot").text(0);
+		addToPlayersBalance(pid,amount);
+	});
+	//Add to player
+}
+
 function setAllPlayersBalance(balance){
 	var updates = {};
 	$.each(players,function(k,pid){

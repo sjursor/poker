@@ -28,6 +28,12 @@ console.log("adminHandlers");
 	  	subtractFromPlayersBalance(pid,sub);
 	  });
 
+	  $("#submitmoveFromPotToPlayer").click(function(){
+	  	let pid 	= $("#moveFromPotToPlayer select").val();
+	  	let amount  = $("#moveFromPotToPlayer input").val();
+	  	moveFromPotToPlayer(pid,amount);
+	  });
+
 	  $("#submitsetAllPlayersBalance").click(function(){
 	  	let bal = $("#setAllPlayersBalance input").val();
 	  	setAllPlayersBalance(bal);
