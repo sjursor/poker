@@ -415,3 +415,11 @@
       }
       #adminBtn{display:none;}
       #game{display:none;}
+
+      .thisRoundBet{color:white;}
+      .green{background-color:white;color:black;}
+      .green{background-color:green; color:white;}
+      .red{background-color:red;color:white;}
+      .blue{background-color:blue;}
+      .black{background-color:black;}
+      .white{background-color:white;color:black;}

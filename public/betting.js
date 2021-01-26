@@ -121,6 +121,16 @@ function winner(pids){
 
 }
 
+function sumTable(){
+	let players = $(".player[data-pid] .balance");
+  	let sum = 0;
+  	$.each(players, function(k,v){
+			let val = parseInt($(v).text());
+  		sum += val;
+  	});
+  	$("#inputSumTable").val(sum+parseInt($(".pot").text()));
+}
+
 function getBetting(){
 	console.log("enabling betting");
 	bettingEnabled = true;

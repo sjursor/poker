@@ -117,7 +117,14 @@ function listenForChangesInTheRoom(){
 		  			//$(".player[data-pid='"+k+"'] .thisRoundBet").text("Check");
 		  			$(".player[data-pid='"+k+"'] .thisRoundBet").text(v);	
 		  		}else{
-		  			$(".player[data-pid='"+k+"'] .thisRoundBet").text(v);	
+		  			let betClass;
+		  			v = parseFloat(v);
+		  			if(v==1){betClass='white';}
+		  			if(v>1){betClass='green';}
+		  			if(v>4){betClass='red';}
+		  			if(v>9){betClass='blue';}
+		  			if(v>19){betClass='black';}
+		  			$(".player[data-pid='"+k+"'] .thisRoundBet").text(v).addClass(betClass);
 		  		}
 		  		
 		  	});	
@@ -219,6 +226,7 @@ function listenForChangesInTheRoom(){
 		}
 		
 	  }
-
+	  //run integrity check for admin input
+		sumTable();
 	});	
 }

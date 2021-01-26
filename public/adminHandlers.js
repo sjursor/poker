@@ -43,13 +43,7 @@ adminHandlers = function(){
 	  });
 
 	  $("#submitinputSumTable").click(function(){
-	  	let players = $(".player[data-pid] .balance");
-	  	let sum = 0;
-	  	$.each(players, function(k,v){
-  			let val = parseInt($(v).text());
-	  		sum += val;
-	  	});
-	  	$("#inputSumTable").val(sum+parseInt($(".pot").text()));
+	  	sumTable();
 	  });
 
 	  $("#submitnextPlayerToTalk").click(function(){
