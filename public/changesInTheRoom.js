@@ -109,9 +109,20 @@ function listenForChangesInTheRoom(){
 
 	  if(val.betting["playersBets"]){
 	  	let playersBets = val.betting["playersBets"];
-	  	$.each(playersBets, function(k,v){
-	  		$(".player[data-pid='"+k+"'] .thisRoundBet").text(v);
-	  	});
+	  	if(typeof(playersBets)!=="object"){
+	  		$(".player .thisRoundBet").text("");	
+	  	}else{
+	  		$.each(playersBets, function(k,v){
+		  		if(v == 0){
+		  			//$(".player[data-pid='"+k+"'] .thisRoundBet").text("Check");
+		  			$(".player[data-pid='"+k+"'] .thisRoundBet").text(v);	
+		  		}else{
+		  			$(".player[data-pid='"+k+"'] .thisRoundBet").text(v);	
+		  		}
+		  		
+		  	});	
+	  	}
+	  	
 	  }else{
 	  	$(".player .thisRoundBet").text("");
 	  }
@@ -160,6 +171,7 @@ function listenForChangesInTheRoom(){
 
 	  if (shownCards) {
 		let rank = [];
+		let rank2 = [];
 		$.each(shownCards,function(k, v) {
 
 		  // Remove profile picture
@@ -172,29 +184,38 @@ function listenForChangesInTheRoom(){
 		  $("[data-pid='" + k + "'] .playercards .playercard1").addClass(userCards[0]);
 		  // Show card 2
 		  $("[data-pid='" + k + "'] .playercards .playercard2").addClass(userCards[1]);
-
-		  solvShownCards();
+		  
 		  $("[data-pid='" + k + "'] .playercards .descr").text(shownCards[k].descr).show();
 
 		  //Solving Rank
 		  let tableCards = getTableCards();
 		  var folded = jQuery("[data-pid='"+k+"']").hasClass("folded");
 		  if(!folded){
-			rank.push(Hand.solve(tableCards.concat(shownCards[k].cards)));
+		  	let s = Hand.solve(tableCards.concat(shownCards[k].cards));
+		  	s.pid = k;
+			rank.push(s);
 		  }
 
 		  //var hand1 = Hand.solve(tableCards);
 		  //var hand2 = Hand.solve(['3d', 'As', 'Jc', 'Th', '2d', '4s', 'Qd']);
-		  //var winner = Hand.winners([hand1, hand2]); // hand2
+		  //var winner = Hand.winners([hand1, hand2]);
 		  
 		});
+		solvShownCards();
 		if(rank.length){
-		  let winner = Hand.winners(rank); // hand2
-		  //console.log(winner);
-		  //console.log(rank);
-		  //console.log(winner);
-		  var winPlayer = jQuery(".player .descr:contains("+winner[0].descr+")");
-		  winPlayer.addClass("winner");  
+		  let winner = Hand.winners(rank);
+		  let w = [];
+		  $.each(winner, function(k, v) {
+		  	w.push(v.pid);
+		  	jQuery(".player[data-pid='"+v.pid+"'] .descr").addClass("winner");
+		  });
+		  console.log(w);
+		  
+		  //If refresh
+		  setTimeout(function(){jQuery("#winner select").val(w);},4000);
+		  
+		  //var winPlayer = jQuery(".player .descr:contains("+winner[0].descr+")");
+		  
 		}
 		
 	  }

@@ -4,7 +4,7 @@ playerToTalk  = "";
 
 //happens every round
 initBetting = function(players,currentDealer){
-	console.log("initing betting");
+	console.log("initing betting", players,currentDealer);
 	var updates = {};
 	playersInGame = players;
     updates["rooms/"+currentRoom+"/betting/playersInGame"] = players;
@@ -13,21 +13,23 @@ initBetting = function(players,currentDealer){
 	updates["rooms/"+currentRoom+"/betting/smallBlind"] = 1;
 	updates["rooms/"+currentRoom+"/betting/bigBlind"] = 2;
 	updates["rooms/"+currentRoom+"/betting/currentBet"] = 2;
+	updates["rooms/"+currentRoom+"/betting/playersBets"] = {};
 	
-	//firebase.database().ref().update(updates);
+	firebase.database().ref().update(updates);
+	updates = {}; 
 
 	let currentDealerPosInArray = $.inArray(currentDealer, players);
 	//console.log("CDPIA ",currentDealerPosInArray, players);
 	//dealer 		= getAtIndex(players,0,currentDealerPosInArray);
 	smallBlindPlayer 	= getAtIndex(players,1,currentDealerPosInArray);
 	bigBlindPlayer	 	= getAtIndex(players,2,currentDealerPosInArray);
-	utg			= getAtIndex(players,3,currentDealerPosInArray);
-	playerToTalk= utg;
-	currentBet 	= bigBlindBet;
+	utg					= getAtIndex(players,3,currentDealerPosInArray);
+	playerToTalk 		= utg;
+	currentBet 			= bigBlindBet;
 	pot = smallBlindBet+bigBlindBet;
-	blinds(smallBlindPlayer, bigBlindPlayer);
-
-	updates["rooms/"+currentRoom+"/betting/playersBets/"+smallBlindPlayer] 	= smallBlindBet;
+	
+	
+	updates["rooms/"+currentRoom+"/betting/playersBets/"+smallBlindPlayer] 		= smallBlindBet;
 	updates["rooms/"+currentRoom+"/betting/playersBets/"+bigBlindPlayer] 		= bigBlindBet;
 	updates["rooms/"+currentRoom+"/betting/smallBlindPlayer"] 	= smallBlindPlayer;
 	updates["rooms/"+currentRoom+"/betting/bigBlindPlayer"] 	= bigBlindPlayer;
@@ -36,13 +38,13 @@ initBetting = function(players,currentDealer){
 	updates["rooms/"+currentRoom+"/betting/pot"] 				= pot;
 
 	firebase.database().ref().update(updates);
-	
+	blinds(smallBlindPlayer, bigBlindPlayer);
 	//firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(utg);
 }
 
 function blinds(smallBlindPlayer, bigBlindPlayer){
 	//Collect Small blind to the pot
-	console.log(smallBlindPlayer,bigBlindPlayer);
+	
 	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/").once("value", function(s){
 		let balance = s.val();
 		let smallBlindBalance 	= balance[smallBlindPlayer];
@@ -57,18 +59,20 @@ function blinds(smallBlindPlayer, bigBlindPlayer){
 }
 
 function setPlayerBalance(pid,balance){
-    firebase.database().ref("rooms/"+currentRoom+"/betting/balance/"+pid).set(parseInt(balance));
+    firebase.database().ref("rooms/"+currentRoom+"/betting/balance/"+pid).set(parseFloat(balance));
     //console.log(balance);
 }
 function addToPlayersBalance(pid,add){
+	let newBalance;
 	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+pid).once("value", function(s){
-		newBalance = parseInt(s.val())+parseInt(add);
+		newBalance = parseFloat(s.val())+parseFloat(add);
+		console.log("nb:",newBalance);
 	});
 	setPlayerBalance(pid,newBalance);
 }
 function subtractFromPlayersBalance(pid,subtract){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+pid).once("value", function(s){
-		newBalance = parseInt(s.val())-subtract;
+		newBalance = parseFloat(s.val())-subtract;
 	});
 	setPlayerBalance(pid,newBalance);
 }
@@ -89,7 +93,7 @@ function moveFromPotToPlayer(pid, amount){
 function setAllPlayersBalance(balance){
 	var updates = {};
 	$.each(players,function(k,pid){
-		updates["rooms/"+currentRoom+"/betting/balance/"+pid] = balance;
+		updates["rooms/"+currentRoom+"/betting/balance/"+pid] = parseFloat(balance);
 	});
 	firebase.database().ref().update(updates);
 }
@@ -101,6 +105,7 @@ function winner(pids){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
 		let pot = s.val();
 		let potshare = pot/winnerCount;
+		console.log("Sharing pot ",pot,winnerCount,potshare);
 
 		$.each(pids, function(k,v){
 			addToPlayersBalance(v,potshare);
@@ -109,6 +114,7 @@ function winner(pids){
 
 		var updates = {};
 	    updates["rooms/"+currentRoom+"/betting/pot"] = 0;
+	    updates["rooms/"+currentRoom+"/betting/playersBets"] = 0;
 	    firebase.database().ref().update(updates);
 		$(".pot").text(0);
 	});
@@ -199,7 +205,7 @@ function talkingPlayer(){
 						firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(currentBet);
 						//update pot
 						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
-							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseInt(s.val())+toCall);
+							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(s.val())+toCall);
 						});
 						setPlayerBalance(talkingPlayer,talkingPlayersBalance-toCall);
 					}
@@ -214,7 +220,7 @@ function talkingPlayer(){
 		        }
 			});
 			$("#bet").click(function(){
-				var bet = parseInt(prompt("Please enter your bet", "10"));
+				var bet = parseFloat(prompt("Please enter your bet", "10"));
 
 				if (bet == null || bet == "") {
 				  bet = 0;
@@ -228,7 +234,7 @@ function talkingPlayer(){
 						firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(bet);
 						//update pot
 						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
-							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseInt(s.val())+bet);
+							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(s.val())+bet);
 						});
 						currentBet = bet;
 						setPlayerBalance(talkingPlayer,talkingPlayersBalance-bet);

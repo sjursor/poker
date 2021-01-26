@@ -407,6 +407,9 @@
         z-index: 101;
         top: 100px;
       }
+      #admin #winner b{
+        vertical-align: top;
+      }
       .adminTool{
         margin-bottom:10px;
       }

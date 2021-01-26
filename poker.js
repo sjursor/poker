@@ -34,6 +34,7 @@ setNextDealerAndDealHand = function() {
 			currentDealer = snapshot.val();
 
 			if (currentDealer == 0) {
+				console.log("initing currentDealer");
 				let playersRef 		= firebase.database().ref('rooms/'+currentRoom+"/players");
 				playersRef.once('value', function(snapshot){
 					var players = snapshot.val();
@@ -60,7 +61,7 @@ setNextDealerAndDealHand = function() {
 				});
 
 			} else {
-
+				console.log("elsing currentDealer");
 				var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
 				playersRef.once('value', function(snapshot){
 					var players = snapshot.val();
@@ -177,6 +178,7 @@ getTableCards = function(){
 }
 
 solvShownCards = function(callback, pid){
+	console.log("solving cards");
 	let pRef = firebase.database().ref('rooms/'+currentRoom+'/shownCards');
 	pRef.once('value', function(s){
   		let shown = s.val();
@@ -184,6 +186,7 @@ solvShownCards = function(callback, pid){
 
   		$.each(shown, function(pid,v){
   			var hand = Hand.solve(tableCards.concat(v.cards));
+  			console.log(pid,hand);
   			firebase.database().ref('rooms/'+currentRoom+'/shownCards/'+pid+'/descr').set(hand.descr);
   		});
 

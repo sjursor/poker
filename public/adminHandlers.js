@@ -1,11 +1,9 @@
 adminHandlers = function(){
-console.log("adminHandlers");
 	//Click handlers
 	  // New room
 	  $("#submitsetNextDealerAndDealHand").click(function(){
 	      setNextDealerAndDealHand();
 	  });
-
 
 	  $("#submitPlayerBalance").click(function(){
 	  	let bal = $("#setPlayerBalance input").val();
@@ -77,7 +75,6 @@ console.log("adminHandlers");
 
 
 	setTimeout(function(){
-		console.log("Filling admin with data");
 		let players = $(".player[data-pid]");
 		let selects = $("#admin select");
 	  	$.each(players, function(k,v){

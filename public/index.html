@@ -189,6 +189,37 @@
 
     <div id="admin">
       <h3>Admin toolz</h3>
+      <div class="adminTool" id="winner">
+        <b>Announce winner:</b>
+        <select name="players" id="" multiple></select>
+        <button type="submit" id="submitWinner">Ok</button>
+      </div>
+      <div class="adminTool" id="numbers">
+        <b>Numbers</b>
+        Sum table: <input type="number" disabled="disabled" id="inputSumTable"/>
+        <button id="submitinputSumTable">Update</button>
+      </div>
+      <hr>
+      <div class="adminTool" id="nextPlayerToTalk">
+        <b>NexPlayerToTalk</b>
+        <button id="submitnextPlayerToTalk">Skip current player to talk</button>
+      </div>
+      <div class="adminTool" id="prevPlayerToTalk">
+        <b>PrevPlayerToTalk</b>
+        <button id="submitprevPlayerToTalk">Set previous player to talk</button>
+      </div>
+
+      <div class="adminTool" id="showCards">
+        <button id="submitadmShowFlop">Show Flop</button>
+        <button id="submitadmShowTurn">Show Turn</button>
+        <button id="submitadmShowRiver">Show River</button>
+      </div>
+
+      <div class="adminTool" id="setNextDealerAndDealHand">
+        <b>setNextDealerAndDealHand</b>
+        <button type="submit" id="submitsetNextDealerAndDealHand">Deal new hand</button>
+      </div>
+      <hr>
       <div class="adminTool" id="setPlayerBalance">
         <b>Set player balance:</b>
         <select name="players"></select>
@@ -200,7 +231,6 @@
         <b>Add amount to players balance:</b>
         Add <input type="number" />Kr to 
         <select name="players"></select>
-        
         <button type="submit" id="submitaddToPlayersBalance">Ok</button>
       </div>
 
@@ -223,37 +253,7 @@
         <button type="submit" id="submitsetAllPlayersBalance">Ok</button>
       </div>
       
-      <div class="adminTool" id="winner">
-        <b>Announce winner:</b>
-        <select name="players" id="" multiple></select>
-        <button type="submit" id="submitWinner">Ok</button>
-      </div>
-
-      <div class="adminTool" id="numbers">
-        <b>Numbers</b>
-        Sum table: <input type="number" disabled="disabled" id="inputSumTable"/>
-        <button id="submitinputSumTable">Update</button>
-      </div>
-
-      <div class="adminTool" id="nextPlayerToTalk">
-        <b>NexPlayerToTalk</b>
-        <button id="submitnextPlayerToTalk">Skip current player to talk</button>
-      </div>
-      <div class="adminTool" id="prevPlayerToTalk">
-        <b>PrevPlayerToTalk</b>
-        <button id="submitprevPlayerToTalk">Set previous player to talk</button>
-      </div>
-
-      <div class="adminTool" id="showCards">
-        <button id="submitadmShowFlop">Show Flop</button>
-        <button id="submitadmShowTurn">Show Turn</button>
-        <button id="submitadmShowRiver">Show River</button>
-      </div>
-
-      <div class="adminTool" id="setNextDealerAndDealHand">
-        <b>setNextDealerAndDealHand</b>
-        <button type="submit" id="submitsetNextDealerAndDealHand">Deal new hand</button>
-      </div>
+      <hr>
       
       <div class="adminTool" id="kickPlayerFromTable">
         <b>Kick Player From Table</b>
