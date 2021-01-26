@@ -20,16 +20,32 @@ Bord:
 - Velg bord ved login/første besøk
 - Flere bord
 
-Users:
-- Velg nick ved login/første besøk
-- Max 10 spillere limit
+Bugz found på test 26.01.21:
+	
+	John:
+	Folded får fortsatt toTalk
+		remove from players in game
+		Fold må ta bort check-tegn
 
-Chip-handling:
-- Vise pung
-- Bet by input - max limit
-- Count pot
-- Set vinnere ved omstart
-- Sidepot
+	Sjur:
+	Call raise samme runde - bet legges pot - vanskelig å holde call på re-raise
 
-- Styling (sexify)
+	View amount betted this round
+
+	- Ta bort KR for spillere som ikke er der.
+	- Skjul adminknapp for !sjur/john/stian
+	- Hvis har vært i 0 - utilstrekkelig konto for call
+
+	Farger på bet blir stående
+		- bet/check oppdater farge
+
+	Hold stell på antall buy-ins
+
+	Funksjon for setPlayerToTalk
+
+	check må sjekke om currentBet == 0 
+	hvis ditt bet denne runden == currentBet 
+	check is allowed
+
+
 

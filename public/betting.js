@@ -237,7 +237,7 @@ function talkingPlayer(){
 				} else {
 					if(bet>talkingPlayersBalance){
 						alert("Bet larger than balance");
-					}else if(bet>=currentBet){
+					}else{
 						if(bet>currentBet){
 							firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet);
 						}
@@ -249,9 +249,10 @@ function talkingPlayer(){
 						currentBet = bet;
 						setPlayerBalance(talkingPlayer,talkingPlayersBalance-bet);
 						setNextPlayerToTalk();
-					}else{
-						alert("Bet to small, current bet is "+currentBet);
 					}
+					// }else{
+					// 	alert("Bet to small, current bet is "+currentBet);
+					// }
 				}
 			});
 		}else{

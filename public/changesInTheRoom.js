@@ -110,12 +110,12 @@ function listenForChangesInTheRoom(){
 	  if(val.betting["playersBets"]){
 	  	let playersBets = val.betting["playersBets"];
 	  	if(typeof(playersBets)!=="object"){
-	  		$(".player .thisRoundBet").text("");	
+	  		$(".player .thisRoundBet").text("");
 	  	}else{
 	  		$.each(playersBets, function(k,v){
 		  		if(v == 0){
-		  			//$(".player[data-pid='"+k+"'] .thisRoundBet").text("Check");
-		  			$(".player[data-pid='"+k+"'] .thisRoundBet").text(v);	
+		  			$(".player[data-pid='"+k+"'] .thisRoundBet").text("Check");
+		  			//$(".player[data-pid='"+k+"'] .thisRoundBet").text(v);
 		  		}else{
 		  			let betClass;
 		  			v = parseFloat(v);

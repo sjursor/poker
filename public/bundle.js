@@ -1953,6 +1953,7 @@ getNewDeck = function(){
 
 setNextDealerAndDealHand = function() {
 	console.log("setting dealer and dealing new hand");
+	jQuery(".thisRoundBet").removeClass("white green red blue black");
 	if(parseInt($(".pot").text()) !== 0){
 		alert("Settle pot first");
 		return false;
