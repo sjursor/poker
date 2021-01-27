@@ -260,8 +260,8 @@
         bottom: -18px;
         left: -0.9px;
       }
-      .balance:after{
-        content:" Kr";
+      .player[data-pid] .balance:after{
+        content: " kr";
       }
       .thisRoundBet{
         clear: both;

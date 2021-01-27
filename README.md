@@ -30,7 +30,6 @@ Bugz found på test 26.01.21:
 
 	View amount betted this round
 
-	- Ta bort KR for spillere som ikke er der.
 	- Hvis har vært i 0 - utilstrekkelig konto for call
 
 	Farger på bet blir stående
