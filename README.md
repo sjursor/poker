@@ -23,9 +23,7 @@ Bord:
 Bugz found på test 26.01.21:
 	
 	John:
-	Folded får fortsatt toTalk
-		remove from players in game
-		Fold må ta bort check-tegn
+	Fold må ta bort check-tegn
 
 	Sjur:
 	Call raise samme runde - bet legges pot - vanskelig å holde call på re-raise
