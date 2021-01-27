@@ -204,11 +204,11 @@
       <h3>Pozitions and cardz</h3>
       <div class="adminTool" id="nextPlayerToTalk">
         <b>NexPlayerToTalk</b>
-        <button id="submitnextPlayerToTalk">Skip current player to talk</button>
+        <button id="submitnextPlayerToTalk">Skip current player to talk --></button>
       </div>
       <div class="adminTool" id="prevPlayerToTalk">
         <b>PrevPlayerToTalk</b>
-        <button id="submitprevPlayerToTalk">Set previous player to talk</button>
+        <button id="submitprevPlayerToTalk"><-- Set previous player to talk</button>
       </div>
 
       <div class="adminTool" id="showCards">
@@ -310,6 +310,7 @@
           validAdmins = ["0oGinVvghrYgAHc1GJz1VGpR8XL2", "9qEcvtXYbzMHg5kLU8YOjKFpvLh2", "J0GfoIqLhzaxL1SrAeYigI7oXVx1_0"]
           if (validAdmins.includes(currentPlayer)) {
             $("#adminBtn").show();
+            $("#admin").show();
           } else {
             $("#adminBtn").remove();
             $("#admin").remove();

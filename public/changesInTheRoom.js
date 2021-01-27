@@ -107,8 +107,8 @@ function listenForChangesInTheRoom(){
 		console.log("found no player to talk", val);
 	  }
 
-	  if(val.betting["playersBets"]){
-	  	let playersBets = val.betting["playersBets"];
+	  if(val.betting){
+	  	let playersBets = val.betting['playersBets'];
 	  	if(typeof(playersBets)!=="object"){
 	  		$(".player .thisRoundBet").text("");
 	  	}else{

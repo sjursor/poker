@@ -13,7 +13,8 @@ initBetting = function(players,currentDealer){
 	updates["rooms/"+currentRoom+"/betting/smallBlind"] = 1;
 	updates["rooms/"+currentRoom+"/betting/bigBlind"] = 2;
 	updates["rooms/"+currentRoom+"/betting/currentBet"] = 2;
-	updates["rooms/"+currentRoom+"/betting/playersBets"] = {};
+	updates["rooms/"+currentRoom+"/betting/thisRoundsBets"] = {};
+	updates["rooms/"+currentRoom+"/betting/sumRoundBets"] 	= {};
 	
 	firebase.database().ref().update(updates);
 	updates = {}; 
@@ -28,7 +29,7 @@ initBetting = function(players,currentDealer){
 	currentBet 			= bigBlindBet;
 	pot = smallBlindBet+bigBlindBet;
 	
-	
+	updates["rooms/"+currentRoom+"/betting/bets"] 				= {};
 	updates["rooms/"+currentRoom+"/betting/playersBets/"+smallBlindPlayer] 		= smallBlindBet;
 	updates["rooms/"+currentRoom+"/betting/playersBets/"+bigBlindPlayer] 		= bigBlindBet;
 	updates["rooms/"+currentRoom+"/betting/smallBlindPlayer"] 	= smallBlindPlayer;
@@ -66,7 +67,6 @@ function addToPlayersBalance(pid,add){
 	let newBalance;
 	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+pid).once("value", function(s){
 		newBalance = parseFloat(s.val())+parseFloat(add);
-		console.log("nb:",newBalance);
 	});
 	setPlayerBalance(pid,newBalance);
 }
@@ -81,7 +81,6 @@ function moveFromPotToPlayer(pid, amount){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
 		let pot = s.val();	
 		var updates = {};
-		console.log("Moving "+amount+" from pot of "+pot+". New pot: "+(pot-amount));
 	    updates["rooms/"+currentRoom+"/betting/pot"] = (pot-amount);
 	    firebase.database().ref().update(updates);
 		//$(".pot").text(0);
@@ -115,6 +114,7 @@ function winner(pids){
 		var updates = {};
 	    updates["rooms/"+currentRoom+"/betting/pot"] = 0;
 	    updates["rooms/"+currentRoom+"/betting/playersBets"] = 0;
+	    updates["rooms/"+currentRoom+"/betting/bets/thisRoundBet"] = {};
 	    firebase.database().ref().update(updates);
 		$(".pot").text(0);
 	});
@@ -153,17 +153,17 @@ function setNextPlayerToTalk(ptt){
 		if(ptt){
 			nextPlayerToTalk = ptt;
 		}else{
-			console.log("PlayerToTalk",playerToTalk);
+			//console.log("PlayerToTalk",playerToTalk);
 			let index = $.inArray(playerToTalk, playersInGame);
-			console.log("index: "+index);
-			console.log("playersInGame",playersInGame);
+			//console.log("index: "+index);
+			//console.log("playersInGame",playersInGame);
 			//TODO: Check if this round is finished and enable show flop
 			//If last player checks or calls, showFlop()
 			nextPlayerToTalk = getAtIndex(playersInGame,1,index);
-			console.log("Found to be new talking player:  "+nextPlayerToTalk);
+			//console.log("Found to be new talking player:  "+nextPlayerToTalk);
 		}
 		playerToTalk = nextPlayerToTalk;
-		console.log("setting player to talk: ", nextPlayerToTalk);
+		//console.log("setting player to talk: ", nextPlayerToTalk);
 		firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(nextPlayerToTalk);
 		
 		//console.log("Player To Talk",playerToTalk);
@@ -181,7 +181,7 @@ function setPrevPlayerToTalk(){
 		playerToTalk = getAtIndex(playersInGame,-1,index);
 
 		firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(playerToTalk);
-		console.log("Player To Talk",playerToTalk);
+		//console.log("Player To Talk",playerToTalk);
 	});
 }
 
@@ -241,11 +241,17 @@ function talkingPlayer(){
 						if(bet>currentBet){
 							firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet);
 						}
-						firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(bet);
+						//firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(bet);
 						//update pot
 						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
 							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(s.val())+bet);
 						});
+
+						firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).once("value", function(s){
+							let cb = s.val();
+							firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+talkingPlayer).set(cb+bet);
+						});
+
 						currentBet = bet;
 						setPlayerBalance(talkingPlayer,talkingPlayersBalance-bet);
 						setNextPlayerToTalk();

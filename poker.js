@@ -34,7 +34,7 @@ setNextDealerAndDealHand = function() {
 			currentDealer = snapshot.val();
 
 			if (currentDealer == 0) {
-				console.log("initing currentDealer");
+				//console.log("initing currentDealer");
 				let playersRef 		= firebase.database().ref('rooms/'+currentRoom+"/players");
 				playersRef.once('value', function(snapshot){
 					var players = snapshot.val();
@@ -61,7 +61,7 @@ setNextDealerAndDealHand = function() {
 				});
 
 			} else {
-				console.log("elsing currentDealer");
+				//console.log("elsing currentDealer");
 				var playersRef = firebase.database().ref('rooms/'+currentRoom+"/players");
 				playersRef.once('value', function(snapshot){
 					var players = snapshot.val();
@@ -69,7 +69,7 @@ setNextDealerAndDealHand = function() {
 
 					players = players.filter(function (el) {return el != null; });
 					dealerpos = $.inArray(currentDealer, players);
-					console.log(dealerpos)
+					//console.log(dealerpos)
 
 					playercount = players.length;
 
@@ -116,9 +116,8 @@ showFlop = function() {
 		deckRef.set(deck);
 	});
 	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
-	console.log("setting smallBlindPlayer to Talk", smallBlindPlayer);
+	//console.log("setting smallBlindPlayer to Talk", smallBlindPlayer);
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk/").set(smallBlindPlayer);
-	console.log("asdf");
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/").set([]);
 }
 
@@ -178,7 +177,7 @@ getTableCards = function(){
 }
 
 solvShownCards = function(callback, pid){
-	console.log("solving cards");
+	//console.log("solving cards");
 	let pRef = firebase.database().ref('rooms/'+currentRoom+'/shownCards');
 	pRef.once('value', function(s){
   		let shown = s.val();
@@ -186,7 +185,7 @@ solvShownCards = function(callback, pid){
 
   		$.each(shown, function(pid,v){
   			var hand = Hand.solve(tableCards.concat(v.cards));
-  			console.log(pid,hand);
+  			//console.log(pid,hand);
   			firebase.database().ref('rooms/'+currentRoom+'/shownCards/'+pid+'/descr').set(hand.descr);
   		});
 
