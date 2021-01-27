@@ -65,15 +65,15 @@ clickHandlers = function(){
 	    });
 	    firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").once("value",function(s){
 	    	const index = s.val().indexOf(currentPlayer);
+			playersInGame = s.val();
 	    	if (index > -1) {
-			  playersInGame = s.val().splice(index, 1);
-			}else{
-				playersInGame = s.val();
+			  	playersInGame.splice(index, 1);
+			} else {
+	    		playersInGame = s.val();
 			}
-			
-			setNextPlayerToTalk();
 
 			firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").set(playersInGame);
+			setNextPlayerToTalk();
 	    });
 
 	    //$("#fold").attr("disabled","disabled");
