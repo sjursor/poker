@@ -14,7 +14,7 @@ initBetting = function(players,currentDealer){
 	updates["rooms/"+currentRoom+"/betting/bigBlind"] = 2;
 	updates["rooms/"+currentRoom+"/betting/currentBet"] = 2;
 	updates["rooms/"+currentRoom+"/betting/thisRoundsBets"] = {};
-	updates["rooms/"+currentRoom+"/betting/sumRoundBets"] 	= {};
+	updates["rooms/"+currentRoom+"/betting/thisRoundSumBets"]= {};
 	
 	firebase.database().ref().update(updates);
 	updates = {}; 
@@ -31,7 +31,9 @@ initBetting = function(players,currentDealer){
 	
 	updates["rooms/"+currentRoom+"/betting/bets"] 				= {};
 	updates["rooms/"+currentRoom+"/betting/playersBets/"+smallBlindPlayer] 		= smallBlindBet;
+		updates["rooms/"+currentRoom+"/betting/thisRoundSumBets/"+smallBlindPlayer] 		= smallBlindBet;
 	updates["rooms/"+currentRoom+"/betting/playersBets/"+bigBlindPlayer] 		= bigBlindBet;
+		updates["rooms/"+currentRoom+"/betting/thisRoundSumBets/"+bigBlindPlayer] 		= bigBlindBet;
 	updates["rooms/"+currentRoom+"/betting/smallBlindPlayer"] 	= smallBlindPlayer;
 	updates["rooms/"+currentRoom+"/betting/bigBlindPlayer"] 	= bigBlindPlayer;
 	updates["rooms/"+currentRoom+"/betting/utg"] 				= utg;
@@ -250,6 +252,11 @@ function talkingPlayer(){
 						firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).once("value", function(s){
 							let cb = s.val();
 							firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+talkingPlayer).set(cb+bet);
+						});
+
+						firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).once("value", function(s){
+							let cb = s.val();
+							firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+talkingPlayer).set(cb+bet);
 						});
 
 						currentBet = bet;

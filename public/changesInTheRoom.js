@@ -113,6 +113,7 @@ function listenForChangesInTheRoom(){
 	  		$(".player .thisRoundBet").text("");
 	  	}else{
 	  		$.each(playersBets, function(k,v){
+	  			$(".player[data-pid='"+k+"'] .thisRoundBet").removeClass("white green red blue black");
 		  		if(v == 0){
 		  			$(".player[data-pid='"+k+"'] .thisRoundBet").text("Check");
 		  			//$(".player[data-pid='"+k+"'] .thisRoundBet").text(v);
@@ -128,6 +129,15 @@ function listenForChangesInTheRoom(){
 		  		}
 		  		
 		  	});	
+	  	}
+	  	if(val.betting['thisRoundSumBets']){
+	  		let sumbets = val.betting['thisRoundSumBets'];
+	  		$(".thisRoundSumBets").hide();
+	  		if(typeof(sumbets) !== 'object'){$(".player .thisRoundSumBets").text("");}else{
+	  			$.each(sumbets, function(k,v){
+		  			$(".player[data-pid='"+k+"'] .thisRoundSumBets").text(v).show();
+		  		});	
+	  		}
 	  	}
 	  	
 	  }else{

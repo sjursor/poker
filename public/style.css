@@ -79,6 +79,7 @@
       }
       .player.playerToTalk{
         border:3px solid yellow;
+        padding-bottom: 10px;
       }
 
       .desk{
@@ -157,11 +158,11 @@
       }
 
       #player1 {
-        padding-top: 2px;
+        margin-top:-20px;
       }
 
       #player2 {
-        padding-top: 2px;
+        margin-top:-20px;
       }
 
       #player3,#player10 {
@@ -260,20 +261,33 @@
         bottom: -18px;
         left: -0.9px;
       }
+      .player[data-pid] .thisRoundSumBets:after,
       .player[data-pid] .balance:after{
         content: " kr";
       }
+      .player[data-pid] .thisRoundSumBets:before{
+        content: "Sum round: ";
+      }
+
       .thisRoundBet{
         clear: both;
         width: 70px;
         background: darkcyan;
         color: white;
         position: absolute;
-        bottom: -50px;
+        bottom: -70px;
         left: 80.1px;
         z-index: 100;
         font-size: 22px;
         border-radius: 100px;
+      }
+      .thisRoundSumBets{
+        position: absolute;
+        float: left;
+        width: 135px;
+        background: white;
+        height: 20px;
+        bottom: -38px;
       }
 
       #currentTable {
