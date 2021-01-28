@@ -255,9 +255,9 @@ function talkingPlayer(){
 				if (bet == null || bet == "") {
 				  bet = 0;
 				} else {
-					if(bet>talkingPlayersBalance){
+					if (bet>talkingPlayersBalance) {
 						alert("Bet larger than balance");
-					}else{
+					} else {
 						firebase.database().ref('rooms/'+currentRoom+"/betting/").once("value", function(s){
 							let betting = s.val();
 							let playerBet = betting['playersBets'][currentPlayer];
@@ -275,12 +275,11 @@ function talkingPlayer(){
 								firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(pot+bet));
 								currentBet = bet+playerBet;
 								setPlayerBalance(currentPlayer,talkingPlayersBalance-bet);
-							}else{
-								
+								setNextPlayerToTalk();
+							} else {
+								alert("Invalid bet!");
 							}
-							setNextPlayerToTalk();
-
-						});						
+						});
 					}
 				}
 			});
