@@ -219,6 +219,10 @@ function talkingPlayer(){
 						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
 							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(s.val())+toCall);
 						});
+						firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).once("value", function(s){
+							let cb = s.val();
+							firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+talkingPlayer).set(cb+toCall);
+						});
 						setPlayerBalance(talkingPlayer,talkingPlayersBalance-toCall);
 					}
 					setNextPlayerToTalk();
