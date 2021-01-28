@@ -219,7 +219,7 @@ function talkingPlayer(){
 					}beenHere = true;
 					//Sjekk om han er inne med noe allerede som skal trekkes fra call'en
 					// thisRoundBetForCurrentPlayer = s.val();
-					firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+talkingPlayer).set(toCall);
+					firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+talkingPlayer).set(currentBet);
 				});
 				
 				if (confirm("Call "+currentBet+"?")) {
