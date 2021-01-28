@@ -421,13 +421,29 @@
         z-index: 101;
         top: 100px;
       }
+      #admin button{
+        background-color: teal;
+        border-radius: 10px;
+        border: 1px solid black;
+        padding: 3px 15px;
+        cursor: pointer;
+        color: white;
+        font-weight: 400;
+        font-size: 14px;
+      }
       #admin #winner b{
         vertical-align: top;
       }
       .adminTool{
         margin-bottom:10px;
       }
-      #adminBtn{display:none;}
+      #adminBtn{
+        display:none;
+        position:absolute;
+        left:10px;
+        top:10px;
+        cursor:pointer;
+      }
       #game{display:none;}
 
       .thisRoundBet{color:white;}

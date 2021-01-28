@@ -237,7 +237,6 @@ function talkingPlayer(){
 			});
 			$("#bet").click(function(){
 				var bet = parseFloat(prompt("Please enter your bet", "10"));
-
 				if (bet == null || bet == "") {
 				  bet = 0;
 				} else {

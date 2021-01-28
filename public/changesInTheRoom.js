@@ -66,12 +66,9 @@ function listenForChangesInTheRoom(){
 
 		$.each(folded, function(k,v){
 		  if (v) {
-			jQuery("[data-pid='"+v['currentPlayer']+"']").addClass("folded");
-			jQuery("[data-pid='"+v['currentPlayer']+"']").find(".infotext").text("FOLDED");
-			jQuery("[data-pid='"+v['currentPlayer']+"']").find(".infotext").show();
-			if (v['currentPlayer'] == currentPlayer) {
-			  //$("#fold").attr("disabled","disabled");
-			}
+			jQuery("[data-pid='"+v+"']").addClass("folded");
+			jQuery("[data-pid='"+v+"']").find(".infotext").text("FOLDED");
+			jQuery("[data-pid='"+v+"']").find(".infotext").show();
 		  }
 		});
 	  } else {

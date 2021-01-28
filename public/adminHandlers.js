@@ -67,6 +67,11 @@ adminHandlers = function(){
 		});
 	  });
 
+	  $("#submitFoldPlayer").click(function(){
+	  	let fold 	= $("#foldPlayer select").val();
+	  	foldPlayer(fold);
+	  });
+
 
 	setTimeout(function(){
 		let players = $(".player[data-pid]");

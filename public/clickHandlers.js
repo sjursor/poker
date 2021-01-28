@@ -60,11 +60,24 @@ clickHandlers = function(){
 	$("#fold").click(function() {
 
 	  if (confirm("Fold hand?")) {
-	    firebase.database().ref('rooms/'+currentRoom+"/folded").push({
-	      currentPlayer
-	    });
+	  	foldPlayer(currentPlayer);
+	  }
+	});
+
+	foldPlayer = function(pid){
+		firebase.database().ref('rooms/'+currentRoom+"/folded").once("value", function(f){
+			let folded = f.val();
+			
+			if(!folded || folded.length == 0){
+				folded = [pid];
+			}else{
+				folded.push(pid);	
+			}
+			console.log(folded);
+			firebase.database().ref('rooms/'+currentRoom+"/folded").set(folded);
+		});
 	    firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").once("value",function(s){
-	    	const index = s.val().indexOf(currentPlayer);
+	    	const index = s.val().indexOf(pid);
 			playersInGame = s.val();
 	    	if (index > -1) {
 			  	playersInGame.splice(index, 1);
@@ -73,12 +86,10 @@ clickHandlers = function(){
 			}
 
 			firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").set(playersInGame);
-			setNextPlayerToTalk();
+			if(pid == playerToTalk){ setNextPlayerToTalk(); }
+			
 	    });
-
-	    //$("#fold").attr("disabled","disabled");
-	  }
-	});
+	}
 
 
 	// Show card-button
