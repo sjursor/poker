@@ -102,6 +102,7 @@ function setAllPlayersBalance(balance){
 function winner(pids){
 	//del currentPot på alle pids i array
 	let winnerCount = pids.length;
+	if(winnerCount == 0){return;}
 
 	firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
 		let pot = s.val();
@@ -203,26 +204,36 @@ function talkingPlayer(){
 			$("#call").show().unbind();
 
 			$("#call").click(function(){
-
+				console.log("currentBet", currentBet);
 				let toCall = currentBet;
-				if(tableState == 1){
-					if(talkingPlayer == smallBlindPlayer){toCall = currentBet-smallBlindBet;}
-					if(talkingPlayer == bigBlindPlayer){toCall = currentBet-bigBlindBet;}	
-				}
+				console.log("ToCall", toCall);
+				//Så må vi sjekke om han har bettet litt allerede kanskje? evt. trekke dette ifra toCall
+				firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).once("value", function(s){
+					let allreadyIn 		= s.val();
+					toCall 				= toCall-allreadyIn;
+
+					if(tableState == 1 && typeof(beenHere) == "undefined"){
+						//To call trekker fra den blind spilleren evt allerede er inne med // Men det må kun skje første runde
+						if(talkingPlayer == smallBlindPlayer){toCall = currentBet-smallBlindBet;}
+						if(talkingPlayer == bigBlindPlayer){toCall = currentBet-bigBlindBet;}	
+					}beenHere = true;
+					//Sjekk om han er inne med noe allerede som skal trekkes fra call'en
+					// thisRoundBetForCurrentPlayer = s.val();
+					firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+talkingPlayer).set(toCall);
+				});
 				
 				if (confirm("Call "+currentBet+"?")) {
 		        	if(toCall>talkingPlayersBalance){
 		        		alert("Insufficient funds");
 		        	}else{
+		        		
+
 						firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(currentBet);
 						//update pot
 						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
 							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(s.val())+toCall);
 						});
-						firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).once("value", function(s){
-							let cb = s.val();
-							firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+talkingPlayer).set(cb+toCall);
-						});
+						
 						setPlayerBalance(talkingPlayer,talkingPlayersBalance-toCall);
 					}
 					setNextPlayerToTalk();
@@ -236,7 +247,11 @@ function talkingPlayer(){
 		        }
 			});
 			$("#bet").click(function(){
-				var bet = parseFloat(prompt("Please enter your bet", "10"));
+				var bet = parseFloat(prompt("Please enter your bet (add)", "10"));
+				if(isNaN(bet)){
+					return;	
+				}
+
 				if (bet == null || bet == "") {
 				  bet = 0;
 				} else {
