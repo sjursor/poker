@@ -258,32 +258,30 @@ function talkingPlayer(){
 					if(bet>talkingPlayersBalance){
 						alert("Bet larger than balance");
 					}else{
-						if(bet>currentBet){
-							firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet);
-						}
-						//firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(bet);
-						//update pot
-						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
-							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(s.val())+bet);
-						});
+						firebase.database().ref('rooms/'+currentRoom+"/betting/").once("value", function(s){
+							let betting = s.val();
+							let playerBet = betting['playersBets'][currentPlayer];
+							let thisRoundSumPlayerBet = betting['thisRoundSumBets'][currentPlayer];
+							let pot = betting['pot'];
+							
+							//bet = inputBoxen
+							//playerBet = det som ligge på bordet foran deg
+							//currentBet = høyste bet til nå
+							//thisRoundSumBets = summen av dine bets gjennom denne håndå
+							if(bet>1 && (bet+playerBet >= currentBet) ){
+								firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet+playerBet);
+								firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(bet+playerBet);
+								firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(thisRoundSumPlayerBet+bet);
+								firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(pot+bet));
+								currentBet = bet+playerBet;
+								setPlayerBalance(currentPlayer,talkingPlayersBalance-bet);
+							}else{
+								
+							}
+							setNextPlayerToTalk();
 
-						firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).once("value", function(s){
-							let cb = s.val();
-							firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+talkingPlayer).set(cb+bet);
-						});
-
-						firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).once("value", function(s){
-							let cb = s.val();
-							firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+talkingPlayer).set(cb+bet);
-						});
-
-						currentBet = bet;
-						setPlayerBalance(talkingPlayer,talkingPlayersBalance-bet);
-						setNextPlayerToTalk();
+						});						
 					}
-					// }else{
-					// 	alert("Bet to small, current bet is "+currentBet);
-					// }
 				}
 			});
 		}else{
