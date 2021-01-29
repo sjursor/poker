@@ -252,7 +252,8 @@ function talkingPlayer(){
 			$("#check").click(function(){
 				firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).once("value", function(s) {
 					// Make sure check is only possible when playerbet matches currentbet
-					if (currentBet == s.val()) {
+
+					if (!s.val() || currentBet == s.val()) {
 						if (confirm("Check?")) {
 							firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(0);
 							setNextPlayerToTalk();
