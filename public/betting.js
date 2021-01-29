@@ -261,7 +261,14 @@ function talkingPlayer(){
 					} else {
 						firebase.database().ref('rooms/'+currentRoom+"/betting/").once("value", function(s){
 							let betting = s.val();
-							let playerBet = betting['playersBets'][currentPlayer];
+							let playerBets = betting['playersBets'];
+							let playerBet = 0;
+
+							//If player not betted yet
+							if(playerBets && playerBets[currentPlayer]>0){
+								playerBet = playerBets[currentPlayer];
+							}
+
 							let thisRoundSumPlayerBet = betting['thisRoundSumBets'][currentPlayer];
 							let pot = betting['pot'];
 							
@@ -278,7 +285,7 @@ function talkingPlayer(){
 								setPlayerBalance(currentPlayer,talkingPlayersBalance-bet);
 								setNextPlayerToTalk();
 							} else {
-								alert("Invalid bet!");
+								alert("Invalid bet!", bet, playerBet, currentBet);
 							}
 						});
 					}
