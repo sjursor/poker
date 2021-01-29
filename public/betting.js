@@ -206,39 +206,41 @@ function talkingPlayer(){
 
 			$("#call").click(function(){
 				console.log("currentBet", currentBet);
-				let toCall = currentBet;
-				console.log("ToCall", toCall);
-				//Så må vi sjekke om han har bettet litt allerede kanskje? evt. trekke dette ifra toCall
-				firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).once("value", function(s){
-					let allreadyIn 		= s.val();
-					toCall 				= toCall-allreadyIn;
+				//playerBet = det som ligge på bordet foran deg
+				//currentBet = høyste bet til nå
+				//thisRoundSumBets = summen av dine bets gjennom denne håndå
 
-					if(tableState == 1 && typeof(beenHere) == "undefined"){
-						//To call trekker fra den blind spilleren evt allerede er inne med // Men det må kun skje første runde
-						if(talkingPlayer == smallBlindPlayer){toCall = currentBet-smallBlindBet;}
-						if(talkingPlayer == bigBlindPlayer){toCall = currentBet-bigBlindBet;}	
-					}beenHere = true;
-					//Sjekk om han er inne med noe allerede som skal trekkes fra call'en
-					// thisRoundBetForCurrentPlayer = s.val();
-					firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+talkingPlayer).set(currentBet);
+				//Så må vi sjekke om han har bettet litt allerede kanskje? evt. trekke dette ifra toCall
+				firebase.database().ref('rooms/'+currentRoom+"/betting/").once("value", function(s){
+					let betting = s.val();
+					let playerBets = betting['playersBets'];
+					let playerBet = 0;
+
+					if(playerBets && playerBets[currentPlayer]>0){
+						playerBet = playerBets[currentPlayer];
+					}
+
+					let thisRoundSumPlayerBet = 0;
+					if(betting['thisRoundSumBets'] && betting['thisRoundSumBets'][currentPlayer]){
+						thisRoundSumPlayerBet = betting['thisRoundSumBets'][currentPlayer];
+					}
+					//let pot = betting['pot'];
+					if (confirm("Call "+currentBet+"?")) {
+			        	if(currentBet>talkingPlayersBalance){
+			        		alert("Insufficient funds");
+			        	}else{
+							firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(currentBet);
+							//update pot
+							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
+								firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(pot+(currentBet-playerBet));
+							});
+							
+							setPlayerBalance(talkingPlayer,talkingPlayersBalance-(currentBet-playerBet));
+						}
+						setNextPlayerToTalk();
+			        }	
 				});
 				
-				if (confirm("Call "+currentBet+"?")) {
-		        	if(toCall>talkingPlayersBalance){
-		        		alert("Insufficient funds");
-		        	}else{
-		        		
-
-						firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(currentBet);
-						//update pot
-						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
-							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(s.val())+toCall);
-						});
-						
-						setPlayerBalance(talkingPlayer,talkingPlayersBalance-toCall);
-					}
-					setNextPlayerToTalk();
-		        }
 			});
 
 			$("#check").click(function(){
@@ -269,7 +271,11 @@ function talkingPlayer(){
 								playerBet = playerBets[currentPlayer];
 							}
 
-							let thisRoundSumPlayerBet = betting['thisRoundSumBets'][currentPlayer];
+							let thisRoundSumPlayerBet = 0;
+							if(betting['thisRoundSumBets'] && betting['thisRoundSumBets'][currentPlayer]){
+								thisRoundSumPlayerBet = betting['thisRoundSumBets'][currentPlayer];
+							}
+
 							let pot = betting['pot'];
 							
 							//bet = inputBoxen
