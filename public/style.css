@@ -83,7 +83,7 @@
       }
       .player.playerToTalk{
         border:3px solid yellow;
-        padding-bottom: 10px;
+        padding-bottom: 30px;
       }
 
       .desk{
@@ -151,8 +151,7 @@
           font-weight: bold;
       }
 
-      .player .name,
-      .player .wallet {
+      .player .name {
         background-color: #1d496c;
         color: white;
         padding: 3px 0px 2px;

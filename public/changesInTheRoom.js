@@ -130,7 +130,9 @@ function listenForChangesInTheRoom(){
 	  	if(val.betting['thisRoundSumBets']){
 	  		let sumbets = val.betting['thisRoundSumBets'];
 	  		$(".thisRoundSumBets").hide();
-	  		if(typeof(sumbets) !== 'object'){$(".player .thisRoundSumBets").text("");}else{
+	  		if (typeof(sumbets) !== 'object') {
+	  			$(".player .thisRoundSumBets").text("");
+	  		} else {
 	  			$.each(sumbets, function(k,v){
 		  			$(".player[data-pid='"+k+"'] .thisRoundSumBets").text(v).show();
 		  		});	
