@@ -118,6 +118,7 @@ function winner(pids){
 	    updates["rooms/"+currentRoom+"/betting/pot"] = 0;
 	    updates["rooms/"+currentRoom+"/betting/playersBets"] = 0;
 	    updates["rooms/"+currentRoom+"/betting/bets/thisRoundBet"] = {};
+	    updates["rooms/"+currentRoom+"/betting/thisRoundSumBets"] = {}; 
 	    firebase.database().ref().update(updates);
 		$(".pot").text(0);
 	});

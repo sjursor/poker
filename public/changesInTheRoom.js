@@ -135,6 +135,8 @@ function listenForChangesInTheRoom(){
 		  			$(".player[data-pid='"+k+"'] .thisRoundSumBets").text(v).show();
 		  		});	
 	  		}
+	  	}else{
+	  		$(".thisRoundSumBets").hide();
 	  	}
 	  	
 	  }else{
