@@ -226,23 +226,29 @@ function talkingPlayer(){
 						thisRoundSumPlayerBet = betting['thisRoundSumBets'][currentPlayer];
 					}
 
-					if (confirm("Call "+currentBet+"?")) {
-			        	if(currentBet>talkingPlayersBalance){
-			        		alert("Insufficient funds");
-			        	}else{
-							firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(currentBet);
-							//update pot
-							let pot = betting['pot'];
-							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(pot+(currentBet-playerBet));
+					// sumToCall is the actual sum this player can call (in case of all-in situation)
+					let sumToCall = currentBet > talkingPlayersBalance ? talkingPlayersBalance : currentBet;
 
-							let playerSumBets = betting['thisRoundSumBets'][currentPlayer];
-							let deduct = currentBet-playerBet;
+					if (confirm("Call "+sumToCall+"?")) {
 
-							firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(playerSumBets+deduct);
+						let playerSumBets = betting['thisRoundSumBets'][currentPlayer];
+						// deduct is the amount to add to the pot, add to thisRoundSumBets and deduct from balance
+						let deduct = currentBet > talkingPlayersBalance ? sumToCall : currentBet-playerBet;
 
-							let newbalance = talkingPlayersBalance-deduct;
-							setPlayerBalance(talkingPlayer,newbalance);
-						}
+						// currentBetForPlayer is the new bet, depending on all-in or not
+						let currentBetForPlayer = currentBet > talkingPlayersBalance ? sumToCall+playerBet : currentBet;
+
+						firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(currentBetForPlayer);
+
+						//update pot
+						let pot = betting['pot'];
+						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(pot+(deduct));
+
+						firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(playerSumBets+deduct);
+
+						let newbalance = talkingPlayersBalance-deduct;
+
+						setPlayerBalance(talkingPlayer,newbalance);
 						setNextPlayerToTalk();
 			        }
 				});
