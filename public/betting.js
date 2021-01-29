@@ -225,16 +225,15 @@ function talkingPlayer(){
 					if(betting['thisRoundSumBets'] && betting['thisRoundSumBets'][currentPlayer]){
 						thisRoundSumPlayerBet = betting['thisRoundSumBets'][currentPlayer];
 					}
-					//let pot = betting['pot'];
+
 					if (confirm("Call "+currentBet+"?")) {
 			        	if(currentBet>talkingPlayersBalance){
 			        		alert("Insufficient funds");
 			        	}else{
 							firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(currentBet);
 							//update pot
-							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").once("value", function(s){
-								firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(pot+(currentBet-playerBet));
-							});
+							let pot = betting['pot'];
+							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(pot+(currentBet-playerBet));
 
 							let playerSumBets = betting['thisRoundSumBets'][currentPlayer];
 							let deduct = currentBet-playerBet;
