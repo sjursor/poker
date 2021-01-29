@@ -244,10 +244,18 @@ function talkingPlayer(){
 			});
 
 			$("#check").click(function(){
-				if (confirm("Check?")) {
-		        	firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(0);
-					setNextPlayerToTalk();
-		        }
+				firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).once("value", function(s) {
+					// Make sure check is only possible when playerbet matches currentbet
+					if (currentBet == s.val()) {
+						if (confirm("Check?")) {
+							firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(0);
+							setNextPlayerToTalk();
+						}
+					} else {
+						alert("Cannot check! Please call or fold");
+					}
+				});
+
 			});
 			$("#bet").click(function(){
 				var bet = parseFloat(prompt("Please enter your bet (add)", "10"));

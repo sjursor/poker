@@ -22,12 +22,6 @@ Bord:
 
 Bugz found på test 26.01.21:
 	
-	John:
-	Fold må ta bort check-tegn
-
-	check må sjekke om currentBet == 0 
-	hvis ditt bet denne runden == currentBet 
-	check is allowed
 
 	Sjur:
 
