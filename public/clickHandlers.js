@@ -86,6 +86,9 @@ clickHandlers = function(){
 			}
 
 			firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").set(playersInGame);
+
+			$(".player[data-pid='"+pid+"'] .thisRoundBet").hide();
+
 			if(pid == playerToTalk){ setNextPlayerToTalk(); }
 			
 	    });

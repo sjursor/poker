@@ -22,8 +22,6 @@ Bord:
 
 Bugz found på test 26.01.21:
 	
-	John:
-	Fold må ta bort check-tegn
 
 	Sjur:
 
