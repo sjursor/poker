@@ -4,6 +4,7 @@ getRooms = function(){
 	roomsRef.on('value', function(snapshot) {
 	  	$("#roomlist ul li").remove();
 	  	$.each(snapshot.val(), function(key,roomData){
+        console.log(key,roomData);
 	    	var li = $("#roomlist ul").append('<li data-fid="'+key+'" data-name="'+roomData['name']+'">'+roomData['name']+'</li>');
 		});	
 	});
@@ -16,6 +17,7 @@ let roomData = {
   players:0,
   currentDealer:0,
   flop:[],
+  betting:{'playerToTalk':""},
   turn:"",
   river:""
 };
@@ -35,10 +37,17 @@ var ref = firebase.database().ref('rooms/'+table+'/players');
 ref.once("value", function(snapshot){
   var ex_players = snapshot.val();
   var players = [];
-  $.each(ex_players,function(k,p){
-    if(p){players.push(p);}
-  });
-
+  if(ex_players){
+    $.each(ex_players,function(k,p){
+      if(p){players.push(p);}
+    });
+  }else{
+    //First Player in the room
+    //First player in room is playerToTalk
+    //Maybe he should also be admin?
+    firebase.database().ref('betting/playerToTalk').set(player);
+  }
+  
   //Add player to playerslist if not already on table
   if($.inArray(player,players)==-1){players.push(player); }
 

@@ -101,7 +101,8 @@ function listenForChangesInTheRoom(){
 		playerToTalk = val.betting["playerToTalk"];
 		
 	  }else{
-		console.log("found no player to talk", val);
+		console.log("found no player to talk, setting first player", val);
+		playerToTalk = val['players'][0];
 	  }
 
 	  if(val.betting){
