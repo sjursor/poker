@@ -283,37 +283,38 @@ function talkingPlayer(){
 						if (bet>talkingPlayersBalance) {
 							alert("Bet larger than balance");
 						} else {
-							return;
-						}
-						console.log("didnt return")
+							//If player not betted yet
+							if(playerBets && playerBets[currentPlayer]>0){
+								playerBet = playerBets[currentPlayer];
+							}
 
-						//If player not betted yet
-						if(playerBets && playerBets[currentPlayer]>0){
-							playerBet = playerBets[currentPlayer];
+							let thisRoundSumPlayerBet = 0;
+							if(betting['thisRoundSumBets'] && betting['thisRoundSumBets'][currentPlayer]){
+								thisRoundSumPlayerBet = betting['thisRoundSumBets'][currentPlayer];
+							}
+
+							let pot = betting['pot'];
+
+							//bet = inputBoxen
+							//playerBet = det som ligge på bordet foran deg
+							//currentBet = høyste bet til nå
+							//thisRoundSumBets = summen av dine bets gjennom denne håndå
+							if(bet>1 && (bet+playerBet >= currentBet) ){
+								firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet+playerBet);
+								firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(bet+playerBet);
+								firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(thisRoundSumPlayerBet+bet);
+								firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(pot+bet));
+								currentBet = bet+playerBet;
+								setPlayerBalance(currentPlayer,talkingPlayersBalance-bet);
+								setNextPlayerToTalk();
+							} else {
+								alert("Invalid bet!", bet, playerBet, currentBet);
+							}
+
 						}
 
-						let thisRoundSumPlayerBet = 0;
-						if(betting['thisRoundSumBets'] && betting['thisRoundSumBets'][currentPlayer]){
-							thisRoundSumPlayerBet = betting['thisRoundSumBets'][currentPlayer];
-						}
 
-						let pot = betting['pot'];
 
-						//bet = inputBoxen
-						//playerBet = det som ligge på bordet foran deg
-						//currentBet = høyste bet til nå
-						//thisRoundSumBets = summen av dine bets gjennom denne håndå
-						if(bet>1 && (bet+playerBet >= currentBet) ){
-							firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet+playerBet);
-							firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(bet+playerBet);
-							firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(thisRoundSumPlayerBet+bet);
-							firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(pot+bet));
-							currentBet = bet+playerBet;
-							setPlayerBalance(currentPlayer,talkingPlayersBalance-bet);
-							setNextPlayerToTalk();
-						} else {
-							alert("Invalid bet!", bet, playerBet, currentBet);
-						}
 					});
 
 				}
