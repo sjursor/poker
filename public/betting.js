@@ -231,7 +231,8 @@ function talkingPlayer(){
 
 					if (confirm("Call "+sumToCall+"?")) {
 
-						let playerSumBets = betting['thisRoundSumBets'][currentPlayer];
+						let playerSumBets = betting['thisRoundSumBets'][currentPlayer] ? betting['thisRoundSumBets'][currentPlayer] : 0;
+
 						// deduct is the amount to add to the pot, add to thisRoundSumBets and deduct from balance
 						let deduct = currentBet > talkingPlayersBalance ? sumToCall : currentBet-playerBet;
 
@@ -244,7 +245,8 @@ function talkingPlayer(){
 						let pot = betting['pot'];
 						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(pot+(deduct));
 
-						firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(playerSumBets+deduct);
+						
+						firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(playerSumBets+deduct);	
 
 						let newbalance = talkingPlayersBalance-deduct;
 
