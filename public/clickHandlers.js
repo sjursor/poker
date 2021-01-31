@@ -92,7 +92,8 @@ clickHandlers = function(){
 				firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").set(newPlayersInGame);
 
 				// Hide this round bet for folded player
-				$(".player[data-pid='"+pid+"'] .thisRoundBet").hide();
+				$(".player[data-pid='"+pid+"'] .thisRoundBet").addClass("folded");
+
 
 				// If folded is also playertotalk, we need to move to next player
 				if (pid == playerToTalk) {

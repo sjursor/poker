@@ -461,4 +461,5 @@
       .red{background-color:red;color:white;}
       .blue{background-color:blue;}
       .black{background-color:black;}
+      .thisRoundBet.folded {display:none;}
 
