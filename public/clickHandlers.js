@@ -44,12 +44,17 @@ clickHandlers = function(){
 	        break;
 
 	      case 4:
-	        if (confirm("End game and deal new hand?")) {
-	          setNextDealerAndDealHand();
-	          setNextPlayerToTalk(smallBlindPlayer);
-	          $("#nextCard").html("Show flop");
-	          tableState = 1;
-	        }
+	      	if (parseInt($(".pot").text()) !== 0) {
+				alert("Settle pot first");
+			} else {
+				if (confirm("End game and deal new hand?")) {
+					setNextDealerAndDealHand();
+					setNextPlayerToTalk(smallBlindPlayer);
+					$("#nextCard").html("Show flop");
+					tableState = 1;
+				}
+			}
+
 	        break;
 	    }
 
