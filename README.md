@@ -20,9 +20,6 @@ Bord:
 - Velg bord ved login/første besøk
 - Flere bord
 
-Bugz found på test 30.01.21:
-- Må være mulig å legge til 1 kr som bet, for å korrigere
-
 
 
 	Tidligere notert:

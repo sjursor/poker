@@ -258,12 +258,14 @@
       .balance{
         clear: both;
         height: 22px;
-        width: 135px;
+        width: 100%;
         background: #001A33;
         color: white;
         position: absolute;
         bottom: -18px;
-        left: -0.9px;
+        left: -1px;
+        border: 1px solid #131134;
+        border-top: 0;
         font-size: 14px;
       }
       .player[data-pid] .balance.allin{
@@ -293,10 +295,10 @@
         background: darkcyan;
         color: white;
         position: absolute;
-        bottom: -72px;
+        bottom: -68px;
         left: 80.1px;
         z-index: 100;
-        font-size: 22px;
+        font-size: 20px;
         border-radius: 100px;
       }
       .thisRoundSumBets{
@@ -306,7 +308,7 @@
         background: white;
         font-size: 14px;
         height: 22px;
-        bottom: -38px;
+        bottom: -40px;
       }
 
       #currentTable {

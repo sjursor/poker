@@ -275,6 +275,7 @@ function talkingPlayer(){
 				});
 
 			});
+
 			$("#bet").click(function(){
 				var bet = parseFloat(prompt("Please enter your bet (add)", "10"));
 				if(isNaN(bet)){
@@ -310,7 +311,7 @@ function talkingPlayer(){
 							//playerBet = det som ligge på bordet foran deg
 							//currentBet = høyste bet til nå
 							//thisRoundSumBets = summen av dine bets gjennom denne håndå
-							if(bet>1 && (bet+playerBet >= currentBet) ){
+							if (bet > 0 && (bet + playerBet >= currentBet) ){
 								firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet+playerBet);
 								firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(bet+playerBet);
 								firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(thisRoundSumPlayerBet+bet);
