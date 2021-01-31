@@ -21,7 +21,6 @@ Bord:
 - Flere bord
 
 Bugz found på test 30.01.21:
-- Når fold, mistes playertotalk.
 - Talkingplayer må settes riktig ved dealnewhand, den blir ofte satt til smallblind-player.
 - Ved første bet/call, kommer ikke alltid chips opp på egen spiller, må refreshe.
 - Hvis currentbet er > det du selv har lagt ut, må ikke check være mulig (ikke viktig, admin kan fikse).

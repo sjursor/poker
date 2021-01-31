@@ -154,6 +154,8 @@ function setNextPlayerToTalk(ptt){
 	let pttRef = firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame");
 	pttRef.once('value', function(s){
 		playersInGame = s.val();
+		//console.log("playertotalk", ptt);
+		//console.log("playersInGame", playersInGame)
 		if(ptt){
 			nextPlayerToTalk = ptt;
 		}else{

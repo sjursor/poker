@@ -73,25 +73,38 @@ clickHandlers = function(){
 			}else{
 				folded.push(pid);	
 			}
-			console.log(folded);
-			firebase.database().ref('rooms/'+currentRoom+"/folded").set(folded);
+			//console.log(folded);
+
+			firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").once("value",function(s){
+				let newPlayersInGame = s.val();
+				let index = newPlayersInGame.indexOf(pid);
+				let nextPlayerIndex = index;
+
+				// Update players in game with folded player removed
+				// Keep index or move it to 0 for next player
+				if (index > -1) {
+					newPlayersInGame.splice(index, 1);
+
+					if (newPlayersInGame.length == index) {
+						nextPlayerIndex = 0;
+					}
+				}
+				firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").set(newPlayersInGame);
+
+				// Hide this round bet for folded player
+				$(".player[data-pid='"+pid+"'] .thisRoundBet").hide();
+
+				// If folded is also playertotalk, we need to move to next player
+				if (pid == playerToTalk) {
+					console.log("folded player is playertotalk, setting next player to talk to be "+newPlayersInGame[nextPlayerIndex]);
+					setNextPlayerToTalk(newPlayersInGame[nextPlayerIndex]);
+				}
+
+				// Do the actual folded update
+				firebase.database().ref('rooms/'+currentRoom+"/folded").set(folded);
+			});
 		});
-	    firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").once("value",function(s){
-	    	const index = s.val().indexOf(pid);
-			playersInGame = s.val();
-	    	if (index > -1) {
-			  	playersInGame.splice(index, 1);
-			} else {
-	    		playersInGame = s.val();
-			}
 
-			firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").set(playersInGame);
-
-			$(".player[data-pid='"+pid+"'] .thisRoundBet").hide();
-
-			if(pid == playerToTalk){ setNextPlayerToTalk(); }
-			
-	    });
 	}
 
 
