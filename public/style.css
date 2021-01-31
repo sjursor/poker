@@ -257,13 +257,14 @@
       }
       .balance{
         clear: both;
-        height: 20px;
+        height: 22px;
         width: 135px;
         background: #001A33;
         color: white;
         position: absolute;
         bottom: -18px;
         left: -0.9px;
+        font-size: 14px;
       }
       .player[data-pid] .thisRoundSumBets:after,
       .player[data-pid] .balance:after{
@@ -279,7 +280,7 @@
         background: darkcyan;
         color: white;
         position: absolute;
-        bottom: -70px;
+        bottom: -72px;
         left: 80.1px;
         z-index: 100;
         font-size: 22px;
@@ -290,7 +291,8 @@
         float: left;
         width: 135px;
         background: white;
-        height: 20px;
+        font-size: 14px;
+        height: 22px;
         bottom: -38px;
       }
 
@@ -335,6 +337,9 @@
       .potContainer .pot{
         display:block;
         font-weight: 200;
+      }
+      .cbetContainer .currentBet:after {
+          content: " kr"
       }
       .pot:after {
         content: " kr"
