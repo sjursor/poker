@@ -49,7 +49,6 @@ clickHandlers = function(){
 			} else {
 				if (confirm("End game and deal new hand?")) {
 					setNextDealerAndDealHand();
-					setNextPlayerToTalk(smallBlindPlayer);
 					$("#nextCard").html("Show flop");
 					tableState = 1;
 				}

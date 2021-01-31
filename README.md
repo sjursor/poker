@@ -21,7 +21,6 @@ Bord:
 - Flere bord
 
 Bugz found på test 30.01.21:
-- Feil med talkingplayer: Jeg er dealer, end game, dealer flyttes riktig og blinds riktig, men smallblind blir talking.
 - Hvis currentbet er > det du selv har lagt ut, må ikke check være mulig (ikke viktig, admin kan fikse).
 - Vise at en spiller er all-in.
 - Elisabeth får ikke være med og spille mer.
