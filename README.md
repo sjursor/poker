@@ -21,8 +21,7 @@ Bord:
 - Flere bord
 
 Bugz found på test 30.01.21:
-- Vise at en spiller er all-in.
-- Elisabeth får ikke være med og spille mer.
+- Må være mulig å legge til 1 kr som bet, for å korrigere
 
 
 

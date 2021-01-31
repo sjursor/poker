@@ -165,7 +165,18 @@ function listenForChangesInTheRoom(){
 	  }
 	  if(val.betting["balance"]){
 		$.each(val.betting["balance"], function(k,v){
-			$("[data-pid='" + k + "'] .balance").html(v);
+			if (v == 0) {
+				let roundBet = $("[data-pid='" + k + "'] .thisRoundBet").text();
+
+				if (roundBet && roundBet > 0) {
+					$("[data-pid='" + k + "'] .balance").html("ALL IN").addClass("allin");
+				} else {
+					$("[data-pid='" + k + "'] .balance").html(v).removeClass("allin");
+				}
+			} else {
+				$("[data-pid='" + k + "'] .balance").html(v).removeClass("allin");
+			}
+
 		});
 	  }
 	  //console.log("sjur",val.betting["pot"]);

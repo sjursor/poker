@@ -266,9 +266,22 @@
         left: -0.9px;
         font-size: 14px;
       }
+      .player[data-pid] .balance.allin{
+          background: orange;
+          color: black;
+          font-weight: bold;
+          animation: blink 0.8s alternate infinite;
+      }
+      @keyframes blink {
+          from { background: orange; }
+          to { background: yellow; }
+      }
       .player[data-pid] .thisRoundSumBets:after,
       .player[data-pid] .balance:after{
         content: " kr";
+      }
+      .player[data-pid] .balance.allin:after{
+          content: "";
       }
       .player[data-pid] .thisRoundSumBets:before{
         content: "Sum round: ";
