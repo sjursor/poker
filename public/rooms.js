@@ -1,17 +1,20 @@
 //List current rooms in firebase
-getRooms = function(){
+getRooms = function(callback){
 	var roomsRef = firebase.database().ref('rooms');
 	roomsRef.on('value', function(snapshot) {
-	  	$("#roomlist ul li").remove();
+	  	$("#roomlist ul li.room").remove();
 	  	$.each(snapshot.val(), function(key,roomData){
         console.log(key,roomData);
-	    	var li = $("#roomlist ul").append('<li data-fid="'+key+'" data-name="'+roomData['name']+'">'+roomData['name']+'</li>');
+        let playersCount = roomData['players'].length;
+        let isPublic = roomData['isPublic'] ? 'Public' : 'Private';
+	    	var li = $("#roomlist ul").prepend('<li class="room" data-rid="'+key+'" data-name="'+roomData['name']+'"  data-players="'+playersCount+'" data-public="'+isPublic+'">'+roomData['name']+'</li>');
 		});	
+      if(typeof(callback)=="function"){callback();}
 	});
 }
 
 //Create new rooms
-createNewRoom = function(name){
+createNewRoom = function(name,callback){
 let roomData = {
   name:name,
   players:0,
@@ -27,6 +30,7 @@ var updates = {};
 updates['/rooms/' + newRoomKey] = roomData;
 firebase.database().ref().update(updates);
 currentRoom = newRoomKey;
+if(typeof(callback)=="function"){callback(newRoomKey);}
 return newRoomKey;
 }
 

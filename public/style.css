@@ -4,7 +4,7 @@
 
         background: url("imgs/tables_and_carpet/carpet_blue.png");
         background-position:center;
-        background-size: cover;
+        
 
         color: rgba(0,0,0,0.87); 
         font-family: 'Titillium Web', sans-serif;
@@ -105,11 +105,6 @@
         width: 235px;
         height: 120px;
         position:absolute;
-      }
-      #activePlayers li,
-      #roomlist li{
-        color:blue;
-        cursor:pointer;
       }
       #seats {
         padding: 4px;
