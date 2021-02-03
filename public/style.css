@@ -278,17 +278,17 @@
           from { background: orange; }
           to { background: yellow; }
       }
-      .player[data-pid] .thisRoundSumBets:after,
-      .player[data-pid] .balance:after{
+      
+      .player[data-pid] .thisRoundSumBets:not(:empty):after,
+      .player[data-pid] .balance:not(:empty):after{
         content: " kr";
       }
       .player[data-pid] .balance.allin:after{
           content: "";
       }
-      .player[data-pid] .thisRoundSumBets:before{
+      .player[data-pid] .thisRoundSumBets:not(:empty):before{
         content: "Sum round: ";
       }
-
       .thisRoundBet{
         clear: both;
         width: 70px;

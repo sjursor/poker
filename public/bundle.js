@@ -102,7 +102,6 @@ module.exports = {
       this.wildValue = str.substr(0, 1);
     }
 
-    // TODO: Add a parameter to leave out the suit and update the this.descr calls.
     toString() {
       return this.wildValue.replace('T', '10') + this.suit;
     }
@@ -137,6 +136,11 @@ module.exports = {
       // Also applies for single player games, like video poker.
       if (canDisqualify && this.game.lowestQualified) {
         this.alwaysQualifies = false;
+      }
+
+      // Ensure no duplicate cards in standard game.
+      if (game.descr === 'standard' && new Set(cards).size !== cards.length) {
+        throw new Error('Duplicate cards');
       }
       
       // Get rank based on game.
@@ -1937,6 +1941,7 @@ module.exports = {
   }
 
 })();
+
 },{}],3:[function(require,module,exports){
 const doc 	= require('deck-o-cards')
 const Hand 	= require('pokersolver').Hand;

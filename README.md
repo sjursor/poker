@@ -28,7 +28,6 @@ Bugs:
 - Nederste spillere har en skjevhet i gul ramme for talkingplayer
 - Sørg for at knappene for fold/show alltid ligger på samme sted, nå flytter de seg når man er talking
 - Problem med at det er mulig å trykke to ganger på deal/flop/turn/river når man er dealer, slik at to "actions" skjer etter hverandre
-- For det visuelle hadde det vært fint om "sum round" alltid vises
 - Det bør ikke være mulig å legge flop/turn/river hvis ikke alle enten har kastet, er allin, eller har bettet tilsvarende currentbet
 - En spiller som blir kicket, må fjernes fra rekkefølgen slik at han ikke blir talkingplayer
 - Settle pot bør tømme listen når ny runde starter, slik at ikke forrige rundes vinnere er selected når denne runden ikke har en vinner
