@@ -22,7 +22,6 @@ Bord:
 
 Bugs:
 - Hvis spiller er allin, må han ikke bli talkingplayer
-- Fortsatt litt bugs med talkingplayer som forsvinner av og til, ser ut som det skjer når spilleren etter dealer er folded
 - Feil i utregning ved allin
 - Vi kom i en situasjon der en spiller ikke hadde kort, til tross for refresh
 - Nederste spillere har en skjevhet i gul ramme for talkingplayer

@@ -115,10 +115,8 @@ showFlop = function() {
 		flopRef.set(flop);
 		deckRef.set(deck);
 	});
-	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
-	//console.log("setting smallBlindPlayer to Talk", smallBlindPlayer);
-	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk/").set(smallBlindPlayer);
-	firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/").set([]);
+
+	resetBetsAndSetFirstPlayerToTalk();
 }
 
 showTurn = function() {
@@ -131,9 +129,8 @@ showTurn = function() {
 		turnRef.set(turn);
 		deckRef.set(deck);
 	});
-	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
-	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk/").set(smallBlindPlayer);
-	firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/").set([]);
+
+	resetBetsAndSetFirstPlayerToTalk();
 }
 
 
@@ -147,9 +144,35 @@ showRiver = function() {
 		riverRef.set(river);
 		deckRef.set(deck);
 	});
-	firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
-	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk/").set(smallBlindPlayer);
-	firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/").set([]);
+
+	resetBetsAndSetFirstPlayerToTalk();
+}
+
+resetBetsAndSetFirstPlayerToTalk = function() {
+	let roomRef = firebase.database().ref('rooms/'+currentRoom);
+	roomRef.once('value', function(s) {
+		let room = s.val();
+		let betting = room["betting"];
+
+		if (betting["playersInGame"]) {
+			let ptt = null;
+
+			if (betting["playersInGame"][1] && betting["playersInGame"][0] == room["currentDealer"]) {
+				// Current dealer is still in game, set second player in array to talk
+				ptt = betting["playersInGame"][1];
+			} else {
+				// Use first available player still in game
+				ptt = betting["playersInGame"][0];
+			}
+
+			// Set player to talk in database
+			firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(ptt);
+
+			// Reset players bets and current bet
+			firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(0);
+			firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/").set([]);
+		}
+	});
 }
 
 getTableCards = function(){
