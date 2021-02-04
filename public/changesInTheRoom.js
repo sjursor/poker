@@ -140,7 +140,7 @@ function listenForChangesInTheRoom(){
 		  		});	
 	  		}
 	  	}else{
-	  		//$(".thisRoundSumBets").hide();
+			$(".player .thisRoundSumBets").text("0");
 	  	}
 	  	
 	  }else{

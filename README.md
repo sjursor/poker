@@ -21,7 +21,6 @@ Bord:
 - Flere bord
 
 Bugs:
-- Hvis spiller er allin, må han ikke bli talkingplayer
 - Feil i utregning ved allin
 - Vi kom i en situasjon der en spiller ikke hadde kort, til tross for refresh
 - Nederste spillere har en skjevhet i gul ramme for talkingplayer
