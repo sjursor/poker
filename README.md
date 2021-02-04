@@ -28,6 +28,8 @@ Bugs:
 - Det bør ikke være mulig å legge flop/turn/river hvis ikke alle enten har kastet, er allin, eller har bettet tilsvarende currentbet
 - En spiller som blir kicket, må fjernes fra rekkefølgen slik at han ikke blir talkingplayer
 - En spiller som blir kicket sitter fortsatt igjen i betting balance, det må fjernes
+- Sum round vises med 0 for alle spillere etter deal new hand (virker etter refresh)
+- Når en spiller joiner eller kickes eller logger ut, må bordet tegnes på nytt
 - Settle pot bør tømme listen når ny runde starter, slik at ikke forrige rundes vinnere er selected når denne runden ikke har en vinner
 
 
