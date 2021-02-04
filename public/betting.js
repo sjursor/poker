@@ -6,8 +6,26 @@ playerToTalk  = "";
 initBetting = function(players,currentDealer){
 	console.log("initing betting", players,currentDealer);
 	var updates = {};
-	playersInGame = players;
-    updates["rooms/"+currentRoom+"/betting/playersInGame"] = players;
+
+	// Reorganize players array into a playersInGame array where element 0 is the dealer
+	dealerIndex = players.indexOf(currentDealer);
+	if (dealerIndex == 0) {
+		playersInGame = players;
+	} else {
+		playersInGame = [];
+
+		// Add from dealer and to the end of players array
+		for (i = dealerIndex; i < players.length; i++) {
+			playersInGame.push(players[i]);
+		}
+
+		// Add from start and to before dealer of players array
+		for (i = 0; i < dealerIndex; i++) {
+			playersInGame.push(players[i]);
+		}
+	}
+
+    updates["rooms/"+currentRoom+"/betting/playersInGame"] = playersInGame;
 	updates["rooms/"+currentRoom+"/betting/pot"] = "0";
 	updates["rooms/"+currentRoom+"/betting/playerToTalk"] = players[0];
 	updates["rooms/"+currentRoom+"/betting/smallBlind"] = 1;
@@ -166,7 +184,13 @@ function setNextPlayerToTalk(ptt){
 			//console.log("playersInGame",playersInGame);
 			//TODO: Check if this round is finished and enable show flop
 			//If last player checks or calls, showFlop()
-			nextPlayerToTalk = getAtIndex(playersInGame,1,index);
+
+			nextTry = 1;
+			do {
+				nextPlayerToTalk = getAtIndex(playersInGame,nextTry,index);
+				nextTry++;
+			} while ($(".player[data-pid='"+nextPlayerToTalk+"'] .balance").hasClass("allin"));
+
 			//console.log("Found to be new talking player:  "+nextPlayerToTalk);
 		}
 		playerToTalk = nextPlayerToTalk;
@@ -263,6 +287,8 @@ function talkingPlayer(){
 			$("#check").click(function(){
 				firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).once("value", function(s) {
 					// Make sure check is only possible when playerbet matches currentbet
+
+					console.log(s.val(), currentBet);
 
 					if ((!s.val() && currentBet == 0) || currentBet == s.val()) {
 						if (confirm("Check?")) {
