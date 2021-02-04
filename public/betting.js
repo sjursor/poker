@@ -184,7 +184,13 @@ function setNextPlayerToTalk(ptt){
 			//console.log("playersInGame",playersInGame);
 			//TODO: Check if this round is finished and enable show flop
 			//If last player checks or calls, showFlop()
-			nextPlayerToTalk = getAtIndex(playersInGame,1,index);
+
+			nextTry = 1;
+			do {
+				nextPlayerToTalk = getAtIndex(playersInGame,nextTry,index);
+				nextTry++;
+			} while ($(".player[data-pid='"+nextPlayerToTalk+"'] .balance").hasClass("allin"));
+
 			//console.log("Found to be new talking player:  "+nextPlayerToTalk);
 		}
 		playerToTalk = nextPlayerToTalk;
