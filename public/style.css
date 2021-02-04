@@ -3,7 +3,7 @@
         background: #ECEFF1;
 
         background: url("imgs/tables_and_carpet/carpet_blue.png");
-        background-position:center;
+        background-size: cover;
         
 
         color: rgba(0,0,0,0.87); 
