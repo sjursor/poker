@@ -60,8 +60,9 @@
       
       
       #userControls{
-        text-align: center;
+        text-align: left;
         padding: 10px;
+        padding-left: 265px;
         clear:both;
       }
       #userControls button{
