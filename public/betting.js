@@ -175,9 +175,9 @@ function setNextPlayerToTalk(ptt){
 		playersInGame = s.val();
 		//console.log("playertotalk", ptt);
 		//console.log("playersInGame", playersInGame)
-		if(ptt){
+		if (ptt) {
 			nextPlayerToTalk = ptt;
-		}else{
+		} else {
 			//console.log("PlayerToTalk",playerToTalk);
 			let index = $.inArray(playerToTalk, playersInGame);
 			//console.log("index: "+index);
@@ -189,14 +189,18 @@ function setNextPlayerToTalk(ptt){
 			do {
 				nextPlayerToTalk = getAtIndex(playersInGame,nextTry,index);
 				nextTry++;
-			} while ($(".player[data-pid='"+nextPlayerToTalk+"'] .balance").hasClass("allin"));
 
-			//console.log("Found to be new talking player:  "+nextPlayerToTalk);
+				if (nextTry > playersInGame.length) {
+					// All players are probably all-in
+					break;
+				}
+			} while ($(".player[data-pid='"+nextPlayerToTalk+"'] .balance").hasClass("allin"));
 		}
-		playerToTalk = nextPlayerToTalk;
-		//console.log("setting player to talk: ", nextPlayerToTalk);
-		firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(nextPlayerToTalk);
-		
+
+		if (nextPlayerToTalk) {
+			playerToTalk = nextPlayerToTalk;
+			firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(nextPlayerToTalk);
+		}
 		//console.log("Player To Talk",playerToTalk);
 	});
 }

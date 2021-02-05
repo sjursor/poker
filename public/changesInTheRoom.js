@@ -166,7 +166,7 @@ function listenForChangesInTheRoom(){
 	  if(val.betting["balance"]){
 		$.each(val.betting["balance"], function(k,v){
 			if (v == 0) {
-				let roundBet = $("[data-pid='" + k + "'] .thisRoundBet").text();
+				let roundBet = $("[data-pid='" + k + "'] .thisRoundSumBets").text();
 
 				if (roundBet && roundBet > 0) {
 					$("[data-pid='" + k + "'] .balance").html("ALL IN").addClass("allin");
