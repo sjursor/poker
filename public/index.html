@@ -315,12 +315,11 @@
 
         //List players around Table
         listPlayersAroundTable(function(){
-          getBetting(players,currentDealer);
           listenForChangesInTheRoom();
           clickHandlers();
           resetTableCards();
+          getBetting(players,currentDealer);
           talkingPlayer();
-
 
           // Show admin panel and admin button only for valid players
           firebase.database().ref('rooms/'+currentRoom+'/admins').on('value', function(snapshot) {

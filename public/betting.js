@@ -162,7 +162,9 @@ function getBetting(){
 	bettingEnabled = true;
 	firebase.database().ref('rooms/'+currentRoom+"/betting/").once("value", function(s){
 		let betting = s.val();
+		console.log("btting",betting);
 		playerToTalk = betting.playerToTalk;
+		console.log("btting gotten");
 	});
 	// firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet").on("value", function(s){
 	// 	console.info("currentBet updated");
@@ -227,7 +229,7 @@ function setPrevPlayerToTalk(){
 function talkingPlayer(){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").on("value", function(s){
 		let talkingPlayer = s.val();
-
+		console.log("weqr",talkingPlayer);
 
 		/*firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+talkingPlayer).once("value", function(s){
 			talkingPlayersBalance = s.val();

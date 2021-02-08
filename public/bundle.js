@@ -1979,11 +1979,12 @@ setNextDealerAndDealHand = function() {
 			currentDealer = snapshot.val();
 
 			if (currentDealer == 0) {
-				//console.log("initing currentDealer");
+				console.log("initing currentDealer",'rooms/'+currentRoom+"/players");
 				let playersRef 		= firebase.database().ref('rooms/'+currentRoom+"/players");
 				playersRef.once('value', function(snapshot){
 					var players = snapshot.val();
-					currentDealer = players.pop();
+					currentDealer = players[0];
+					
 					$(players).each(function(k,v){
 						firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
 						firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
@@ -1993,7 +1994,7 @@ setNextDealerAndDealHand = function() {
 					$("#fold").attr("disabled", null);
 
 					$(".playercards .descr").hide();
-
+					
 					initBetting(players,currentDealer);
 
 					var updates = {};

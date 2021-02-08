@@ -6,7 +6,7 @@ getRooms = function(callback){
 	  	$.each(snapshot.val(), function(key,roomData){
         let playersCount = roomData['players'].length || 0;
         let isPublic = roomData['isPublic'] ? 'Public' : 'Private';
-	    	var tr = $(".roomsTable").append('<tr class="room" data-rid="'+key+'">\
+	    	var tr = $(".roomsTable").append('<tr class="room" data-rid="'+key+'" data-public="'+isPublic+'">\
                                             <td>'+roomData['name']+'</td>\
                                             <td>'+playersCount+'</td>\
                                             <td>'+isPublic+'</td>\
@@ -27,9 +27,9 @@ createNewRoom = function(name,callback){
     flop:[],
     betting:{
         'playersInGame':['0oGinVvghrYgAHc1GJz1VGpR8XL2'],
-        'playerToTalk':"",
+        'playerToTalk':'0oGinVvghrYgAHc1GJz1VGpR8XL2',
         'playersInGame':['0oGinVvghrYgAHc1GJz1VGpR8XL2'],
-        'balance':[],
+        'balance':{'0oGinVvghrYgAHc1GJz1VGpR8XL2':"0"},
         'thisRoundsBets':[0],
         'thisRoundSumBets':[],
         'smallBlind':1,

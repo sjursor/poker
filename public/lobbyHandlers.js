@@ -13,7 +13,7 @@ initLobby = function(){
 				//Auto-join: $(".room [data-rid='"+rid+"']").click();
 			});
 		});
-
+		
 		$(".joinRoom").click(function(){
 			let rid = $(this).data("rid");
 			location = "/?rid="+rid;
