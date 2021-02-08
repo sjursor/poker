@@ -12,7 +12,7 @@ getNewDeck = function(){
 }  
 
 setNextDealerAndDealHand = function() {
-	console.log("setting dealer and dealing new hand");
+	console.log("setting dealer and dealing new hand",currentRoom);
 	jQuery(".thisRoundBet").removeClass("white green red blue black");
 	if(parseInt($(".pot").text()) !== 0){
 		alert("Settle pot first");

@@ -2,12 +2,17 @@
 getRooms = function(callback){
 	var roomsRef = firebase.database().ref('rooms');
 	roomsRef.on('value', function(snapshot) {
-	  	$("#roomlist ul li.room").remove();
+	  	$(".room[data-rid]").remove();
 	  	$.each(snapshot.val(), function(key,roomData){
-        console.log(key,roomData);
-        let playersCount = roomData['players'].length;
+        let playersCount = roomData['players'].length || 0;
         let isPublic = roomData['isPublic'] ? 'Public' : 'Private';
-	    	var li = $("#roomlist ul").prepend('<li class="room" data-rid="'+key+'" data-name="'+roomData['name']+'"  data-players="'+playersCount+'" data-public="'+isPublic+'">'+roomData['name']+'</li>');
+	    	var tr = $(".roomsTable").append('<tr class="room" data-rid="'+key+'">\
+                                            <td>'+roomData['name']+'</td>\
+                                            <td>'+playersCount+'</td>\
+                                            <td>'+isPublic+'</td>\
+                                            <td><button class="joinRoom" data-rid="'+key+'">Join Room</button>\
+                                            <button class="deleteRoom" style="display:none" data-rid="'+key+'">Delete Room</button></td>\
+                                          </tr>');
 		});	
       if(typeof(callback)=="function"){callback();}
 	});
@@ -15,23 +20,35 @@ getRooms = function(callback){
 
 //Create new rooms
 createNewRoom = function(name,callback){
-let roomData = {
-  name:name,
-  players:0,
-  currentDealer:0,
-  flop:[],
-  betting:{'playerToTalk':""},
-  turn:"",
-  river:""
-};
-let newRoomKey = firebase.database().ref().child('rooms').push().key;
+  let roomData = {
+    name:name,
+    players:0,
+    currentDealer:0,
+    flop:[],
+    betting:{
+        'playersInGame':['0oGinVvghrYgAHc1GJz1VGpR8XL2'],
+        'playerToTalk':"",
+        'playersInGame':['0oGinVvghrYgAHc1GJz1VGpR8XL2'],
+        'balance':[],
+        'thisRoundsBets':[0],
+        'thisRoundSumBets':[],
+        'smallBlind':1,
+        'bigBlind':2,
+        'currentBet':0,
+        "pot":0
+      },
+    turn:"",
+    river:"",
+    admins:["0oGinVvghrYgAHc1GJz1VGpR8XL2", "9qEcvtXYbzMHg5kLU8YOjKFpvLh2", "J0GfoIqLhzaxL1SrAeYigI7oXVx1"]
+  };
+  let newRoomKey = firebase.database().ref().child('rooms').push().key;
 
-var updates = {};
-updates['/rooms/' + newRoomKey] = roomData;
-firebase.database().ref().update(updates);
-currentRoom = newRoomKey;
-if(typeof(callback)=="function"){callback(newRoomKey);}
-return newRoomKey;
+  var updates = {};
+  updates['/rooms/' + newRoomKey] = roomData;
+  firebase.database().ref().update(updates);
+  currentRoom = newRoomKey;
+  if(typeof(callback)=="function"){callback(newRoomKey);}
+  return newRoomKey;
 }
 
 

@@ -12,71 +12,40 @@ h1{
 	background:#111;
 	margin:auto;
 	border-radius:8px;
-	border:1px solid yellow;
+	border:1px solid #0C8BB9;
 	color:white;
+	padding:20px;
 }
 
 .roomSelector{
-	border:1px solid #E0C311;
-	margin:20px;
 	min-height:280px;
 	border-radius:8px;
 }
-.left{
-	float:left;
-	width:32%;
-	min-height:280px;
-	border-right:1px solid yellow;
-}
-.right{
-	float:right;
-	width:60%;
-	min-height:240px;
+
+.createRoom{
 	padding:20px;
-}
-#roomlist ul{
-	padding:0;
-	margin:0;
-}
-#roomlist ul li{
-	height:20px;
-	padding:20px;
-	border-bottom: 1px solid #333;
-	cursor:pointer;
+	width:660px;
+	background:#111;
+	margin:auto;
+	border-radius:8px;
+	border:1px solid #0C8BB9;
 	color:white;
+}
+
+table.roomsTable{
 	text-transform: capitalize;
-	display:block;
 }
-.room span{
-	float:right;
-}
-.roomDetails{
-	position: relative;
-	min-height: 120px;
-}
-.roomDetails button{
-	position:absolute;
-	bottom:20px;
-	right:20px;
-	border:1px solid;
-	padding:2px 18px;
-	border-radius: 8px;
-	background:white;
-	font-weight: 600;
-	cursor: pointer;
-}
-button.joinRoom{
-	background: green;
-	color:white;
-	font-weight: normal;
-}
-button.deleteRoom{
-	right:132px;
-	background: none;
-	color:white;
-	border:1px solid #333;
-}
+
 table{
 	width:100%;
 	text-align: left;
+	border-collapse: collapse;
+}
+table th{
+	font-weight: bold;
+	border-collapse: collapse;
+	border-bottom:1px solid #0C8BB9;
+}
+table tr{
+	line-height: 38px;
 }

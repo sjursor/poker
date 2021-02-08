@@ -126,7 +126,6 @@ function listenForChangesInTheRoom(){
 		  			if(v>19){betClass='black';}
 		  			$(".player[data-pid='"+k+"'] .thisRoundBet").text(v).addClass(betClass);
 		  		}
-		  		
 		  	});	
 	  	}
 	  	if(val.betting['thisRoundSumBets']){

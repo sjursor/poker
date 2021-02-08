@@ -149,9 +149,12 @@ function sumTable(){
   	$.each(players, function(k,v){
   		let bal = $(v).text();
   		let val = bal === "ALL IN" ? 0 : parseInt($(v).text());
-  		sum += val;
+  		if(!isNaN(val)){ sum += val;}
+  		
   	});
-  	$("#inputSumTable").val(sum+parseInt($(".pot").text()));
+  	let p = parseInt($(".pot").text());
+  	
+  	$("#inputSumTable").val(sum+p);
 }
 
 function getBetting(){

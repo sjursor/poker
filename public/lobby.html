@@ -37,41 +37,24 @@
   	<div class="lobbyContainer">
   		<h2>Select room</h2>
   		<div class="roomSelector">
-  			<div class="left">
   				<div id="roomlist">
-	  				<ul>
-              <li><b>Create New Room</b></li>
-	  				</ul>
+            <table class="roomsTable">
+              <tr>
+                <th>Room</th>
+                <th>Players in room</th>
+                <th>Public/Private</th>
+                <th>&nbsp;</th>
+              </tr>
+              
+            </table>
   				</div>
-  				
-  				
-  			</div>
-  			<div class="right">
-  				<div class="roomDetails">
-  					<table>
-  						<tr>
-  							<th>Name</th>
-  							<th>Players</th>
-  							<th>Public</th>
-  						</tr>
-  						<tr>
-  							<td>Hulen</td>
-  							<td>8</td>
-  							<td>Public</td>
-  						</tr>
-  					</table>
-  					<button class="deleteRoom">Delete</button>
-  					<button class="joinRoom">Join Room</button>
-  				</div>
-  				<div class="createRoom">
-  					<b>Create a new poker room<b><br>
-  					Room Name: <input type="text" name="" id="inputRoomName"/>
-  					<button id="createNewRoomSubmit">Create</button>
-  				</div>
-  			</div>
   		</div>
-  		
   	</div>
+    <div class="createRoom" style="margin-top:20px;">
+      <b>Create a new poker room</b><br>
+      Room Name: <input type="text" name="" id="inputRoomName"/>
+      <button id="createNewRoomSubmit">Create</button>
+    </div>
   	<script>
   		$(document).ready(function(){
   			initLobby();

@@ -10,21 +10,19 @@ initLobby = function(){
 		$("#createNewRoomSubmit").click(function(){
 			let input = $("#inputRoomName").val();
 			createNewRoom(input,function(rid){
-				$(".room [data-rid='"+rid+"']").click();
+				//Auto-join: $(".room [data-rid='"+rid+"']").click();
 			});
 		});
 
-		$(".room").click(function(){
-			$(".createRoom").hide();
+		$(".joinRoom").click(function(){
 			let rid = $(this).data("rid");
-			console.log(rid);
+			location = "/?rid="+rid;
 		});
 	}
 
 	showRoom = function(rid){
 		$("#createRoom").hide();
 		$(".roomDetails").show();
-		$()
 	}
 
 }

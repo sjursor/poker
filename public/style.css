@@ -57,7 +57,7 @@
           text-decoration: underline;
           cursor: pointer;
       }
-      
+      .returnToLobby{position: absolute;left:20px; top:90px;}
       
       #userControls{
         text-align: left;
@@ -474,3 +474,50 @@
       .black{background-color:black;}
       .thisRoundBet.folded {display:none;}
 
+      a[role="button"],
+      button{
+        display:inline-block;
+        padding:0.35em 1.2em;
+        border:none;
+        margin:0 0.3em 0.3em 0;
+        border-radius:0.12em;
+        box-sizing: border-box;
+        text-decoration:none;
+        font-weight:300;
+        color:#fff;
+        background-color:#0C8BB9;
+        text-align:center;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+      button:hover{
+        background-color:#053958;
+        color:white;
+      }
+
+      .arrow {
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        display: inline-block;
+        padding: 4px;
+      }
+
+      .right {
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+      }
+
+      .left {
+        transform: rotate(135deg);
+        -webkit-transform: rotate(135deg);
+      }
+
+      .up {
+        transform: rotate(-135deg);
+        -webkit-transform: rotate(-135deg);
+      }
+
+      .down {
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+      }

@@ -20,6 +20,7 @@
     <script type="application/javascript" src="/clickHandlers.js"></script>
     <script type="application/javascript" src="/adminHandlers.js"></script>
     <script type="application/javascript" src="/betting.js"></script>
+    <script type="application/javascript" src="/utils.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200;400;700;900&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" type="text/css" href="cardStyling.css">
@@ -40,10 +41,11 @@
       <div id="loginContainer">
         <button id="login">Logg inn</button>
       </div>
+      <a href="lobby.html" role="button" class="returnToLobby"><span class="arrow left"></span> Return to Lobby</a>
       <div id="game">
         <div id="userControls">
           <button id="fold">Fold</button>
-          <button id="showcards">Show cards</button>
+          <button id="showcards" alt="Make my cards visible for everyone">Show cards</button>
           <button id="check">Check</button><button id="call">Call</button><button id="bet">Bet</button>
         </div>
         <div id="seats">
@@ -306,7 +308,7 @@
         // 3: Turn
         // 4: River
         tableState = 0;
-        currentRoom = "-M3NcGg4RPa6ShpXgZXa";
+        currentRoom = getUrlParameter("rid")||"-M3NcGg4RPa6ShpXgZXa";
         currentDealer = "";
 
         resetTableCards();
@@ -318,17 +320,22 @@
           clickHandlers();
           resetTableCards();
           talkingPlayer();
-          adminHandlers();
+
 
           // Show admin panel and admin button only for valid players
-          validAdmins = ["0oGinVvghrYgAHc1GJz1VGpR8XL2", "9qEcvtXYbzMHg5kLU8YOjKFpvLh2", "J0GfoIqLhzaxL1SrAeYigI7oXVx1"]
-          if (validAdmins.includes(currentPlayer)) {
-            $("#adminBtn").show();
-            $("#admin").show();
-          } else {
-            $("#adminBtn").remove();
-            $("#admin").remove();
-          }
+          firebase.database().ref('rooms/'+currentRoom+'/admins').on('value', function(snapshot) {
+            var validAdmins = snapshot.val();
+            //let  validAdmins = ["0oGinVvghrYgAHc1GJz1VGpR8XL2", "9qEcvtXYbzMHg5kLU8YOjKFpvLh2", "J0GfoIqLhzaxL1SrAeYigI7oXVx1"];
+            if (validAdmins.includes(currentPlayer)) {
+              $("#adminBtn").show();
+              $("#admin").show();
+              adminHandlers();
+            } else {
+              $("#adminBtn").remove();
+              $("#admin").remove();
+            }
+
+          });
         });
  
       });
