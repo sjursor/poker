@@ -229,7 +229,6 @@ function setPrevPlayerToTalk(){
 function talkingPlayer(){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").on("value", function(s){
 		let talkingPlayer = s.val();
-		console.log("weqr",talkingPlayer);
 
 		/*firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+talkingPlayer).once("value", function(s){
 			talkingPlayersBalance = s.val();
@@ -241,7 +240,6 @@ function talkingPlayer(){
 			$("#call").show().unbind();
 
 			$("#call").click(function(){
-				console.log("currentBet", currentBet);
 				//playerBet = det som ligge på bordet foran deg
 				//currentBet = høyste bet til nå
 				//thisRoundSumBets = summen av dine bets gjennom denne håndå
