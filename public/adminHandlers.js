@@ -72,8 +72,19 @@ adminHandlers = function(){
 	  	foldPlayer(fold);
 	  });
 
+	  $("#submitAdminz").click(function(){
+	  	let admins = $("#adminlist select").val();
+	  	if(admins.length){
+			firebase.database().ref('rooms/'+currentRoom+"/admins/").set(admins);
+	  	}else{
+	  		alert("Amongst all indians, someone has to be chief");
+	  	}
+	  });
+
 
 	setTimeout(function(){
+		$("#admin select").empty();
+		
 		let players = $(".player[data-pid]");
 		let selects = $("#admin select");
 	  	$.each(players, function(k,v){
@@ -84,6 +95,14 @@ adminHandlers = function(){
 				$(vv).append(ins);
 	  		});
 		});
+
+	  	//mark adminz
+	  	let fbref 	= firebase.database().ref('rooms/'+currentRoom+"/admins/");
+	  	fbref.once('value', function(admins){
+	  		admins = admins.val();
+	  		$("select#adminz").val(admins);  			
+	  	});
+
 	},2000);
 	
 }
