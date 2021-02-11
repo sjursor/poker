@@ -31,7 +31,8 @@ h1{
 	border:1px solid #0C8BB9;
 	color:white;
 }
-
+.delete{background:#631a1a;}
+.delete:hover{background:#e41d1d;}
 table.roomsTable{
 	text-transform: capitalize;
 }

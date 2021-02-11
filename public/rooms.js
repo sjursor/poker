@@ -4,24 +4,39 @@ getRooms = function(callback){
 	roomsRef.on('value', function(snapshot) {
 	  	$(".room[data-rid]").remove();
 	  	$.each(snapshot.val(), function(key,roomData){
-        let playersCount = roomData['players'].length || 0;
-        let isPublic = roomData['isPublic'] ? 'Public' : 'Private';
-	    	var tr = $(".roomsTable").append('<tr class="room" data-rid="'+key+'" data-public="'+isPublic+'">\
+        let playersInRoom = roomData['players'].length || 0;
+        let isPublic = roomData['isPublic'];
+        let publicity = isPublic==true?'Public':'Private';
+	    	var tr = $(".roomsTable").append('<tr class="room" data-rid="'+key+'" data-public="'+isPublic+'" data-playersInRoom="'+playersInRoom+'">\
                                             <td>'+roomData['name']+'</td>\
-                                            <td>'+playersCount+'</td>\
-                                            <td>'+isPublic+'</td>\
+                                            <td>'+playersInRoom+'</td>\
+                                            <td>'+publicity+'</td>\
                                             <td><button class="joinRoom" data-rid="'+key+'">Join Room</button>\
-                                            <button class="deleteRoom" style="display:none" data-rid="'+key+'">Delete Room</button></td>\
+                                            <button class="delete" data-rid="'+key+'">Delete</button></td>\
                                           </tr>');
 		});	
       if(typeof(callback)=="function"){callback();}
 	});
 }
 
+deleteRoom = function(rid){
+  //Todo, check if owner
+  let updates = {};
+  if(rid !== "" && rid !== '-M3NcGg4RPa6ShpXgZXa' && rid !== '-MT5RYDarQOGALe5jgqn'){
+    updates['/rooms/' + rid] = {};
+    
+    firebase.database().ref().update(updates);
+  }
+  
+  
+}
+
 //Create new rooms
-createNewRoom = function(name,callback){
+createNewRoom = function(name,pwd,callback){
   let roomData = {
     name:name,
+    pwd:pwd||"",
+    isPublic: pwd=="",
     players:0,
     currentDealer:0,
     flop:[],
@@ -35,7 +50,8 @@ createNewRoom = function(name,callback){
         'smallBlind':1,
         'bigBlind':2,
         'currentBet':0,
-        "pot":0
+        "pot":0,
+        "isPublic":true
       },
     turn:"",
     river:"",

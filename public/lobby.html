@@ -52,11 +52,13 @@
   	</div>
     <div class="createRoom" style="margin-top:20px;">
       <b>Create a new poker room</b><br>
-      Room Name: <input type="text" name="" id="inputRoomName"/>
+      Room Name: <input type="text" name="" id="inputRoomName"/><br>
+      Password:<input type="text" name="" id="inputRoomPassword"/><br>
       <button id="createNewRoomSubmit">Create</button>
     </div>
   	<script>
   		$(document).ready(function(){
+        console.log("Document ready");
   			initLobby();
   		});
   	</script>
