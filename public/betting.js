@@ -135,9 +135,19 @@ function winner(pids){
 		let potshare = pot/winnerCount;
 		console.log("Sharing pot ",pot,winnerCount,potshare);
 
+		//check if first winners takes all of pot
+			//1. Check if sum of winning players thisRoundSumBets/[pid] is equal to or higher than potshare
+				//true :: check if splitpot is equal to or lower than each of winning players thisRoundSumBets
+					//true::Split pot on winning players
+					//false::
+				//false:: 
+			
+			//if secondary winners - take rest of pot
+
+
 		$.each(pids, function(k,v){
 			addToPlayersBalance(v,potshare);
-			log("Winner: moving "+potshare+" from pot to "+pidToName(v));
+			log("Winner: Adding "+potshare+" to "+pidToName(v)+" as winner");
 		});
 		
 
