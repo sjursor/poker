@@ -135,6 +135,15 @@ function winner(pids){
 		let potshare = pot/winnerCount;
 		console.log("Sharing pot ",pot,winnerCount,potshare);
 
+		
+		/*
+		RULE: The golden, overarching rule to keep in mind is that each player matches each opponents' bet with as much as is left in his stack.
+
+		All players still in the pot are obligated to match whatever the smallest stack has contributed to the pot. This is the "main pot.”
+		The player with the next smallest stack then is required to match remaining bets from players with bigger stacks, and so on.
+		This is put into a “side pot” with each respective player.
+		*/
+
 		//check if first winners takes all of pot
 			//1. Check if sum of winning players thisRoundSumBets/[pid] is equal to or higher than potshare
 				//true :: check if splitpot is equal to or lower than each of winning players thisRoundSumBets
