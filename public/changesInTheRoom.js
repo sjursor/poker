@@ -250,6 +250,13 @@ function listenForChangesInTheRoom(){
 		
 	  }
 	  //run integrity check for admin input
-		sumTable();
+	  sumTable();
+	  $("#log").val();
+	  let log = "";
+	  $.each(val['log'].reverse(), function(k,v){
+	  	log += k+" :: "+v+"&#010;";
+	  });
+	  $("#log").html(log);
+	  
 	});	
 }

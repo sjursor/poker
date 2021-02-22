@@ -69,9 +69,11 @@ function blinds(smallBlindPlayer, bigBlindPlayer){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/").once("value", function(s){
 		let balance = s.val();
 		let smallBlindBalance 	= balance[smallBlindPlayer];
+		log("SmallBlind "+smallBlindBet+" from "+smallBlindPlayer+" to Pot");
 		firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+smallBlindPlayer).set(smallBlindBalance-smallBlindBet);
 
 		let bigBlindBalance 	= balance[bigBlindPlayer];
+		log("bigBlind "+bigBlindBet+" from "+bigBlindPlayer+" to Pot");
 		firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+bigBlindPlayer).set(bigBlindBalance-bigBlindBet);
 		
 		let pot = bigBlindBet+smallBlindBet;
@@ -80,6 +82,7 @@ function blinds(smallBlindPlayer, bigBlindPlayer){
 }
 
 function setPlayerBalance(pid,balance){
+	log("setting player "+pid+" balance to "+balance);
     firebase.database().ref("rooms/"+currentRoom+"/betting/balance/"+pid).set(parseFloat(balance));
     //console.log(balance);
 }
@@ -88,12 +91,15 @@ function addToPlayersBalance(pid,add){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+pid).once("value", function(s){
 		newBalance = parseFloat(s.val())+parseFloat(add);
 	});
+	log("adding "+add+" to "+pid+", new balance is "+newBalance);
 	setPlayerBalance(pid,newBalance);
 }
 function subtractFromPlayersBalance(pid,subtract){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+pid).once("value", function(s){
 		newBalance = parseFloat(s.val())-subtract;
+		log("subtracking "+subtract+" from player balance  from "+s.val()+" to "+newBalance);
 	});
+
 	setPlayerBalance(pid,newBalance);
 }
 function moveFromPotToPlayer(pid, amount){
@@ -105,6 +111,7 @@ function moveFromPotToPlayer(pid, amount){
 	    firebase.database().ref().update(updates);
 		//$(".pot").text(0);
 		addToPlayersBalance(pid,amount);
+		log("Moving "+amount+" from pot and adding "+amount+" to "+pid);
 	});
 	//Add to player
 }
@@ -114,6 +121,7 @@ function setAllPlayersBalance(balance){
 	$.each(players,function(k,pid){
 		updates["rooms/"+currentRoom+"/betting/balance/"+pid] = parseFloat(balance);
 	});
+	log("Setting all players balance to "+balance);
 	firebase.database().ref().update(updates);
 }
 
@@ -129,6 +137,7 @@ function winner(pids){
 
 		$.each(pids, function(k,v){
 			addToPlayersBalance(v,potshare);
+			log("Winner: moving "+potshare+" from pot to "+v);
 		});
 		
 
@@ -136,7 +145,8 @@ function winner(pids){
 	    updates["rooms/"+currentRoom+"/betting/pot"] = 0;
 	    updates["rooms/"+currentRoom+"/betting/playersBets"] = 0;
 	    updates["rooms/"+currentRoom+"/betting/bets/thisRoundBet"] = {};
-	    updates["rooms/"+currentRoom+"/betting/thisRoundSumBets"] = {}; 
+	    updates["rooms/"+currentRoom+"/betting/thisRoundSumBets"] = {};
+	    log("Setting pot to and playerBets to 0");
 	    firebase.database().ref().update(updates);
 		$(".pot").text(0);
 	});
@@ -158,13 +168,11 @@ function sumTable(){
 }
 
 function getBetting(){
-	console.log("enabling betting");
+	console.log("Enabling betting");
 	bettingEnabled = true;
 	firebase.database().ref('rooms/'+currentRoom+"/betting/").once("value", function(s){
 		let betting = s.val();
-		console.log("btting",betting);
 		playerToTalk = betting.playerToTalk;
-		console.log("btting gotten");
 	});
 	// firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet").on("value", function(s){
 	// 	console.info("currentBet updated");
@@ -278,6 +286,7 @@ function talkingPlayer(){
 						//update pot
 						let pot = betting['pot'];
 						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(pot+(deduct));
+						log("Call: updates pot to "+pot+deduct);
 
 						
 						firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(playerSumBets+deduct);	
@@ -285,6 +294,7 @@ function talkingPlayer(){
 						let newbalance = talkingPlayersBalance-deduct;
 
 						setPlayerBalance(talkingPlayer,newbalance);
+						log("Call: Updating talkingplayer balance from "+talkingPlayersBalance+" to "+newbalance+" - called "+deduct);
 						setNextPlayerToTalk();
 			        }
 				});
@@ -350,6 +360,7 @@ function talkingPlayer(){
 								firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(thisRoundSumPlayerBet+bet);
 								firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(pot+bet));
 								currentBet = bet+playerBet;
+								log("Bet: "+currentPlayer+" betted "+playerBet+", updating players Balance from "+talkingPlayersBalance+" to "+(talkingPlayersBalance-bet));
 								setPlayerBalance(currentPlayer,talkingPlayersBalance-bet);
 								setNextPlayerToTalk();
 							} else {
@@ -378,9 +389,22 @@ function getPot(){
 	});
 }
 
-function endRoundBetting(){
-	//Set current bet to 0
-	//set player to talk = smallBlind
+function log(descr){
+	var d = new Date();
+	var n = d.toLocaleTimeString();
+	let size = 20;
+	console.log(n+" :: "+descr);
+
+	firebase.database().ref('rooms/'+currentRoom+"/log").once("value",function(s){
+		let logdb = s.val();
+		if(logdb){
+			logdb.push(n+" :: "+descr);
+			firebase.database().ref('rooms/'+currentRoom+"/log").set(logdb.slice(1, size));
+		}else{
+			let log = [n+" :: "+descr];
+			firebase.database().ref('rooms/'+currentRoom+"/log").set(log);
+		}
+	});
 }
 
 function getAtIndex(theArray,i,currentIndex) {

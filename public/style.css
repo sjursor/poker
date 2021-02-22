@@ -439,7 +439,7 @@
         box-shadow: 0px 0px 15px 5px black;
         left: 0;
         z-index: 101;
-        top: 100px;
+        top: 48px;
       }
       #admin button{
         background-color: teal;
@@ -454,6 +454,12 @@
       #admin #winner b{
         vertical-align: top;
       }
+      #admin textarea#log{
+        width:100%;
+        min-height:200px;
+        background-color:black;
+        color:lightgreen;
+      }
       .adminTool{
         margin-bottom:10px;
       }
@@ -465,7 +471,7 @@
         cursor:pointer;
       }
       #game{display:none;}
-
+      
       .thisRoundBet{color:white;}
       .white{background-color:white;color:black;}
       .green{background-color:green; color:white;}
