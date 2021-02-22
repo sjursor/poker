@@ -87,12 +87,14 @@ adminHandlers = function(){
 		
 		let players = $(".player[data-pid]");
 		let selects = $("#admin select");
+		playerMap = [];
 	  	$.each(players, function(k,v){
 			let pid  = $(v).data("pid");
 			let name = $(".name", $(v)).text();
 			$.each(selects, function (kk,vv){
 				let ins = '<option value="'+pid+'">'+name+'</option>';
 				$(vv).append(ins);
+				playerMap[pid] = name;
 	  		});
 		});
 
