@@ -33,29 +33,32 @@ deleteRoom = function(rid){
 
 //Create new rooms
 createNewRoom = function(name,pwd,callback){
+  var d = new Date();
+  var n = d.toLocaleTimeString();
+
   let roomData = {
     name:name,
     pwd:pwd||"",
     isPublic: pwd=="",
     players:0,
-    currentDealer:0,
+    currentDealer:[currentPlayer],
+    log:[n+" :: Init Game"],
     flop:[],
     betting:{
-        'playersInGame':['0oGinVvghrYgAHc1GJz1VGpR8XL2'],
-        'playerToTalk':'0oGinVvghrYgAHc1GJz1VGpR8XL2',
-        'playersInGame':['0oGinVvghrYgAHc1GJz1VGpR8XL2'],
-        'balance':{'0oGinVvghrYgAHc1GJz1VGpR8XL2':"0"},
+        'playersInGame':[currentPlayer],
+        'playerToTalk':currentPlayer,
+        'playersInGame':[currentPlayer],
+        'balance':{currentPlayer:"0"},
         'thisRoundsBets':[0],
         'thisRoundSumBets':[],
         'smallBlind':1,
         'bigBlind':2,
         'currentBet':0,
-        "pot":0,
-        "isPublic":true
+        "pot":0
       },
     turn:"",
     river:"",
-    admins:["0oGinVvghrYgAHc1GJz1VGpR8XL2", "9qEcvtXYbzMHg5kLU8YOjKFpvLh2", "J0GfoIqLhzaxL1SrAeYigI7oXVx1"]
+    admins:["0oGinVvghrYgAHc1GJz1VGpR8XL2", currentPlayer]
   };
   let newRoomKey = firebase.database().ref().child('rooms').push().key;
 

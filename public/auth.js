@@ -1,45 +1,36 @@
-loginHandler = function(){
+loginHandler = function(callback){
   var provider = new firebase.auth.FacebookAuthProvider();
 
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
+        u = user;
         console.log("user is signed in");
-        //newPlayer(user.uid, user.email, user.displayName, user.photoURL, function(pid){
-          let roomId = getUrlParameter("rid")||"-M3NcGg4RPa6ShpXgZXa";
-          addPlayerToTable(user.uid, roomId);
-          currentPlayer = user.uid;
-        
-          showGame(user);
-          updateUserCards();
-        //});
-    } else {
+        currentPlayer = user.uid;
 
+        if(typeof(callback=="function")){callback(user);}
+        //newPlayer(user.uid, user.email, user.displayName, user.photoURL, function(pid){//});
+    } else {
+      callback(false);
       $("#login").click(function(){
         firebase.auth().signInWithPopup(provider).then(function(result) {
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        var token = result.credential.accessToken;
-        // The signed-in user info.
-        var user = result.user;
+          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+          var token = result.credential.accessToken;
+          // The signed-in user info.
+          var user = result.user;
 
-        console.log("authing");
+          console.log("authing");
 
-        newPlayer(user.uid, user.email, user.displayName, user.photoURL, function(pid){
-          currentPlayer = pid;
-          
-          addPlayerToTable(pid,currentRoom);
-          jQuery("#userinfo").text("User: "+user.displayName);
-        });
+          newPlayer(user.uid, user.email, user.displayName, user.photoURL, function(pid){
+            currentPlayer = pid;
+          });
 
-        showGame();
-        updateUserCards();
+          jQuery("#userinfoname").text("User: "+user.displayName);
+          $("#logout").show();
+          $("#login").hide();
+          $("#loginContainer").hide();
 
-
+          if(typeof(callback=="function")){callback(user);}
         
-
-
-
-
-        // ...
         }).catch(function(error) {
           // Handle Errors here.
           var errorCode = error.code;
@@ -51,16 +42,16 @@ loginHandler = function(){
           console.log(errorMessage, errorCode, email);
           // ...
         }); 
-      })  
+      });
     }
 
     $("#logout").on("click", function(){
-      removePlayerFromTable(user.uid);
+      //removePlayerFromTable(u.uid);
       firebase.auth().signOut().then(function() {
         console.log("signed out success");
         $("#logout").hide();
+        $("#loginContainer").show();
         $("#userinfoname").text("You must log in to play the game (reload page)");
-        $("#game").hide();
       }).catch(function(error) {
         console.log("error", error);
       });

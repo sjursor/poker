@@ -1,5 +1,6 @@
-const doc 	= require('deck-o-cards')
-const Hand 	= require('pokersolver').Hand;
+const doc 		= require('deck-o-cards')
+const Hand 		= require('pokersolver').Hand;
+const {sha256} 	= require('crypto-hash');
 
 // Notes...
 // Sjur: 0oGinVvghrYgAHc1GJz1VGpR8XL2
@@ -10,6 +11,10 @@ getNewDeck = function(){
 	deck = doc.randomizedDeck();
 	return deck;
 }  
+
+hash = function(h){
+	return sha256(h);
+}
 
 setNextDealerAndDealHand = function() {
 	console.log("setting dealer and dealing new hand",currentRoom);

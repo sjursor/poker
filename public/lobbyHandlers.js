@@ -26,18 +26,16 @@ initLobby = function(){
 			firebase.database().ref('rooms/'+rid+"/pwd").once("value", function(s) {
 				if (playersInRoom !== 10){
 					if(isPublic){
-					location = "/?rid="+rid;
+						location = "/table.html?rid="+rid;
 					}else{
 						var inputPwd = prompt("This is a private room, please enter password");
 						if(inputPwd == s.val()){
-							location = "/?rid="+rid;
-						}else{
-							alert("Wrong password");
-						}
+							hash(inputPwd).then(function(pwdhash){
+								location = "/table.html?rid="+rid+"&auth="+pwdhash;
+							});
+						}else{alert("Wrong password");}
 					}	
-				}else{
-					alert("Room is full");
-				}
+				}else{alert("Room is full");}
 				
 			});
 			
@@ -45,7 +43,15 @@ initLobby = function(){
 
 		$(".delete").click(function(){
 			let rid = $(this).data("rid");
-			deleteRoom(rid);
+			let isPublic = $($(this).closest("tr")[0]).data("public");
+			if(isPublic == false){
+				firebase.database().ref('rooms/'+rid+"/pwd").once("value", function(s) {
+					var pwd = prompt("Enter room password to delete this room");
+					if(pwd == s.val()){
+						deleteRoom(rid);
+					}else{alert("Wrong password");}
+				});
+			}
 		});
 	});		
 

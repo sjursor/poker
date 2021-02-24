@@ -1,4 +1,63 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+(function (global){
+/* eslint-env browser */
+/* global globalThis:readonly */
+'use strict';
+
+// Ponyfill for `globalThis`
+const _globalThis = (() => {
+	if (typeof globalThis !== 'undefined') {
+		return globalThis;
+	}
+
+	if (typeof self !== 'undefined') {
+		return self;
+	}
+
+	/* istanbul ignore next */
+	if (typeof window !== 'undefined') {
+		return window;
+	}
+
+	/* istanbul ignore next */
+	if (typeof global !== 'undefined') {
+		return global;
+	}
+})();
+
+const bufferToHex = buffer => {
+	const view = new DataView(buffer);
+
+	let hexCodes = '';
+	for (let i = 0; i < view.byteLength; i += 4) {
+		hexCodes += view.getUint32(i).toString(16).padStart(8, '0');
+	}
+
+	return hexCodes;
+};
+
+const create = algorithm => async (buffer, options) => {
+	if (typeof buffer === 'string') {
+		buffer = new _globalThis.TextEncoder().encode(buffer);
+	}
+
+	options = {
+		outputFormat: 'hex',
+		...options
+	};
+
+	const hash = await _globalThis.crypto.subtle.digest(algorithm, buffer);
+
+	return options.outputFormat === 'hex' ? bufferToHex(hash) : hash;
+};
+
+exports.sha1 = create('SHA-1');
+exports.sha256 = create('SHA-256');
+exports.sha384 = create('SHA-384');
+exports.sha512 = create('SHA-512');
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],2:[function(require,module,exports){
 'use strict'
 
 const randomizedDeck = () => {
@@ -78,7 +137,7 @@ module.exports = {
   randomizedDeck:randomizedDeck
 }
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 /**
  * pokersolver v2.1.2
  * Copyright (c) 2016, James Simpson of GoldFire Studios
@@ -1942,9 +2001,10 @@ module.exports = {
 
 })();
 
-},{}],3:[function(require,module,exports){
-const doc 	= require('deck-o-cards')
-const Hand 	= require('pokersolver').Hand;
+},{}],4:[function(require,module,exports){
+const doc 		= require('deck-o-cards')
+const Hand 		= require('pokersolver').Hand;
+const {sha256} 	= require('crypto-hash');
 
 // Notes...
 // Sjur: 0oGinVvghrYgAHc1GJz1VGpR8XL2
@@ -1955,6 +2015,10 @@ getNewDeck = function(){
 	deck = doc.randomizedDeck();
 	return deck;
 }  
+
+hash = function(h){
+	return sha256(h);
+}
 
 setNextDealerAndDealHand = function() {
 	console.log("setting dealer and dealing new hand",currentRoom);
@@ -2235,4 +2299,4 @@ updateUserCards = function() {
     
   });
 }
-},{"deck-o-cards":1,"pokersolver":2}]},{},[3]);
+},{"crypto-hash":1,"deck-o-cards":2,"pokersolver":3}]},{},[4]);

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PokerCave</title>
+
+    <!-- update the version number as needed -->
+    
+    <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-auth.js"></script>
+
+    <script type="application/javascript" src="/bundle.js"></script>
+    <script type="application/javascript" src="/auth.js"></script>
+    <script type="application/javascript" src="/jQuery_3.4.1.min.js"></script>
+    <script type="application/javascript" src="/players.js"></script>
+    <script type="application/javascript" src="/rooms.js"></script>
+    <script type="application/javascript" src="/changesInTheRoom.js"></script>
+    <script type="application/javascript" src="/clickHandlers.js"></script>
+    <script type="application/javascript" src="/adminHandlers.js"></script>
+    <script type="application/javascript" src="/betting.js"></script>
+    <script type="application/javascript" src="/utils.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200;400;700;900&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" type="text/css" href="cardStyling.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    
+  </head>
+  <body>
+  <div id="userinfowrapper">
+    <div id="topmenu">
+      <div id="logo"><img src="imgs/pokercave2.png" /></div>
+      <div class="userinfo">
+        <span id="userinfoname"></span>
+        <a id="logout" style="display:none">Logg ut</a>
+      </div>
+    </div>
+  </div>
+    <div id="container">
+      <div id="loginContainer">
+        <button id="login">Logg inn</button>
+      </div>
+      <a href="index.html" role="button" class="returnToLobby"><span class="arrow left"></span> Return to Lobby</a>
+      <div id="game">
+        <div id="userControls">
+          <button id="fold">Fold</button>
+          <button id="showcards" alt="Make my cards visible for everyone">Show cards</button>
+          <button id="check">Check</button><button id="call">Call</button><button id="bet">Bet</button>
+        </div>
+        <div id="seats">
+          <div class="seatrow" id="row1">
+            <div class="player" id="player10">
+              <div class="name">&nbsp;</div>
+              <div class="playercards">
+                <div class="playercard1"></div>
+                <div class="playercard2"></div>
+                <div class="descr"></div>
+                <div class="infotext"></div>
+                <div class="balance"></div>
+                <div class="thisRoundBet"></div>
+                <div class="thisRoundSumBets"></div>
+              </div>
+            </div>
+            <div class="player" id="player1">
+              <div class="name">&nbsp;</div>
+              <div class="playercards">
+                <div class="playercard1"></div>
+                <div class="playercard2"></div>
+                <div class="descr"></div>
+                <div class="infotext"></div>
+                <div class="balance"></div>
+                <div class="thisRoundBet"></div>
+                <div class="thisRoundSumBets"></div>
+              </div>
+            </div>
+            <div id="userCards" class="userfunction">
+              <div class="mycards">MY CARDS</div>
+              <div class="card" id="userCard1"></div>
+              <div class="card" id="userCard2"></div>
+              <div class="" id="myCardCurrentStatus"></div>
+            </div>
+            <div class="player" id="player2">
+              <div class="name">&nbsp;</div>
+              <div class="playercards">
+                <div class="playercard1"></div>
+                <div class="playercard2"></div>
+                <div class="descr"></div>
+                <div class="infotext"></div>
+                <div class="balance"></div>
+                <div class="thisRoundBet"></div>
+                <div class="thisRoundSumBets"></div>
+              </div>
+            </div>
+            <div class="player" id="player3">
+              <div class="name">&nbsp;</div>
+              <div class="playercards">
+                <div class="playercard1"></div>
+                <div class="playercard2"></div>
+                <div class="descr"></div>
+                <div class="infotext"></div>
+                <div class="balance"></div>
+                <div class="thisRoundBet"></div>
+                <div class="thisRoundSumBets"></div>
+              </div>
+            </div>
+          </div>
+          <div class="seatrow" id="row2">
+            <div class="player" id="player9">
+              <div class="name">&nbsp;</div>
+              <div class="playercards">
+                <div class="playercard1"></div>
+                <div class="playercard2"></div>
+                <div class="descr"></div>
+                <div class="infotext"></div>
+                <div class="balance"></div>
+                <div class="thisRoundBet"></div>
+                <div class="thisRoundSumBets"></div>
+              </div>
+            </div>
+            <div class="player" id="player4">
+              <div class="name">&nbsp;</div>
+              <div class="playercards">
+                <div class="playercard1"></div>
+                <div class="playercard2"></div>
+                <div class="descr"></div>
+                <div class="infotext"></div>
+                <div class="balance"></div>
+                <div class="thisRoundBet"></div>
+                <div class="thisRoundSumBets"></div>
+              </div>
+            </div>
+          </div>
+          <div class="seatrow" id="row3">
+            <div class="player" id="player8">
+              <div class="name">&nbsp;</div>
+              <div class="playercards">
+                <div class="playercard1"></div>
+                <div class="playercard2"></div>
+                <div class="descr"></div>
+                <div class="infotext"></div>
+                <div class="balance"></div>
+                <div class="thisRoundBet"></div>
+                <div class="thisRoundSumBets"></div>
+              </div>
+            </div>
+            <div class="player" id="player7">
+              <div class="name">&nbsp;</div>
+              <div class="playercards">
+                <div class="playercard1"></div>
+                <div class="playercard2"></div>
+                <div class="descr"></div>
+                <div class="infotext"></div>
+                <div class="balance"></div>
+                <div class="thisRoundBet"></div>
+                <div class="thisRoundSumBets"></div>
+              </div>
+            </div>
+            <div class="player" id="player6">
+              <div class="name">&nbsp;</div>
+              <div class="playercards">
+                <div class="playercard1"></div>
+                <div class="playercard2"></div>
+                <div class="descr"></div>
+                <div class="infotext"></div>
+                <div class="balance"></div>
+                <div class="thisRoundBet"></div>
+                <div class="thisRoundSumBets"></div>
+              </div>
+            </div>
+            <div class="player" id="player5">
+              <div class="name">&nbsp;</div>
+              <div class="playercards">
+                <div class="playercard1"></div>
+                <div class="playercard2"></div>
+                <div class="descr"></div>
+                <div class="infotext"></div>
+                <div class="balance"></div>
+                <div class="thisRoundBet"></div>
+                <div class="thisRoundSumBets"></div>
+              </div>
+            </div>
+          </div>
+          <div id="currentTable">
+            <div class="desk"><img src="imgs/desk/desk_7.png" width="70px"></div>
+            <div class="chip"><img src="imgs/chips/gold-1.png" width="30px" style="left: 170px;position: absolute;top: 45px;"></div>
+            <div class="chip"><img src="imgs/chips/gold-1.png" width="30px" style="left: 180px;position: absolute;top: 55px;"></div>
+            <div class="chip"><img src="imgs/chips/gold-1.png" width="30px" style="left: 186px;position: absolute;top: 38px;"></div>
+            <h3>Current Table: <span id="currentTableName"></span></h3>
+            <div class="duken" id="duken">
+
+            </div>
+            <div class="potContainer">Pot: <div class="pot">0</div></div>
+            <div class="cbetContainer">Current bet: <span class="currentBet"></span></div>
+            <button id="nextCard">Deal new hand</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="admin">
+      <h3>Winnerz and integrity-check</h3>
+      <div class="adminTool" id="winner">
+        <b>Announce winner:</b>
+        <select name="players" id="" multiple></select>
+        <button type="submit" id="submitWinner">Ok</button>
+      </div>
+      <div class="adminTool" id="numbers">
+        <b>Numbers</b>
+        Sum table: <input type="number" disabled="disabled" id="inputSumTable"/>
+        <button id="submitinputSumTable">Update</button>
+      </div>
+      <hr>
+
+      <h3>Pozitions and cardz</h3>
+      <div class="adminTool" id="nextPlayerToTalk">
+        <b>NextPlayerToTalk</b>
+        <button id="submitnextPlayerToTalk">Skip current player to talk --></button>
+      </div>
+      <div class="adminTool" id="prevPlayerToTalk">
+        <b>PrevPlayerToTalk</b>
+        <button id="submitprevPlayerToTalk"><-- Set previous player to talk</button>
+      </div>
+
+      <div class="adminTool">
+        <button id="submitadmShowFlop">Show Flop</button>
+        <button id="submitadmShowTurn">Show Turn</button>
+        <button id="submitadmShowRiver">Show River</button>
+      </div>
+
+      <div class="adminTool" id="setNextDealerAndDealHand">
+        <b>setNextDealerAndDealHand</b>
+        <button type="submit" id="submitsetNextDealerAndDealHand">Deal new hand</button>
+      </div>
+      
+      <hr>
+      <h3>Playerz balance and money</h3>
+      <div class="adminTool" id="setPlayerBalance">
+        <b>Set player balance:</b>
+        <select name="players"></select>
+        <input type="number" />
+        <button type="submit" id="submitPlayerBalance">Ok</button>
+      </div>
+      
+      <div class="adminTool" id="addToPlayersBalance">
+        <b>Add amount to players balance:</b>
+        Add <input type="number" />Kr to 
+        <select name="players"></select>
+        <button type="submit" id="submitaddToPlayersBalance">Ok</button>
+      </div>
+
+      <div class="adminTool" id="subtractFromPlayersBalance">
+        <b>Subtract amount from players balance:</b>
+        Subtract <input type="number" />Kr from 
+        <select name="players"></select>
+        
+        <button type="submit" id="submitsubtractFromPlayersBalance">Ok</button>
+      </div>
+
+      <div class="adminTool" id="moveFromPotToPlayer">
+        <b>Move <input type="number" /> from pot to player <select name="players"></select></b>
+        <button type="submit" id="submitmoveFromPotToPlayer">Ok</button>
+      </div>
+      
+      <div class="adminTool" id="setAllPlayersBalance">
+        <b>Set all players balance to:</b>
+        <input type="number"  value="200"/>
+        <button type="submit" id="submitsetAllPlayersBalance">Ok</button>
+      </div>
+      
+      <hr>
+      <h3>Eject the baztardz</h3>
+      <div class="adminTool" id="kickPlayerFromTable">
+        <b>Kick Player From Table</b>
+        <select name="players" id=""></select>
+        <button type="submit" id="submitKickPlayerFromTable">Kick</button>
+      </div>
+      <div class="adminTool" id="foldPlayer">
+        <b>Fold Player</b>
+        <select name="players" id=""></select>
+        <button type="submit" id="submitFoldPlayer">Fold</button>
+      </div>
+      <div class="adminTool" id="adminlist">
+        <b>Adminz</b>
+        <select name="adminz" id="adminz" class="players" multiple></select>
+        <button type="submit" id="submitAdminz">Update</button>
+      </div>
+      <h3>Transaction log</h3>
+      <textarea id="log"></textarea>
+
+    </div>
+
+    <script>
+
+      $(document).ready(function(){
+        let app = firebase.app();
+        currentRoom   = "";
+        currentPlayer = "";
+        photoURLs = {};
+        
+        loginHandler(function(user){
+          console.log(user);
+          if(user){
+            $("#loginContainer").hide();
+            jQuery("#userinfoname").text("User: "+user.displayName);
+            $("#logout").show();
+
+            let roomId = getUrlParameter("rid")||"-M3NcGg4RPa6ShpXgZXa";
+            addPlayerToTable(user.uid, roomId);
+            $("#game").show();
+            updateUserCards();
+
+            // Table states:
+            // 0: No cards dealt (only when initializing new table)
+            // 1: Cards dealt to players, no cards on table (this is also first state after previous hand finishes)
+            // 2: Flop
+            // 3: Turn
+            // 4: River
+            tableState = 0;
+            currentRoom = getUrlParameter("rid")||"-M3NcGg4RPa6ShpXgZXa";
+            roomCode    = getUrlParameter("auth");
+            currentDealer = "";
+
+            resetTableCards();
+
+            //List players around Table
+            listPlayersAroundTable(function(){
+              listenForChangesInTheRoom();
+              clickHandlers();
+              resetTableCards();
+              getBetting(players,currentDealer);
+              talkingPlayer();
+
+              // Show admin panel and admin button only for valid players
+              firebase.database().ref('rooms/'+currentRoom+'/admins').on('value', function(snapshot) {
+                var validAdmins = snapshot.val();
+                //let  validAdmins = ["0oGinVvghrYgAHc1GJz1VGpR8XL2", "9qEcvtXYbzMHg5kLU8YOjKFpvLh2", "J0GfoIqLhzaxL1SrAeYigI7oXVx1"];
+                if (validAdmins.includes(currentPlayer)) {
+                  $("#adminBtn").show();
+                  $("#admin").show();
+                  adminHandlers();
+                } else {
+                  $("#adminBtn").remove();
+                  $("#admin").remove();
+                }
+
+              });
+            });
+            
+          }else{
+            console.log("s");
+          }
+          
+        });
+
+ 
+      });
+
+      getCardClass = function(card, removeDefault){
+        if(!card){return;}
+        var type = getType(card[0]);
+        return (removeDefault == true ? "" : "card ")+card[1].toLowerCase()+'_'+type;
+      }
+
+      getType = function(s){
+        if(!s){return;}
+        r = s
+        .replace("♣️","clubs")
+        .replace("♠️","spades")
+        .replace("❤️","hearts")
+        .replace("♦️","diamonds")
+
+        return r;
+      }
+
+      resetTableCards = function(){
+        $("#duken").html('<div class="flop">\
+          <span class="card" id="flopp1"></span>\
+          <span class="card" id="flopp2"></span>\
+          <span class="card" id="flopp3"></span>\
+        </div>\
+        <div class="turn">\
+          <span class="card" id="turn"></span>\
+        </div>\
+        <div class="river">\
+          <span class="card" id="river"></span>\
+        </div>');
+      }
+      
+    </script>
+    <button id="adminBtn">Admin</button>
+  </body>
+</html>
