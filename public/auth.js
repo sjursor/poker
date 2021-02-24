@@ -46,12 +46,15 @@ loginHandler = function(callback){
     }
 
     $("#logout").on("click", function(){
-      //removePlayerFromTable(u.uid);
+      if(currentRoom){
+        removePlayerFromTable(u.uid,currentRoom);
+      }
       firebase.auth().signOut().then(function() {
         console.log("signed out success");
         $("#logout").hide();
         $("#loginContainer").show();
         $("#userinfoname").text("You must log in to play the game (reload page)");
+        window.location.reload();
       }).catch(function(error) {
         console.log("error", error);
       });
