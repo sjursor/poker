@@ -46,7 +46,8 @@ loginHandler = function(callback){
     }
 
     $("#logout").on("click", function(){
-      if(currentRoom){
+      console.log(typeof(currentRoom));
+      if(typeof(currentRoom) !== "undefined"){
         removePlayerFromTable(u.uid,currentRoom);
       }
       firebase.auth().signOut().then(function() {
