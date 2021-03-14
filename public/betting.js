@@ -199,11 +199,12 @@ function getBetting(){
 	// });
 
 }
-
 function setNextPlayerToTalk(ptt){
+	console.log('rooms/'+currentRoom+"/betting/playersInGame");
 	let pttRef = firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame");
 	pttRef.once('value', function(s){
 		playersInGame = s.val();
+		console.log(playersInGame);
 		//console.log("playertotalk", ptt);
 		//console.log("playersInGame", playersInGame)
 		if (ptt) {

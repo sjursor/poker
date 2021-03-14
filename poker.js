@@ -10,7 +10,7 @@ const {sha256} 	= require('crypto-hash');
 getNewDeck = function(){
 	deck = doc.randomizedDeck();
 	return deck;
-}  
+}   
 
 hash = function(h){
 	return sha256(h);
