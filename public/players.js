@@ -68,8 +68,7 @@ createNewPlayer = function(uid, email, displayName, photoURL,callback){
 firebase.database().ref().child('players/'+uid).set({
   name:displayName,
   email:email,
-  photo:photoURL,
-  stack:0
+  photo:photoURL
   //currentRoom:currentRoom
 },function(error) {
   if (error) {

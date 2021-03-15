@@ -46,7 +46,7 @@ setNextDealerAndDealHand = function() {
 					currentDealer = players[0];
 					
 					$(players).each(function(k,v){
-						firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
+						firebase.database().ref('players/'+v+"/"+currentRoom+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
 						firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
 					});
 
@@ -86,7 +86,7 @@ setNextDealerAndDealHand = function() {
 					}
 
 					$(players).each(function(k,v){
-						firebase.database().ref('players/'+v+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
+						firebase.database().ref('players/'+v+"/"+currentRoom+"/activeCards").set(newDeck.pop()+";"+newDeck.pop());
 						firebase.database().ref('players/'+v+"/currentRoom").set(currentRoom);
 					});
 
@@ -224,7 +224,7 @@ solvShownCards = function(callback, pid){
 
 currentPlayerHandDescription = function(callback){	
 	var tableCards = getTableCards();
-  	let pRef = firebase.database().ref('players/'+currentPlayer+"/activeCards");
+  	let pRef = firebase.database().ref('players/'+currentPlayer+"/"+currentRoom+"/activeCards");
 
   	//Players cards
   	pRef.once('value', function(s){
@@ -282,8 +282,9 @@ updateUserCards = function() {
   playerRef.on('value', function(snapshot){
     var userData = snapshot.val();
 
-    if(userData['activeCards']){
-      var userCards = userData['activeCards'].split(";");
+    if(userData[currentRoom] && userData[currentRoom]['activeCards']){
+      var userCards = userData[currentRoom]['activeCards'].split(";");
+      console.log(userCards);
       var klass1 = userCards[0].split(",");
       var type = getType(klass1[0]);
       $("#userCard1").removeClass().addClass(getCardClass(klass1));
@@ -291,6 +292,8 @@ updateUserCards = function() {
       var klass2 = userCards[1].split(",");
       var type = getType(klass2[0]);
       $("#userCard2").removeClass().addClass(getCardClass(klass2));//"card "+klass2[1].toLowerCase()+'_'+type);  
+    }else{
+    	console.log("nope");
     }
     
   });

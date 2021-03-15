@@ -11,6 +11,8 @@
         
         margin: 0; 
         padding: 0; 
+
+        min-width: 1024px;
       }
       #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
       #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
@@ -85,6 +87,7 @@
       .player.playerToTalk{
         border:3px solid yellow;
         padding-bottom: 30px;
+        border-radius: 15px;
       }
 
       .desk{
@@ -122,16 +125,17 @@
       }
       #row1, #row3 {
         justify-content: space-between;
-        padding-left: 60px;
-        padding-right: 60px;
-        height: 230px;
+        margin: 0 90px;
+        height: 214px;
       }
       #row2 {
         justify-content: space-between;
         height: 160px;
+        padding:0 40px;
+        margin-top:20px;
       }
       #row3{
-        margin-top:35px;
+        margin-top:0px;
       }
       .player {
         margin: 4px;
@@ -140,6 +144,7 @@
         text-align: center;
         font-weight: normal;
         font-size: 13px;
+        z-index:10;
       }
 
       .dealer:after {
@@ -151,6 +156,7 @@
         background-color: #1d496c;
         color: white;
         padding: 3px 0px 2px;
+        border-radius:15px 15px 0 0;
       }
 
       .dealer.name {
@@ -285,6 +291,7 @@
       .player[data-pid] .thisRoundSumBets:not(:empty):before{
         content: "Sum round: ";
       }
+      
       .thisRoundBet{
         clear: both;
         width: 70px;
@@ -305,6 +312,7 @@
         font-size: 14px;
         height: 22px;
         bottom: -40px;
+        border-radius: 0px 0px 15px 15px;
       }
 
       #currentTable {

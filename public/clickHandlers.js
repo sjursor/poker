@@ -1,5 +1,4 @@
 clickHandlers = function(){
-
 	//Click handlers
 	  // New room
 	  $("#newRoomSubmit").click(function(){
@@ -62,7 +61,6 @@ clickHandlers = function(){
 
 	// Fold-button
 	$("#fold").click(function() {
-
 	  if (confirm("Fold hand?")) {
 	  	foldPlayer(currentPlayer);
 	  }
