@@ -415,17 +415,20 @@ function pidToName(pid){
 function log(descr){
 	var d = new Date();
 	var n = d.toLocaleTimeString();
-	let size = 50;
-	console.log(n+" :: "+descr);
 
 	firebase.database().ref('rooms/'+currentRoom+"/log").once("value",function(s){
 		let logdb = s.val();
-		if(logdb){
-			logdb.push(n+" :: "+descr);
-			firebase.database().ref('rooms/'+currentRoom+"/log").set(logdb.slice(1, size));
-		}else{
+		console.log("sjur",logdb);
+		if(logdb == null){
+			console.log("initing log");
 			let log = [n+" :: "+descr];
 			firebase.database().ref('rooms/'+currentRoom+"/log").set(log);
+		}else{
+			console.log("appending to log");
+			logdb.unshift(n+" :: "+descr);
+			logpart = logdb.slice(0,20);
+			console.log("logpart",logpart);
+			firebase.database().ref('rooms/'+currentRoom+"/log").set(logpart);
 		}
 	});
 }

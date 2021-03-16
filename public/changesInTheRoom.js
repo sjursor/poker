@@ -253,10 +253,13 @@ function listenForChangesInTheRoom(){
 	  sumTable();
 	  $("#log").val();
 	  let log = "";
-	  $.each(val['log'].reverse(), function(k,v){
-	  	log += k+" :: "+v+"&#010;";
-	  });
+	  if(val['log']){
+	  	$.each(val['log'], function(k,v){
+	  	  log += k+" :: "+v+"&#010;";
+	  	});
+	  }
 	  $("#log").html(log);
+	  
 	  
 	});	
 }
