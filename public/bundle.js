@@ -2288,7 +2288,7 @@ updateUserCards = function() {
 
     if(userData[currentRoom] && userData[currentRoom]['activeCards']){
       var userCards = userData[currentRoom]['activeCards'].split(";");
-      console.log(userCards);
+
       var klass1 = userCards[0].split(",");
       var type = getType(klass1[0]);
       $("#userCard1").removeClass().addClass(getCardClass(klass1));

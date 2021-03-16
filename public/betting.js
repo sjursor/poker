@@ -4,7 +4,6 @@ playerToTalk  = "";
 
 //happens every round
 initBetting = function(players,currentDealer){
-	console.log("initing betting", players,currentDealer);
 	var updates = {};
 
 	// Reorganize players array into a playersInGame array where element 0 is the dealer
@@ -418,16 +417,13 @@ function log(descr){
 
 	firebase.database().ref('rooms/'+currentRoom+"/log").once("value",function(s){
 		let logdb = s.val();
-		console.log("sjur",logdb);
+
 		if(logdb == null){
-			console.log("initing log");
 			let log = [n+" :: "+descr];
 			firebase.database().ref('rooms/'+currentRoom+"/log").set(log);
 		}else{
-			console.log("appending to log");
 			logdb.unshift(n+" :: "+descr);
 			logpart = logdb.slice(0,20);
-			console.log("logpart",logpart);
 			firebase.database().ref('rooms/'+currentRoom+"/log").set(logpart);
 		}
 	});

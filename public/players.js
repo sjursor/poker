@@ -60,23 +60,34 @@ listPlayersAroundTable = function(callback){
 //Create new player
 newPlayer = function(uid, email, displayName, photoURL, callback){
 	let newPlayerKey = firebase.database().ref('players/'+uid);
-	createNewPlayer(uid, email, displayName, photoURL,callback);
-	callback(uid);
+
+	var playerRef = firebase.database().ref('players/'+uid);
+	  //console.log(playerRef)
+	  playerRef.once('value', function(snapshot) {
+	  	let v = snapshot.val();
+	  	if(v){
+	  		console.log("calling home");
+	  		callback(uid)
+	  	}else{
+	  		console.log("creating player");
+	  		createNewPlayer(uid, email, displayName, photoURL,callback);
+	  	}
+	  });
 }
 
 createNewPlayer = function(uid, email, displayName, photoURL,callback){
-firebase.database().ref().child('players/'+uid).set({
-  name:displayName,
-  email:email,
-  photo:photoURL
-  //currentRoom:currentRoom
-},function(error) {
-  if (error) {
-    console.log("The write failed...");
-  } else {
-    // Data saved successfully!
-    currentPlayer = uid;
-    //callback(uid);
-  }
-});
+	firebase.database().ref().child('players/'+uid).set({
+	  name:displayName,
+	  email:email,
+	  photo:photoURL
+	  //currentRoom:currentRoom
+	},function(error) {
+	  if (error) {
+	    console.log("The write failed...");
+	  } else {
+	    // Data saved successfully!
+	    currentPlayer = uid;
+	    //callback(uid);
+	  }
+	});
 }
