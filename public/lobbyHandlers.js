@@ -51,6 +51,8 @@ initLobby = function(){
 						deleteRoom(rid);
 					}else{alert("Wrong password");}
 				});
+			}else{
+				deleteRoom(rid);
 			}
 		});
 	});		
