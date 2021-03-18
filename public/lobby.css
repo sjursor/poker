@@ -61,7 +61,7 @@ button#login{
 }
 .lobbyContainer{
 	display:none;
-	width:660px;
+	max-width:660px;
 	min-height:300px;
 	background:#111;
 	margin:auto;
@@ -79,7 +79,7 @@ button#login{
 .createRoom{
 	display:none;
 	padding:0px 20px 20px;
-	width:660px;
+	max-width:660px;
 	background:#111;
 	margin:auto;
 	border-radius:8px;

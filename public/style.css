@@ -30,6 +30,7 @@
 
       #userinfowrapper {
         width: 100%;
+        min-width: 1024px;
         background-color: #000;
         color: #fff;
         font-size: 14px;
