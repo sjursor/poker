@@ -52,6 +52,10 @@ adminHandlers = function(){
 	  $("#submitprevPlayerToTalk").click(function(){
 	  	setPrevPlayerToTalk();
 	  });
+	  $("#submitSetDealer").click(function(){
+	  	let dealer = $("#setDealer select").val();
+	  	firebase.database().ref('rooms/'+currentRoom+"/currentDealer").set(dealer);
+	  });
 
 	  $("#submitadmShowFlop").click(function(){showFlop()});
 	  $("#submitadmShowTurn").click(function(){showTurn()});
