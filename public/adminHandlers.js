@@ -65,6 +65,12 @@ adminHandlers = function(){
 			var newPlayers = players.filter(function(e) { return e !== kick });
 			firebase.database().ref('rooms/'+currentRoom+"/players/").set(newPlayers);	
 		});
+		let fbref2 	= firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame");
+	  	fbref2.once('value', function(snapshot){
+			var players2 = snapshot.val();
+			var newPlayers2 = players.filter(function(e) { return e !== kick });
+			firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame").set(newPlayers2);	
+		});
 	  });
 
 	  $("#submitFoldPlayer").click(function(){

@@ -293,6 +293,10 @@
     <script>
 
       $(document).ready(function(){
+        letTheGamesBegin();
+      });
+
+      letTheGamesBegin = function(){
         let app = firebase.app();
         currentRoom   = "";
         currentPlayer = "";
@@ -351,9 +355,7 @@
           }
           
         });
-
- 
-      });
+      }
 
       getCardClass = function(card, removeDefault){
         if(!card){return;}

@@ -1,4 +1,5 @@
 clickHandlers = function(){
+	console.log("ClickHandlers");
 	//Click handlers
 	  // New room
 	  $("#newRoomSubmit").click(function(){
@@ -7,7 +8,7 @@ clickHandlers = function(){
 	  });
 
 	  // Next card
-	  $("#nextCard").click(function() {
+	  $("#nextCard").unbind("click").click(function() {
 	    switch (tableState) {
 	      case 0:
 	        if (confirm("Deal new hand?")) {
@@ -52,7 +53,6 @@ clickHandlers = function(){
 					tableState = 1;
 				}
 			}
-
 	        break;
 	    }
 

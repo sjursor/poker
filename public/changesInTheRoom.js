@@ -106,6 +106,21 @@ function listenForChangesInTheRoom(){
 		playerToTalk = val['players'][0];
 	  }
 
+	  let playersSelect = $(".player[data-pid]");
+	  let visiblePlayersOnTable = [];
+	  $.each(playersSelect, function(k,v){
+	  	visiblePlayersOnTable.push($(v).attr("data-pid"));
+	  });
+
+	  //Auto reload window if new users join or leaves
+	  if(visiblePlayersOnTable.length !== val['players'].length){
+	  	window.location.reload();
+	  }
+	  //console.log(visiblePlayersOnTable.length, val['players'].length);
+	  //console.log(visiblePlayersOnTable, val['players']);
+	  
+	  
+
 	  if(val.betting){
 	  	let playersBets = val.betting['playersBets'];
 	  	if(typeof(playersBets)!=="object"){
