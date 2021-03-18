@@ -1,16 +1,55 @@
-h1,h2{
+body{
 	color:white;
-	text-align:center;
+	text-align:left;
+}
+
+h1,h2,h3{
+	color:white;
+	clear:both;
 }
 h1{
+	font-size:42px;
+}
 
+
+#lobbyHeading{
+	text-align:center;
+}
+
+.leftbox{
+	float:left;
+	width:380px;
+	padding:10px;
+	position: absolute;
+	left:20px;
+	top:30px;
+	box-shadow: 10px 10px 20px 20px black;
+	background:black;
+}
+.rightbox{
+    min-width: 1005px;
+    padding: 10px;
+    background: black;
+    box-shadow: 10px 10px 20px 3px black;
+    margin-top: -12px;
+    text-align: center;
+}
+
+img.frontimg{
+	margin-top: -9px;
+    border: 1px solid black;
+    box-shadow: 10px 10px 20px 3px black;
 }
 
 #loginContainer{
 	display:none;
-	width:600px;
+	max-width:1024px;
 	margin:auto;
-	text-align: center;
+	position:relative;
+	font-size:26px;
+}
+ul{
+	text-align:left;
 }
 button#login{
 	width: 300px;
@@ -37,7 +76,7 @@ button#login{
 
 .createRoom{
 	display:none;
-	padding:20px;
+	padding:0px 20px 20px;
 	width:660px;
 	background:#111;
 	margin:auto;
@@ -45,13 +84,20 @@ button#login{
 	border:1px solid #0C8BB9;
 	color:white;
 }
+.createRoom table{
+	min-width:300px;
+}
+.createRoom table tr{
+	line-height:26px;
+}
+
 .delete{background:#631a1a;}
 .delete:hover{background:#e41d1d;}
 table.roomsTable{
 	text-transform: capitalize;
 }
 
-table{
+.lobbyContainer table{
 	width:100%;
 	text-align: left;
 	border-collapse: collapse;

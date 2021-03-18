@@ -36,12 +36,31 @@
     </div>
   </div>
     <div id="loginContainer">
-        <h1>You must log in to play poker</h1>
-        <button id="login">Log in</button>
+        <img src="imgs/pkrcave.png" width="100%" class="frontimg"/>
+        <div class="leftbox">
+          <p>
+            <b>Play poker with your friends</b>
+            <ul>
+              <li>You are the admin</li>
+              <li>You deal the cards</li>
+              <li>You settle the pots</li>
+              <li>You set the stacks</li>
+              <li>You have full flexibility</li>
+              <li>You have fun</li>
+            </ul>
+          </p>
+        </div>
+
+        <div class="rightbox">
+          <h3>Login with facebook to get started</h3>
+          <button id="login">Log in</button>  
+        </div>
+
+        
     </div>
     <h1 id="lobbyHeading">Pokercave lobby</h1>
     <div class="lobbyContainer">
-      <h2>Select room</h2>
+      <h2>Join or create a room</h2>
       <div class="roomSelector">
           <div id="roomlist">
             <table class="roomsTable">
@@ -57,9 +76,17 @@
       </div>
     </div>
     <div class="createRoom" style="margin-top:20px;">
-      <b>Create a new poker room</b><br>
-      Room Name: <input type="text" name="" id="inputRoomName"/><br>
-      Password:<input type="text" name="" id="inputRoomPassword"/><br>
+      <h2>Create a new poker room</h2>
+      <table>
+        <tr>
+          <td>Room Name:</td>
+          <td><input type="text" name="" id="inputRoomName"/></td>
+        <tr>
+        <tr>
+          <td>Password::</td>
+          <td><input type="text" name="" id="inputRoomPassword"/></td>
+        <tr>
+      </table>
       <button id="createNewRoomSubmit">Create</button>
     </div>
     <script>

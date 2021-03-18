@@ -9,7 +9,7 @@ getRooms = function(callback){
         let publicity = isPublic==true?'Public':'Private';
 	    	var tr = $(".roomsTable").append('<tr class="room" data-rid="'+key+'" data-public="'+isPublic+'" data-playersInRoom="'+playersInRoom+'">\
                                             <td>'+roomData['name']+'</td>\
-                                            <td>'+playersInRoom+'</td>\
+                                            <td>'+playersInRoom+'/10</td>\
                                             <td>'+publicity+'</td>\
                                             <td><button class="joinRoom" data-rid="'+key+'">Join Room</button>\
                                             <button class="delete" data-rid="'+key+'">Delete</button></td>\
