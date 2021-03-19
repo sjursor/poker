@@ -23,7 +23,7 @@ initBetting = function(players,currentDealer){
 			playersInGame.push(players[i]);
 		}
 	}
-	console.log("1");
+
     updates["rooms/"+currentRoom+"/betting/playersInGame"] = playersInGame;
 	updates["rooms/"+currentRoom+"/betting/pot"] = "0";
 	updates["rooms/"+currentRoom+"/betting/playerToTalk"] = players[0];
@@ -33,10 +33,8 @@ initBetting = function(players,currentDealer){
 	updates["rooms/"+currentRoom+"/betting/thisRoundsBets"] = {};
 	updates["rooms/"+currentRoom+"/betting/thisRoundSumBets"]= {};
 	
-	console.log(updates);
 	firebase.database().ref().update(updates);
 	updates = {}; 
-	console.log("2");
 
 	let currentDealerPosInArray = $.inArray(currentDealer, players);
 	//console.log("CDPIA ",currentDealerPosInArray, players);
@@ -85,7 +83,6 @@ function blinds(smallBlindPlayer, bigBlindPlayer){
 function setPlayerBalance(pid,balance){
 	log("Setting player "+pidToName(pid)+" balance to "+balance);
     firebase.database().ref("rooms/"+currentRoom+"/betting/balance/"+pid).set(parseFloat(balance));
-    //console.log(balance);
 }
 function addToPlayersBalance(pid,add){
 	let newBalance;
@@ -201,12 +198,10 @@ function getBetting(){
 
 }
 function setNextPlayerToTalk(ptt){
-	console.log('rooms/'+currentRoom+"/betting/playersInGame");
+	//console.log('rooms/'+currentRoom+"/betting/playersInGame");
 	let pttRef = firebase.database().ref('rooms/'+currentRoom+"/betting/playersInGame");
 	pttRef.once('value', function(s){
 		playersInGame = s.val();
-		console.log("PlayersInGame",playersInGame);
-		console.log("PTT",ptt);
 		//console.log("playertotalk", ptt);
 		//console.log("playersInGame", playersInGame)
 		if (ptt) {
@@ -234,9 +229,7 @@ function setNextPlayerToTalk(ptt){
 			playerToTalk = nextPlayerToTalk;
 			
 			firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(nextPlayerToTalk);
-			console.log(4);
 		}
-		//console.log("Player To Talk",playerToTalk);
 	});
 }
 
@@ -251,7 +244,6 @@ function setPrevPlayerToTalk(){
 		playerToTalk = getAtIndex(playersInGame,-1,index);
 
 		firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(playerToTalk);
-		//console.log("Player To Talk",playerToTalk);
 	});
 }
 
@@ -326,8 +318,6 @@ function talkingPlayer(){
 			$("#check").click(function(){
 				firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).once("value", function(s) {
 					// Make sure check is only possible when playerbet matches currentbet
-
-					console.log(s.val(), currentBet);
 
 					if ((!s.val() && currentBet == 0) || currentBet == s.val()) {
 						if (confirm("Check?")) {
