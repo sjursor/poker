@@ -54,9 +54,9 @@ ul{
 	text-align:left;
 }
 button#login{
-	width: 300px;
-    height: 80px;
-    font-size: 41px;
+	width: 285px;
+    height: 55px;
+    font-size: 31px;
     background: cadetblue;
 }
 .lobbyContainer{

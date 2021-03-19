@@ -45,7 +45,7 @@ clickHandlers = function(){
 
 	      case 4:
 	      	if (parseInt($(".pot").text()) !== 0) {
-				alert("Settle pot first");
+				alert("Settle pot first, [Admin must announce winner]");
 			} else {
 				if (confirm("End game and deal new hand?")) {
 					setNextDealerAndDealHand();
