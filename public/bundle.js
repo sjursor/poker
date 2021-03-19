@@ -2024,7 +2024,7 @@ setNextDealerAndDealHand = function() {
 	console.log("setting dealer and dealing new hand",currentRoom);
 	jQuery(".thisRoundBet").removeClass("white green red blue black");
 	if(parseInt($(".pot").text()) !== 0){
-		alert("Settle pot first");
+		alert("Admin must first announce winner to settle the pot");
 		return false;
 	}else{
 		var newDeck = getNewDeck();
@@ -2288,7 +2288,7 @@ updateUserCards = function() {
 
     if(userData[currentRoom] && userData[currentRoom]['activeCards']){
       var userCards = userData[currentRoom]['activeCards'].split(";");
-
+      
       var klass1 = userCards[0].split(",");
       var type = getType(klass1[0]);
       $("#userCard1").removeClass().addClass(getCardClass(klass1));

@@ -1,7 +1,7 @@
 adminHandlers = function(){
 	//Click handlers
 	  // New room
-	  $("#submitsetNextDealerAndDealHand").click(function(){
+	  $("#submitsetNextDealerAndDealHand").unbind("click").click(function(){
 	      setNextDealerAndDealHand();
 	  });
 

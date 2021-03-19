@@ -32,7 +32,6 @@ listPlayersAroundTable = function(callback){
 		  var playerRef = firebase.database().ref('players/'+v);
 		  //console.log(playerRef)
 		  playerRef.on('value', function(snapshot) {
-		  	console.log("playerUpdate");
 		    var val = snapshot.val();
 		    var playerkey = snapshot.key;
 

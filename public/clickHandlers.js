@@ -45,7 +45,7 @@ clickHandlers = function(){
 
 	      case 4:
 	      	if (parseInt($(".pot").text()) !== 0) {
-				alert("Settle pot first, [Admin must announce winner]");
+				alert("Admin must first announce winner to settle the pot");
 			} else {
 				if (confirm("End game and deal new hand?")) {
 					setNextDealerAndDealHand();
@@ -132,10 +132,6 @@ clickHandlers = function(){
 	    $("#showCards").attr("disabled","disabled");
 	  }
 
-	});
-
-	$("#adminBtn").click(function(){
-		$("#admin").toggle();
 	});
 }
 

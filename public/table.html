@@ -356,6 +356,9 @@
                   $("#adminBtn").remove();
                   $("#admin").remove();
                 }
+                $("#adminBtn").unbind("click").click(function(){
+                  $("#admin").toggle();
+                });
 
               });
               

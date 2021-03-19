@@ -88,6 +88,10 @@ addPlayerToTable = function(player,table){
       //First Player in the room
       //First player in room is playerToTalk
       firebase.database().ref('rooms/'+table+'/betting/playerToTalk').set(player);
+      setTimeout(function(){
+        setNextDealerAndDealHand();
+      },2500);
+      
     }
     
     //Add player to playerslist if not already on table
