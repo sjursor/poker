@@ -68,9 +68,9 @@
         clear:both;
       }
       #userControls button{
-        padding:10px 24px;
-        border:none;
-        font-size:18px;
+        padding: 9px 12px;
+        border: none;
+        font-size: 17px;
         border-radius: 20px;
       }
       #fold{
@@ -79,7 +79,7 @@
       }
       #check,#bet, #call{
         display:none;
-        background-color:darkorange;
+        background-color:blueviolet;
       }
       #call{
         margin:0px 5px;

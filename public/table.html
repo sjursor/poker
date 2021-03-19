@@ -44,9 +44,11 @@
       <a href="index.html" role="button" class="returnToLobby"><span class="arrow left"></span> Return to Lobby</a>
       <div id="game">
         <div id="userControls">
-          <button id="fold">Fold</button>
-          <button id="showcards" alt="Make my cards visible for everyone">Show cards</button>
-          <button id="check">Check</button><button id="call">Call</button><button id="bet">Bet</button>
+          <button id="fold">Fold (f)</button>
+          <button id="showcards" alt="Make my cards visible for everyone">Show cards (s)</button>
+          <button id="check">Check (c)</button>
+          <button id="call">Call (v)</button>
+          <button id="bet">Bet (b)</button>
         </div>
         <div id="seats">
           <div class="seatrow" id="row1">
@@ -359,6 +361,13 @@
                 $("#adminBtn").unbind("click").click(function(){
                   $("#admin").toggle();
                 });
+                $(document).keypress(function(event) {
+                    switch(event.charCode){ 
+                      case 97:{ //a
+                        $("#adminBtn").click();break;
+                      }
+                    }
+                });
 
               });
               
@@ -403,6 +412,6 @@
       }
       
     </script>
-    <button id="adminBtn">Admin</button>
+    <button id="adminBtn">Admin (a)</button>
   </body>
 </html>

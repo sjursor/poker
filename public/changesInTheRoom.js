@@ -254,15 +254,10 @@ function listenForChangesInTheRoom(){
 		  	w.push(v.pid);
 		  	jQuery(".player[data-pid='"+v.pid+"'] .descr").addClass("winner");
 		  });
-		  console.log(w);
 		  
 		  //If refresh
-		  setTimeout(function(){jQuery("#winner select").val(w);},4000);
-		  
-		  //var winPlayer = jQuery(".player .descr:contains("+winner[0].descr+")");
-		  
+		  setTimeout(function(){jQuery("#winner select").val(w);},4000);		  
 		}
-		
 	  }
 	  //run integrity check for admin input
 	  sumTable();
