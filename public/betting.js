@@ -23,7 +23,7 @@ initBetting = function(players,currentDealer){
 			playersInGame.push(players[i]);
 		}
 	}
-
+	console.log("1");
     updates["rooms/"+currentRoom+"/betting/playersInGame"] = playersInGame;
 	updates["rooms/"+currentRoom+"/betting/pot"] = "0";
 	updates["rooms/"+currentRoom+"/betting/playerToTalk"] = players[0];
@@ -33,8 +33,10 @@ initBetting = function(players,currentDealer){
 	updates["rooms/"+currentRoom+"/betting/thisRoundsBets"] = {};
 	updates["rooms/"+currentRoom+"/betting/thisRoundSumBets"]= {};
 	
+	console.log(updates);
 	firebase.database().ref().update(updates);
 	updates = {}; 
+	console.log("2");
 
 	let currentDealerPosInArray = $.inArray(currentDealer, players);
 	//console.log("CDPIA ",currentDealerPosInArray, players);
@@ -228,10 +230,11 @@ function setNextPlayerToTalk(ptt){
 				}
 			} while ($(".player[data-pid='"+nextPlayerToTalk+"'] .balance").hasClass("allin"));
 		}
-
 		if (nextPlayerToTalk) {
 			playerToTalk = nextPlayerToTalk;
+			
 			firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").set(nextPlayerToTalk);
+			console.log(4);
 		}
 		//console.log("Player To Talk",playerToTalk);
 	});

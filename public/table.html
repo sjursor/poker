@@ -311,6 +311,7 @@
         photoURLs = {};
         
         loginHandler(function(user){
+          console.log("asdf");
           if(user){
             $("#loginContainer").hide();
             jQuery("#userinfoname").text("User: "+user.displayName);
@@ -336,6 +337,7 @@
 
             //List players around Table
             listPlayersAroundTable(function(){
+              
               listenForChangesInTheRoom();
               clickHandlers();
               resetTableCards();
@@ -356,6 +358,7 @@
                 }
 
               });
+              
             });
             
           }else{
