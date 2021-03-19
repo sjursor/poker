@@ -387,10 +387,40 @@ function talkingPlayer(){
 
 				}
 			});
+
+			//Enable key-bindings
+			$(document).keypress(function(event) {
+				console.log(event.charCode);
+  				switch(event.charCode){
+  					case 98:{ //b
+  						$("#bet").click();
+  						break;
+  					}
+  					case 102:{ //f
+  						$("#fold").click();
+  						break;
+  					}
+  					case 99:{ //c
+  						$("#check").click();
+  						break;
+  					}
+  					case 115:{//s
+  						$("#showcards").click();
+  						break;
+  					}
+  					case 118:{ //v
+  						$("#call").click();
+  						break;
+  					}
+  				}
+			});
+
+
 		}else{
 			$("#check").hide().unbind();
 			$("#bet").hide().unbind();
 			$("#call").hide().unbind();
+			$(document).unbind("keypress");
 		}
 	});
 }
