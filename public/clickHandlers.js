@@ -60,7 +60,7 @@ clickHandlers = function(){
 
 
 	// Fold-button
-	$("#fold").click(function() {
+	$("#fold").unbind("click").click(function() {
 	  if (confirm("Fold hand?")) {
 	  	foldPlayer(currentPlayer);
 	  }
@@ -112,7 +112,8 @@ clickHandlers = function(){
 
 
 	// Show card-button
-	$("#showcards").click(function() {
+	console.log("here");
+	$("#showcards").unbind("click").click(function() {
 
 	  if (confirm("Show cards?")) {
 

@@ -81,9 +81,15 @@ addPlayerToTable = function(player,table){
     var ex_players = snapshot.val();
     var players = [];
     if(ex_players){
-      $.each(ex_players,function(k,p){
-        if(p){players.push(p);}
-      });
+      console.log(ex_players.length);
+      if(ex_players.length == 10){
+        console.log("Table Full");
+        return;
+      }else{
+        $.each(ex_players,function(k,p){
+          if(p){players.push(p);}
+        });  
+      }
     }else{
       //First Player in the room
       //First player in room is playerToTalk

@@ -535,3 +535,10 @@
         transform: rotate(45deg);
         -webkit-transform: rotate(45deg);
       }
+
+      #buyHat a{
+        right:20px;
+        bottom:20px;
+        position:absolute;
+        color:white;
+      }

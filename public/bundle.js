@@ -2244,11 +2244,13 @@ currentPlayerHandDescription = function(callback){
   		}
   	});
 
-
-	
-	//var hand1 = Hand.solve(tableCards);
-	//var hand2 = Hand.solve(['3d', 'As', 'Jc', 'Th', '2d', '4s', 'Qd']);
-	//var winner = Hand.winners([hand1, hand2]); // hand2
+  	/*
+	var tableCards = getTableCards();
+	var hand1 = Hand.solve(tableCards);
+	var hand2 = Hand.solve(['3d', 'As', 'Jc', 'Th', '2d', '4s', 'Qd']);
+	var hand3 = Hand.solve(['3h', 'Ad', 'Jd', 'Td', '2d', '4d', 'Qd']);
+	var winner = Hand.winners([hand1, hand2,hand3]); // hand2
+	*/
 	//console.log("Winner is "+winner);
 	//console.log(hand1.descr);
 	//console.log(hand2.name); // Two Pair
@@ -2288,7 +2290,7 @@ updateUserCards = function() {
 
     if(userData[currentRoom] && userData[currentRoom]['activeCards']){
       var userCards = userData[currentRoom]['activeCards'].split(";");
-      
+      console.log(userCards);
       var klass1 = userCards[0].split(",");
       var type = getType(klass1[0]);
       $("#userCard1").removeClass().addClass(getCardClass(klass1));
