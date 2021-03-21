@@ -444,17 +444,17 @@ $(document).keypress(function(event) {
 		}
 		case 98:{ //b
 			if($("#bet").is(":visible"))
-			betFunction();
+				betFunction();
 			break;
 		}
 		case 99:{ //c
 			if($("#check").is(":visible"))
-			checkFunction();
+				checkFunction();
 			break;
 		}
 		case 118:{ //v
 			if($("#call").is(":visible"))
-			callFunction();
+				callFunction();
 			break;
 		}
 	}
