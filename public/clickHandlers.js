@@ -113,8 +113,8 @@ clickHandlers = function(){
 
 	// Show card-button
 	console.log("here");
-	$("#showcards").unbind("click").click(function() {
-
+	$("#showcards").click(function() {
+		console.log("s");
 	  if (confirm("Show cards?")) {
 
 	    var card1 = $("#userCard1").attr("class").replace("card ", "");

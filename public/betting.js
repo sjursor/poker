@@ -142,14 +142,11 @@ function winner(pids){
 		This is put into a “side pot” with each respective player.
 		*/
 
-		//check if first winners takes all of pot
-			//1. Check if sum of winning players thisRoundSumBets/[pid] is equal to or higher than potshare
-				//true :: check if splitpot is equal to or lower than each of winning players thisRoundSumBets
-					//true::Split pot on winning players
-					//false::
-				//false:: 
-			
-			//if secondary winners - take rest of pot
+		/*
+			Første vinner henter sin innsats(sumThisRound) fra alle sin sumThisRound så lenge det er nok (inkludert sin egen)
+			neste vinner henter sin innsats fra resten av alles sumThisRound så lenge det er nok
+			osv.
+		*/
 
 
 		$.each(pids, function(k,v){
@@ -252,180 +249,20 @@ function talkingPlayer(){
 	firebase.database().ref('rooms/'+currentRoom+"/betting/playerToTalk").on("value", function(s){
 		let talkingPlayer = s.val();
 
-		/*firebase.database().ref('rooms/'+currentRoom+"/betting/balance/"+talkingPlayer).once("value", function(s){
-			talkingPlayersBalance = s.val();
-		});*/
 		if(talkingPlayer == currentPlayer){
-
 			$("#check").show().unbind();
 			$("#bet").show().unbind();
 			$("#call").show().unbind();
 
-			$("#call").click(function(){
-				//playerBet = det som ligge på bordet foran deg
-				//currentBet = høyste bet til nå
-				//thisRoundSumBets = summen av dine bets gjennom denne håndå
-
-				//Så må vi sjekke om han har bettet litt allerede kanskje? evt. trekke dette ifra toCall
-				firebase.database().ref('rooms/'+currentRoom+"/betting/").once("value", function(s){
-					let betting = s.val();
-					let playerBets = betting['playersBets'];
-					let playerBet = 0;
-					let talkingPlayersBalance = betting['balance'][currentPlayer]
-
-					if(playerBets && playerBets[currentPlayer]>0){
-						playerBet = playerBets[currentPlayer];
-					}
-
-					let thisRoundSumPlayerBet = 0;
-					if(betting['thisRoundSumBets'] && betting['thisRoundSumBets'][currentPlayer]){
-						thisRoundSumPlayerBet = betting['thisRoundSumBets'][currentPlayer];
-					}
-
-					// sumToCall is the actual sum this player can call (in case of all-in situation)
-					let sumToCall = currentBet > talkingPlayersBalance ? talkingPlayersBalance : currentBet;
-
-					if (confirm("Call "+sumToCall+"?")) {
-
-						let playerSumBets = betting['thisRoundSumBets'][currentPlayer] ? betting['thisRoundSumBets'][currentPlayer] : 0;
-
-						// deduct is the amount to add to the pot, add to thisRoundSumBets and deduct from balance
-						let deduct = currentBet > talkingPlayersBalance ? sumToCall : currentBet-playerBet;
-
-						// currentBetForPlayer is the new bet, depending on all-in or not
-						let currentBetForPlayer = currentBet > talkingPlayersBalance ? sumToCall+playerBet : currentBet;
-
-						firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(currentBetForPlayer);
-
-						//update pot
-						let pot = betting['pot'];
-						firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(pot+(deduct));
-						log("Call: updates pot to "+pot+deduct);
-
-						
-						firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(playerSumBets+deduct);	
-
-						let newbalance = talkingPlayersBalance-deduct;
-
-						setPlayerBalance(talkingPlayer,newbalance);
-						log("Call: Updating "+pidToName(talkingPlayer)+" balance from "+talkingPlayersBalance+" to "+newbalance+" - called "+deduct);
-						setNextPlayerToTalk();
-			        }
-				});
-
-			});
-
-			$("#check").click(function(){
-				firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).once("value", function(s) {
-					// Make sure check is only possible when playerbet matches currentbet
-
-					if ((!s.val() && currentBet == 0) || currentBet == s.val()) {
-						if (confirm("Check?")) {
-							firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(0);
-							setNextPlayerToTalk();
-						}
-					} else {
-						alert("Cannot check! Please call or fold");
-					}
-				});
-
-			});
-
-			$("#bet").click(function(){
-				var bet = parseFloat(prompt("Please enter your bet (add)", "10"));
-				if(isNaN(bet)){
-					return;
-				}
-
-				if (bet == null || bet == "") {
-				  bet = 0;
-				} else {
-
-					firebase.database().ref('rooms/'+currentRoom+"/betting/").once("value", function(s){
-						let betting = s.val();
-						let playerBets = betting['playersBets'];
-						let playerBet = 0;
-						let talkingPlayersBalance = betting['balance'][currentPlayer];
-
-						if (bet>talkingPlayersBalance) {
-							alert("Bet larger than balance");
-						} else {
-							//If player not betted yet
-							if(playerBets && playerBets[currentPlayer]>0){
-								playerBet = playerBets[currentPlayer];
-							}
-
-							let thisRoundSumPlayerBet = 0;
-							if(betting['thisRoundSumBets'] && betting['thisRoundSumBets'][currentPlayer]){
-								thisRoundSumPlayerBet = betting['thisRoundSumBets'][currentPlayer];
-							}
-
-							let pot = betting['pot'];
-
-							//bet = inputBoxen
-							//playerBet = det som ligge på bordet foran deg
-							//currentBet = høyste bet til nå
-							//thisRoundSumBets = summen av dine bets gjennom denne håndå
-							if (bet > 0 && (bet + playerBet >= currentBet) ){
-								firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet+playerBet);
-								firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(bet+playerBet);
-								firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(thisRoundSumPlayerBet+bet);
-								firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(pot+bet));
-								currentBet = bet+playerBet;
-								log("Bet: "+pidToName(currentPlayer)+" betted "+playerBet+", updating players Balance from "+talkingPlayersBalance+" to "+(talkingPlayersBalance-bet));
-								setPlayerBalance(currentPlayer,talkingPlayersBalance-bet);
-								setNextPlayerToTalk();
-							} else {
-								alert("Invalid bet!", bet, playerBet, currentBet);
-							}
-
-						}
-
-
-
-					});
-
-				}
-			});
-
-			//Enable key-bindings
-			$(document).keypress(function(event) {
-  				switch(event.charCode){
-  					case 98:{ //b
-  						$("#bet").click();
-  						break;
-  					}
-  					case 99:{ //c
-  						$("#check").click();
-  						break;
-  					}
-  					case 118:{ //v
-  						$("#call").click();
-  						break;
-  					}
-  				}
-			});
-
+			$("#call").click(function(){callFunction(talkingPlayer);});
+			$("#check").click(function(){checkFunction();});
+			$("#bet").click(function(){betFunction(talkingPlayer);});		
 
 		}else{
 			$("#check").hide().unbind();
 			$("#bet").hide().unbind();
 			$("#call").hide().unbind();
-			//$(document).unbind("keypress");
 		}
-
-		$(document).keypress(function(event) {
-			switch(event.charCode){
-				case 115:{//s
-					$("#showcards").click();
-					break;
-				}
-				case 102:{ //f
-					$("#fold").click();
-					break;
-				}
-			}
-		});
 	});
 }
 
@@ -466,3 +303,159 @@ function getAtIndex(theArray,i,currentIndex) {
         return theArray[(currentIndex + i) % theArray.length];
     }
 }
+
+betFunction = function(talkingPlayer){
+	var bet = parseFloat(prompt("Please enter your bet (add)", "10"));
+	if(isNaN(bet)){
+		return;
+	}
+
+	if (bet == null || bet == "") {
+	  bet = 0;
+	} else {
+
+		firebase.database().ref('rooms/'+currentRoom+"/betting/").once("value", function(s){
+			let betting = s.val();
+			let playerBets = betting['playersBets'];
+			let playerBet = 0;
+			let talkingPlayersBalance = betting['balance'][currentPlayer];
+
+			if (bet>talkingPlayersBalance) {
+				alert("Bet larger than balance");
+			} else {
+				//If player not betted yet
+				if(playerBets && playerBets[currentPlayer]>0){
+					playerBet = playerBets[currentPlayer];
+				}
+
+				let thisRoundSumPlayerBet = 0;
+				if(betting['thisRoundSumBets'] && betting['thisRoundSumBets'][currentPlayer]){
+					thisRoundSumPlayerBet = betting['thisRoundSumBets'][currentPlayer];
+				}
+
+				let pot = betting['pot'];
+
+				//bet = inputBoxen
+				//playerBet = det som ligge på bordet foran deg
+				//currentBet = høyste bet til nå
+				//thisRoundSumBets = summen av dine bets gjennom denne håndå
+				if (bet > 0 && (bet + playerBet >= currentBet) ){
+					firebase.database().ref('rooms/'+currentRoom+"/betting/currentBet/").set(bet+playerBet);
+					firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(bet+playerBet);
+					firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(thisRoundSumPlayerBet+bet);
+					firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(parseFloat(pot+bet));
+					currentBet = bet+playerBet;
+					log("Bet: "+pidToName(currentPlayer)+" betted "+playerBet+", updating players Balance from "+talkingPlayersBalance+" to "+(talkingPlayersBalance-bet));
+					setPlayerBalance(currentPlayer,talkingPlayersBalance-bet);
+					setNextPlayerToTalk();
+				} else {
+					alert("Invalid bet!", bet, playerBet, currentBet);
+				}
+
+			}
+
+
+
+		});
+
+	}
+}
+
+callFunction = function(talkingPlayer){
+	//playerBet = det som ligge på bordet foran deg
+	//currentBet = høyste bet til nå
+	//thisRoundSumBets = summen av dine bets gjennom denne håndå
+
+	//Så må vi sjekke om han har bettet litt allerede kanskje? evt. trekke dette ifra toCall
+	firebase.database().ref('rooms/'+currentRoom+"/betting/").once("value", function(s){
+		let betting = s.val();
+		let playerBets = betting['playersBets'];
+		let playerBet = 0;
+		let talkingPlayersBalance = betting['balance'][currentPlayer]
+
+		if(playerBets && playerBets[currentPlayer]>0){
+			playerBet = playerBets[currentPlayer];
+		}
+
+		let thisRoundSumPlayerBet = 0;
+		if(betting['thisRoundSumBets'] && betting['thisRoundSumBets'][currentPlayer]){
+			thisRoundSumPlayerBet = betting['thisRoundSumBets'][currentPlayer];
+		}
+
+		// sumToCall is the actual sum this player can call (in case of all-in situation)
+		let sumToCall = currentBet > talkingPlayersBalance ? talkingPlayersBalance : currentBet;
+
+		if (confirm("Call "+sumToCall+"?")) {
+
+			let playerSumBets = betting['thisRoundSumBets'][currentPlayer] ? betting['thisRoundSumBets'][currentPlayer] : 0;
+
+			// deduct is the amount to add to the pot, add to thisRoundSumBets and deduct from balance
+			let deduct = currentBet > talkingPlayersBalance ? sumToCall : currentBet-playerBet;
+
+			// currentBetForPlayer is the new bet, depending on all-in or not
+			let currentBetForPlayer = currentBet > talkingPlayersBalance ? sumToCall+playerBet : currentBet;
+
+			firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(currentBetForPlayer);
+
+			//update pot
+			let pot = betting['pot'];
+			firebase.database().ref('rooms/'+currentRoom+"/betting/pot").set(pot+(deduct));
+			log("Call: updates pot to "+pot+deduct);
+
+			
+			firebase.database().ref('rooms/'+currentRoom+"/betting/thisRoundSumBets/"+currentPlayer).set(playerSumBets+deduct);	
+
+			let newbalance = talkingPlayersBalance-deduct;
+
+			setPlayerBalance(talkingPlayer,newbalance);
+			log("Call: Updating "+pidToName(talkingPlayer)+" balance from "+talkingPlayersBalance+" to "+newbalance+" - called "+deduct);
+			setNextPlayerToTalk();
+        }
+	});
+}
+
+checkFunction = function(){
+	firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).once("value", function(s) {
+	// Make sure check is only possible when playerbet matches currentbet
+		if ((!s.val() && currentBet == 0) || currentBet == s.val()) {
+			if (confirm("Check?")) {
+				firebase.database().ref('rooms/'+currentRoom+"/betting/playersBets/"+currentPlayer).set(0);
+				setNextPlayerToTalk();
+			}
+		} else {
+			alert("Cannot check! Please call or fold");
+		}
+	});
+}
+
+
+
+$(document).keypress(function(event) {
+	switch(event.charCode){
+		case 115:{//s
+			if($("#showcards").is(":visible"))
+				$("#showcards").click();
+			break;
+		}
+		case 102:{ //f
+			if($("#fold").is(":visible"))
+				$("#fold").click();
+			break;
+		}
+		case 98:{ //b
+			if($("#bet").is(":visible"))
+			betFunction();
+			break;
+		}
+		case 99:{ //c
+			if($("#check").is(":visible"))
+			checkFunction();
+			break;
+		}
+		case 118:{ //v
+			if($("#call").is(":visible"))
+			callFunction();
+			break;
+		}
+	}
+});
