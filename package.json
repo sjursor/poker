@@ -25,7 +25,7 @@
     "ecstatic": "^4.1.2",
     "fast-crc32c": "^2.0.0",
     "firebase": "^7.24.0",
-    "firebase-admin": "^8.10.0",
+    "firebase-admin": "^11.4.1",
     "firebase-functions": "^3.5.0",
     "fs": "0.0.1-security",
     "handranker": "^1.0.4",
